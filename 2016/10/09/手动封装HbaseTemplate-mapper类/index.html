@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2016/10/09/手动封装HbaseTemplate-mapper类/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://jacobs.wanhb.cn/images/background2.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background2.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>手动封装HbaseTemplate mapper类</h1>
+                    
+                    <h2 class="subheading">看spring 源码有感</h2>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2016-10-09
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                        <a class="tag" href="/tags/#Hbase"
+                           title="Hbase">Hbase</a>
+                        
+                        <a class="tag" href="/tags/#Java"
+                           title="Java">Java</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            手动封装HbaseTemplate mapper类
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近因为业务关系，用到了Hbase，因为用的是Spring boot框架 ，所以自然而然就用到了spring封装的HbaseTemplate工具类。然而HbaseTemplate封装的代码实在比较糟糕，出了一些基本的CRUD操作之外并没有给我们提供太多便利之处。先来看看痛处：</p>
+<p>###痛处一及改进###</p>
+<ul>
+<li>我们先来看看HabaseTemplate最基本的查询操作(以下只是demo演示)：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span></span>&#123;</div><div class="line"> string name;</div><div class="line"> string password;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">putUserInfo</span><span class="params">(UserInfo userInfo)</span> </span>&#123;</div><div class="line">   hBaseTemplate.execute(TABLE_NAME, (table) -&gt; &#123;</div><div class="line">     <span class="comment">//根据rowKey定义一个put对象，可用作插入和更新</span></div><div class="line">     Put put = <span class="keyword">new</span> Put(Bytes.toBytes(rowKey));</div><div class="line">    <span class="comment">//name是否为空</span></div><div class="line">     <span class="keyword">if</span>(userInfo.name!=<span class="keyword">null</span>)&#123;</div><div class="line">     put.addColumn(COLUMN_FAMILY_NAME.getBytes(), Bytes.toBytes(COLUMN_RAW_DATA)，Bytes.toBytes(userInfo.name));</div><div class="line">     &#125;</div><div class="line">     <span class="comment">//password是否为空</span></div><div class="line">     <span class="keyword">if</span>(userInfo.password!=<span class="keyword">null</span>)&#123;</div><div class="line">     put.addColumn(COLUMN_FAMILY_NAME.getBytes(), Bytes.toBytes(COLUMN_RAW_DATA)，Bytes.toBytes(userInfo.password));</div><div class="line">     &#125;</div><div class="line">     table.put(put);</div><div class="line">     <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">   &#125;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>相信大家也看出来了，如果待插入的对象有很多字段呢？还要逐个写if语句来判读非空么？这明显使得代码非常地不简洁。于是，个人封装了一个插入更新模版类（其实只是简单的对Put对象的一个扩展）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//继承并扩展Put对象</div><div class="line">public class PutExtension extends Put &#123;</div><div class="line"></div><div class="line">  String columnFamilyName = &quot;demo&quot;;</div><div class="line"></div><div class="line">  public PutExtension(String columnFamilyName, byte[] row) &#123;</div><div class="line">    super(row);</div><div class="line">    this.columnFamilyName = columnFamilyName;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public PutExtension build(String paramName, Object param) throws IOException &#123;</div><div class="line">    if (param != null) &#123;</div><div class="line">      this.addColumn(columnFamilyName.getBytes(), paramName.getBytes(),</div><div class="line">          Bytes.toBytes(param.toString()));</div><div class="line">    &#125;</div><div class="line">    return this;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>封装之后，之前累赘的查询操作可以变得如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//然后操作如下</span></div><div class="line">hBaseTemplate.execute(TABLE_NAME, (table) -&gt; &#123;</div><div class="line">      PutExtension putExtension = <span class="keyword">new</span> PutExtension(familyName, rowKey.getBytes());</div><div class="line">      putExtension.build(<span class="string">"name"</span>,userInfo.name)</div><div class="line">          .build(<span class="string">"password"</span>, userInfo.password);</div><div class="line">      table.put(putExtension);</div><div class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure></p>
+<p>其实这也就是一个简单的封装，只不过把冗余的逻辑判断给丢出去了而已。</p>
+<p>###痛处二及改进###</p>
+<ul>
+<li>在HbaseTemplate中，根据rowKey查询出来的原始数据是字节数组，我们要将字节数组转化成业务逻辑中希望的java bean需要做很多重复的判断匹配逻辑，以下是没改进前的代码：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">public</span> UserInfo <span class="title">getUserInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (UserInfo) hBaseTemplate.get(TABLE_NAME, rowKey, familyName,(result, i) -&gt;&#123;</div><div class="line">     UserInfo userInfo=<span class="keyword">new</span> UserInfo()</div><div class="line">     <span class="comment">//重复逻辑一</span></div><div class="line">bytes[] nameBytes=result.getValue(familyName.getBytes(), <span class="string">"name"</span>.getBytes()));</div><div class="line"><span class="keyword">if</span>(nameBytes!=<span class="keyword">null</span>)&#123;</div><div class="line">  userInfo.setName(Bytes.toString(nameBytes));</div><div class="line">&#125;</div><div class="line"><span class="comment">//重复逻辑二</span></div><div class="line">bytes[] passwordBytes=result.getValue(familyName.getBytes(), <span class="string">"password"</span>.getBytes()));</div><div class="line"><span class="keyword">if</span>(passwordBytes!=<span class="keyword">null</span>)&#123;</div><div class="line">  userInfo.setPassword(Bytes.toString(passwordBytes));</div><div class="line">&#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 可以看出，这样做的缺点是一旦java bean的字段一多，重复的非空判断逻辑也会增多，从而使得代码变得十分累赘且不可维护。于是我参考Spring JDBC的RowMapper的封装，利用了Spring框架自带的反射工具beanUtils和beanWrapper，自己实现了如下封装：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HBaseResultBuilder</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">  <span class="keyword">private</span> Class&lt;T&gt; mappedClass;</div><div class="line">  <span class="keyword">private</span> Map&lt;String, PropertyDescriptor&gt; mappedFields;</div><div class="line">  <span class="keyword">private</span> Set&lt;String&gt; mappedProperties;</div><div class="line">  HashSet populatedProperties;</div><div class="line">  <span class="keyword">private</span> BeanWrapper beanWrapper;</div><div class="line">  <span class="keyword">private</span> Result result;</div><div class="line">  <span class="keyword">private</span> String columnFamilyName;</div><div class="line">  <span class="keyword">private</span> T t;</div><div class="line">  <span class="comment">//接受一些列参数并实例化要返回的结果对象</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">HBaseResultBuilder</span><span class="params">(String columnFamilyName, Result result, Class&lt;T&gt; clazz)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.columnFamilyName = columnFamilyName;</div><div class="line">    <span class="keyword">this</span>.result = result;</div><div class="line">    <span class="keyword">this</span>.mappedClass = clazz;</div><div class="line">    mappedFields = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line">    mappedProperties = <span class="keyword">new</span> HashSet&lt;&gt;();</div><div class="line">    populatedProperties = <span class="keyword">new</span> HashSet&lt;&gt;();</div><div class="line">    <span class="keyword">this</span>.t = BeanUtils.instantiate(clazz);</div><div class="line">    PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(mappedClass);</div><div class="line">    PropertyDescriptor[] var3 = pds;</div><div class="line">    <span class="keyword">int</span> var4 = pds.length;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> var5 = <span class="number">0</span>; var5 &lt; var4; ++var5) &#123;</div><div class="line">      PropertyDescriptor pd = var3[var5];</div><div class="line">      <span class="keyword">if</span> (pd.getWriteMethod() != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">this</span>.mappedFields.put(<span class="keyword">this</span>.lowerCaseName(pd.getName()), pd);</div><div class="line">        String underscoredName = <span class="keyword">this</span>.underscoreName(pd.getName());</div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.lowerCaseName(pd.getName()).equals(underscoredName)) &#123;</div><div class="line">          <span class="keyword">this</span>.mappedFields.put(underscoredName, pd);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.mappedProperties.add(pd.getName());</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(t);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">private</span> String <span class="title">underscoreName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!StringUtils.hasLength(name)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      StringBuilder result = <span class="keyword">new</span> StringBuilder();</div><div class="line">      result.append(<span class="keyword">this</span>.lowerCaseName(name.substring(<span class="number">0</span>, <span class="number">1</span>)));</div><div class="line"></div><div class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; name.length(); ++i) &#123;</div><div class="line">        String s = name.substring(i, i + <span class="number">1</span>);</div><div class="line">        String slc = <span class="keyword">this</span>.lowerCaseName(s);</div><div class="line">        <span class="keyword">if</span> (!s.equals(slc)) &#123;</div><div class="line">          result.append(<span class="string">"_"</span>).append(slc);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">          result.append(s);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">return</span> result.toString();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">private</span> String <span class="title">lowerCaseName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> name.toLowerCase(Locale.US);</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//使用时根据要解析的字段频繁调用此方法即可，仿造java8 流式操作</span></div><div class="line">  <span class="function"><span class="keyword">public</span> HBaseResultBuilder <span class="title">build</span><span class="params">(String columnName)</span> </span>&#123;</div><div class="line">    <span class="keyword">byte</span>[] value = result.getValue(columnFamilyName.getBytes(), columnName.getBytes());</div><div class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span> || value.length == <span class="number">0</span>) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      String field = <span class="keyword">this</span>.lowerCaseName(columnName.replaceAll(<span class="string">" "</span>, <span class="string">""</span>));</div><div class="line">      PropertyDescriptor pd = <span class="keyword">this</span>.mappedFields.get(field);</div><div class="line">      <span class="keyword">if</span> (pd == <span class="keyword">null</span>) &#123;</div><div class="line">        log.error(<span class="string">"HBaseResultBuilder error: can not find property: "</span> + field);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        beanWrapper.setPropertyValue(pd.getName(), Bytes.toString(value));</div><div class="line">        populatedProperties.add(pd.getName());</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">//伪造Java8的即视感，“流最后的终端操作“。</span></div><div class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">fetch</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">//只要有一个属性被解析出来就返回结果对象，毕竟hbase存的是稀疏数据，不一定全量</span></div><div class="line">    <span class="keyword">if</span> (CollectionUtils.isNotEmpty(populatedProperties)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.t;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>通过利用反射的基本原理，我们可以通过结果数据构造出我们需要的java bean。最后我们的调用过程可以简化成如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> UserInfo <span class="title">getUserInfo</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (UserInfo) hBaseTemplate.get(TABLE_NAME, rowKey,    familyName,</div><div class="line">        (result, i) -&gt; <span class="keyword">new</span> HBaseResultBuilder&lt;&gt;(familyName, result, UserInfo.class).build(<span class="string">"name"</span>).build(<span class="string">"password"</span>).fetch());</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>成功！！！是不是代码整洁多了，其实也就是将一些复杂的逻辑给抽出去了，正好最近看了Java8实战，从而萌生的一点小想法。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/10/02/hello-world/" data-toggle="tooltip" data-placement="top"
+                           title="Hello World">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Spring"
+                           title="Spring">Spring</a>
+                        
+                        <a class="tag" href="/tags/#Hbase"
+                           title="Hbase">Hbase</a>
+                        
+                        <a class="tag" href="/tags/#Java"
+                           title="Java">Java</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2016
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar.jpeg">
+</body>
+
+</html>
