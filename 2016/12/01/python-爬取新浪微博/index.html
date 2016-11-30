@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2016/12/01/python-爬取新浪微博/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://jacobs.wanhb.cn/images/background3.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background3.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>python 爬取新浪微博</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2016-12-01
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#Python"
+                           title="Python">Python</a>
+                        
+                        <a class="tag" href="/tags/#Crawler"
+                           title="Crawler">Crawler</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            python 爬取新浪微博
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>最近因为课设的要求，开始了对新浪微博数据的爬取研究，看了不少博客文章，也试了不少方法，原理无非就是模拟登录，但是感觉目前可用的方法太过分散，而且自从微博改版之后，很多以前适用的方法都基本没有用处了。这里总结一下几种可用的方法以及自己研究之后稳定可用的方法(所有的方法都是基于python2.7)：</p>
+<hr>
+<p>###1、绕过.com域名</p>
+<p>如果没有爬取主站的刚需，只是对微博相关的数据感兴趣，可以尝试爬取微博cn域名下的内容(即<a href="http://weibo.cn)，亲测可用...最简单的办法就是先预先登录一下然后获取返回的cookie，贴入代码中作为请求的headers即可。" target="_blank" rel="external">http://weibo.cn)，亲测可用...最简单的办法就是先预先登录一下然后获取返回的cookie，贴入代码中作为请求的headers即可。</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">_header=&#123;</div><div class="line">        &quot;User-Agent&quot;: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.86 Safari/537.36&quot;,</div><div class="line">        &quot;Cookie&quot;:&quot;_T_WM=03e77f532a8c1a437da863b36a62207d; SUB=_2A256KfecDeRxGeVP61MX9yzKyT-IHXVZ1ZnUrDV6PUNbvtANLRTVkW1LHesQJOUc8nbbLnoALvjmulMBSwDnAw..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WhPUuFTXg4zll8rx_8Ap-XA5JpX5KMhUgL.Foepeh2cS0zceoet; SUHB=0cSXC9tcKk2RM7; SSOLoginState=1462601676; gsid_CTandWM=4uTtCpOz5hhWcws1tVSIdd0SYa3&quot;    &#125;</div><div class="line"> request = urllib2.Request(url=url, headers=self._header)</div><div class="line"> response = urllib2.urlopen(request)</div><div class="line"> html = response.read()</div></pre></td></tr></table></figure>
+<p>接下来对爬取下来的html就可以通过xpath,或者bs来完成数据提取了。</p>
+<hr>
+<p>###2、使用urllib模拟登录微博.com主站</p>
+<p>这个过程比较麻烦，前人有了很多铺垫做相应的改动直接拿来用就好啦，以下代码亲测可用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div></pre></td><td class="code"><pre><div class="line">-*- coding: utf-8 -*-import urllib2</div><div class="line">import re</div><div class="line">import rsa</div><div class="line">import cookielib  #从前的cookielibimport base64</div><div class="line">import json</div><div class="line">import urllib</div><div class="line">import binascii</div><div class="line">from lxml import etree</div><div class="line">import json</div><div class="line"> 用于模拟登陆新浪微博class launcher():</div><div class="line"> </div><div class="line">    cookieContainer=None    _headers=&#123;</div><div class="line">            &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36&quot;        &#125;</div><div class="line">    def __init__(self,username, password):</div><div class="line">        self.password = password</div><div class="line">        self.username = username</div><div class="line"></div><div class="line"></div><div class="line">    def get_prelogin_args(self):</div><div class="line">        json_pattern = re.compile(&apos;\((.*)\)&apos;)</div><div class="line">        url = &apos;http://login.sina.com.cn/sso/prelogin.php?entry=weibo&amp;callback=sinaSSOController.preloginCallBack&amp;su=&amp;&apos; + self.get_encrypted_name() + &apos;&amp;rsakt=mod&amp;checkpin=1&amp;client=ssologin.js(v1.4.18)&apos;        try:</div><div class="line">            request = urllib2.Request(url)</div><div class="line">            response = urllib2.urlopen(request)</div><div class="line">            raw_data = response.read().decode(&apos;utf-8&apos;)</div><div class="line">            print &quot;get_prelogin_args&quot;+raw_data;</div><div class="line">            json_data = json_pattern.search(raw_data).group(1)</div><div class="line">            data = json.loads(json_data)</div><div class="line">            return data</div><div class="line">        except urllib2.HTTPError as e:</div><div class="line">            print(&quot;%d&quot;%e.code)</div><div class="line">            return None    def get_encrypted_pw(self,data):</div><div class="line">        rsa_e = 65537 #0x10001        pw_string = str(data[&apos;servertime&apos;]) + &apos;\t&apos; + str(data[&apos;nonce&apos;]) + &apos;\n&apos; + str(self.password)</div><div class="line">        key = rsa.PublicKey(int(data[&apos;pubkey&apos;],16),rsa_e)</div><div class="line">        pw_encypted = rsa.encrypt(pw_string.encode(&apos;utf-8&apos;), key)</div><div class="line">        self.password = &apos;&apos;   #清空password        passwd = binascii.b2a_hex(pw_encypted)</div><div class="line">        print(passwd)</div><div class="line">        return passwd</div><div class="line"></div><div class="line"></div><div class="line">    def get_encrypted_name(self):</div><div class="line">        username_urllike   = urllib.quote(self.username)</div><div class="line">        byteStr=bytes(username_urllike)</div><div class="line">        byteStrEncod=byteStr.encode(encoding=&quot;utf-8&quot;)</div><div class="line">        username_encrypted = base64.b64encode(byteStrEncod)</div><div class="line">        return username_encrypted.decode(&apos;utf-8&apos;)</div><div class="line"></div><div class="line"></div><div class="line">    def enableCookies(self):</div><div class="line">            #建立一个cookies 容器            self.cookieContainer = cookielib.MozillaCookieJar(&quot;/Users/lichao/desktop/weibo/cookie/cookie.txt&quot;);</div><div class="line">            # ckjar=cookielib.MozillaCookieJar(&quot;/Users/Apple/Desktop/cookie.txt&quot;)            #将一个cookies容器和一个HTTP的cookie的处理器绑定            cookie_support = urllib2.HTTPCookieProcessor(self.cookieContainer)</div><div class="line">            #创建一个opener,设置一个handler用于处理http的url打开            opener = urllib2.build_opener(cookie_support, urllib2.HTTPHandler)</div><div class="line">            #安装opener，此后调用urlopen()时会使用安装过的opener对象            # proxy_handler = urllib2.ProxyHandler(&#123;&quot;http&quot;: &apos;http://localhost:5000&apos;&#125;)            # opener=urllib2.build_opener(proxy_handler)            urllib2.install_opener(opener)</div><div class="line"></div><div class="line"></div><div class="line">    def build_post_data(self,raw):</div><div class="line">        post_data = &#123;</div><div class="line">            &quot;entry&quot;:&quot;weibo&quot;,</div><div class="line">            &quot;gateway&quot;:&quot;1&quot;,</div><div class="line">            &quot;from&quot;:&quot;&quot;,</div><div class="line">            &quot;savestate&quot;:&quot;7&quot;,</div><div class="line">            &quot;useticket&quot;:&quot;1&quot;,</div><div class="line">            &quot;pagerefer&quot;:&quot;Sina Visitor System&quot;,</div><div class="line">            &quot;vsnf&quot;:&quot;1&quot;,</div><div class="line">            &quot;su&quot;:self.get_encrypted_name(),</div><div class="line">            &quot;service&quot;:&quot;miniblog&quot;,</div><div class="line">            &quot;servertime&quot;:raw[&apos;servertime&apos;],</div><div class="line">            &quot;nonce&quot;:raw[&apos;nonce&apos;],</div><div class="line">            &quot;pwencode&quot;:&quot;rsa2&quot;,</div><div class="line">            &quot;rsakv&quot;:raw[&apos;rsakv&apos;],</div><div class="line">            &quot;sp&quot;:self.get_encrypted_pw(raw),</div><div class="line">            &quot;sr&quot;:&quot;1280*800&quot;,</div><div class="line">            &quot;encoding&quot;:&quot;UTF-8&quot;,</div><div class="line">            &quot;prelt&quot;:&quot;77&quot;,</div><div class="line">            &quot;url&quot;:&quot;http://weibo.com/ajaxlogin.php?framelogin=1&amp;callback=parent.sinaSSOController.feedBackUrlCallBack&quot;,</div><div class="line">            &quot;returntype&quot;:&quot;META&quot;        &#125;</div><div class="line">        data = urllib.urlencode(post_data).encode(&apos;utf-8&apos;)</div><div class="line">        return data</div><div class="line"></div><div class="line"></div><div class="line">    def login(self):</div><div class="line">        url = &apos;新浪通行证&apos;        self.enableCookies()</div><div class="line">        data = self.get_prelogin_args()</div><div class="line">        post_data = self.build_post_data(data)</div><div class="line">        headers = &#123;</div><div class="line">            &quot;User-Agent&quot;:&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36&quot;        &#125;</div><div class="line">        try:</div><div class="line">            request = urllib2.Request(url=url,data=post_data,headers=headers)</div><div class="line">            response = urllib2.urlopen(request)</div><div class="line">            html = response.read().decode(&apos;GBK&apos;)</div><div class="line">            #print(html)        except urllib2.HTTPError as e:</div><div class="line">            print(e.code)</div><div class="line"></div><div class="line"></div><div class="line">        p = re.compile(&apos;location\.replace\(\&apos;(.*?)\&apos;\)&apos;)</div><div class="line">        p2 = re.compile(r&apos;&quot;userdomain&quot;:&quot;(.*?)&quot;&apos;)</div><div class="line"></div><div class="line"></div><div class="line">        try:</div><div class="line">            login_url = p.search(html).group(1)</div><div class="line">            print(login_url)</div><div class="line">            request = urllib2.Request(login_url)</div><div class="line">            response = urllib2.urlopen(request)</div><div class="line">            page = response.read().decode(&apos;utf-8&apos;)</div><div class="line">            print(page)</div><div class="line">            login_url = &apos;http://weibo.com/&apos; + p2.search(page).group(1)</div><div class="line">            request = urllib2.Request(login_url)</div><div class="line">            response = urllib2.urlopen(request)</div><div class="line">            final = response.read().decode(&apos;utf-8&apos;)</div><div class="line"></div><div class="line"></div><div class="line">            print(&quot;Login success!&quot;)</div><div class="line">            self.cookieContainer.save(ignore_discard=True, ignore_expires=True)</div><div class="line">        except Exception, e:</div><div class="line">            print(&apos;Login error!&apos;)</div><div class="line">            print e</div><div class="line">            return 0</div></pre></td></tr></table></figure>
+<p>###3、使用selenium实现模拟登录</p>
+<ul>
+<li>selenium +phantomjs</li>
+</ul>
+<p>第二种方法有一个问题，因为目前新版的微博页面的渲染方式采用的是分片渲染的，这就导致我们通过第二种静态方式爬取到的页面并不是最终的页面，而是内容嵌在 js里的中间页面，这肯定不是我们想看到的结果。于是，考虑模拟浏览器渲染页面的方式获取到最终的呈现页面。selenium这个工具正好完美的解决了我们的问题，它可以模拟浏览器的行为，并且我们拿到的source可以向jquery操作dom对象那样查找定位元素，非常方便，实现的核心代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">import time</div><div class="line">from selenium import webdriver</div><div class="line">import urllib2</div><div class="line">import selenium.webdriver.support.ui as ui</div><div class="line">import sys</div><div class="line">reload(sys)</div><div class="line">sys.setdefaultencoding( &quot;utf-8&quot; )</div><div class="line">from selenium.webdriver.common.keys import Keys</div><div class="line">Chrome PhantomJS#driver = webdriver.PhantomJS(&quot;/Users/test/documents/phantomjs/bin/phantomjs&quot;)</div><div class="line">driver.get(&apos;http://weibo.com/&apos;)</div><div class="line"></div><div class="line"></div><div class="line">try:</div><div class="line">    print &quot;登录开始&quot;</div><div class="line">    username = driver.find_element_by_xpath(&apos;//input[@name=&quot;username&quot;]&apos;)</div><div class="line">    password = driver.find_element_by_xpath(&apos;//input[@name=&quot;password&quot;]&apos;)</div><div class="line">    sbtn = driver.find_element_by_xpath(&apos;//a[@action-type=&quot;btn_submit&quot;]&apos;)</div><div class="line">    username.send_keys(&apos;&apos;) #send username       </div><div class="line">    password.send_keys(&apos;&apos;) #send password    sbtn.click()  </div><div class="line">    # 提交表单    </div><div class="line">    time.sleep(3)  # 等待页面加载   </div><div class="line">    # get the session cookie    </div><div class="line">    cookie = &#123;item[&quot;name&quot;] + &quot;:&quot; + item[&quot;value&quot;] for item in driver.get_cookies()&#125;    cookie=driver.get_cookies()</div><div class="line">    for item in driver.get_cookies():    cookieItem=&#123;&quot;name&quot;:item[&quot;name&quot;],&quot;value&quot;:item[&quot;value&quot;],&quot;domain&quot;:item[&quot;domain&quot;],&quot;httponly&quot;:item[&quot;httponly&quot;],&quot;path&quot;:item[&quot;path&quot;],&quot;secure&quot;:item[&quot;secure&quot;]&#125;    cookie.append(cookieItem)    cookie_file= open(&quot;/Users/test/desktop/weibo/cookie/cookie.txt&quot;,&apos;w&apos;)    cookie_file.write(str(cookie))    print str(str(cookie))</div><div class="line">except urllib2.HTTPError as e:</div><div class="line">    print e</div><div class="line">    print &quot;登录失败&quot;print &quot;开始爬取谣言大厅&quot;driver.get(&quot;http://service.account.weibo.com/show?rid=K1CaN7gJl8q8f&quot;)</div><div class="line">page = driver.page_source</div><div class="line">print page</div><div class="line">driver.quit()</div></pre></td></tr></table></figure>
+<p>我们将登录之后获取的cookie以键值对的形式存入文本文件中，方便下次直接load而不需要重复登录:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">def loadCookie(self):</div><div class="line">self._driver.get(&quot;http://www.sina.com.cn&quot;)</div><div class="line">    cookie_file=open(&quot;/Users/test/desktop/weibo/cookie/cookie.txt&quot;,&apos;r&apos;)</div><div class="line">    cookieStr=cookie_file.read();</div><div class="line">print &quot;cookie is: &quot;+cookieStr</div><div class="line">    cookieList=list(eval(cookieStr))</div><div class="line">for item in cookieList:</div><div class="line">cookieDic= type(eval(item))</div><div class="line">        self._driver.add_cookie(item)</div></pre></td></tr></table></figure>
+<ul>
+<li>selenium +chromedirver</li>
+</ul>
+<p>使用phantomjs存在一个问题，登录过程老是失败，因为验证码无法识别获取导致登录经常失败，这里我们使用chromedirver这工具结合selenium实现开挂级别的python数据爬取，模拟登录万无一失，核心代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">print &quot;登录开始&quot;</div><div class="line">username = driver.find_element_by_xpath(&apos;//input[@name=&quot;username&quot;]&apos;)</div><div class="line">password = driver.find_element_by_xpath(&apos;//input[@name=&quot;password&quot;]&apos;)</div><div class="line">sbtn = driver.find_element_by_xpath(&apos;//a[@action-type=&quot;btn_submit&quot;]&apos;)</div><div class="line">veryfiCode=driver.find_element_by_xpath(&apos;//input[@name=&quot;verifycode&quot;]&apos;)</div></pre></td></tr></table></figure>
+<p> 程序启动时会自动开启一个chrome窗口，只不过这个浏览器的行为我们可以通过程序控制，这样是不是方便多了！我们在username这一行打一个断点，然后程序执行到这一步，在浏览器中输入相应的用户名，密码，验证码，然后在pycharm中点击继续，登录成功！真实浏览器结合程序，真是开挂级别的爬取微博啊…</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/10/09/手动封装HbaseTemplate-mapper类/" data-toggle="tooltip" data-placement="top"
+                           title="手动封装HbaseTemplate mapper类">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#Python"
+                           title="Python">Python</a>
+                        
+                        <a class="tag" href="/tags/#Crawler"
+                           title="Crawler">Crawler</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2016
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
