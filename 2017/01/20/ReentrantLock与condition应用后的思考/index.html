@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2017/01/20/ReentrantLock与condition应用后的思考/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://jacobs.wanhb.cn/images/background3.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background3.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>ReentrantLock与condition应用后的思考</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2017-01-20
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#多线程 ReentrantLock"
+                           title="多线程 ReentrantLock">多线程 ReentrantLock</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            ReentrantLock与condition应用后的思考
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>一直在断断续续看《java并发编程实战》这本书，每次看都有不一样的体会，前些日子在知乎上回答了一个关于ReentrantLock的问题<a href="https://www.zhihu.com/question/52273413" target="_blank" rel="external">java里是怎么通过condition接口是获取监视器方法的</a> ,那次回答之后也引发了我对其实现的进一步探究。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>举一个简单的例子，是基本上各个公司招聘的时候都会出现的关于多线程间通信的问题：利用多线程循环打印n次”ABC”。当然，这个题目有很多实现方法，有经典的wait和notify的原生方法,也有时髦一点的ReentrantLock写法，如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Created by lichao on 2016/1/20.</div><div class="line"> */</div><div class="line">public class PrintABC &#123;</div><div class="line"></div><div class="line">  static ReentrantLock lock = new ReentrantLock();</div><div class="line">  static Condition conditionA = lock.newCondition();</div><div class="line">  static Condition conditionB = lock.newCondition();</div><div class="line">  static Condition conditionC = lock.newCondition();</div><div class="line">  static int signal = 1;//1=&gt;A, 2=&gt;B 3=&gt;C</div><div class="line">  static int loopValue = 10;</div><div class="line"></div><div class="line">  class taskA implements Runnable &#123;</div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">      lock.lock();</div><div class="line">      try &#123;</div><div class="line">        for (int i = 0; i &lt; loopValue; i++) &#123;</div><div class="line">          if (signal != 1) &#123;</div><div class="line">            conditionA.await();</div><div class="line">            conditionB.signalAll();</div><div class="line">            conditionC.signalAll();</div><div class="line">          &#125;</div><div class="line">          signal = 2;</div><div class="line">          System.out.print(&quot;A&quot;);</div><div class="line">          conditionB.signal();</div><div class="line">          conditionA.await();</div><div class="line">        &#125;</div><div class="line">      &#125; catch (Exception ex) &#123;</div><div class="line"></div><div class="line">      &#125; finally &#123;</div><div class="line">        lock.unlock();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  class taskB implements Runnable &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">      lock.lock();</div><div class="line">      try &#123;</div><div class="line">        for (int i = 0; i &lt; loopValue; i++) &#123;</div><div class="line">          if (signal != 2) &#123;</div><div class="line">            conditionB.await();</div><div class="line">            conditionA.signalAll();</div><div class="line">            conditionC.signalAll();</div><div class="line">          &#125;</div><div class="line">          signal = 3;</div><div class="line">          System.out.print(&quot;B&quot;);</div><div class="line">          conditionC.signal();</div><div class="line">          conditionB.await();</div><div class="line"></div><div class="line">        &#125;</div><div class="line">      &#125; catch (Exception ex) &#123;</div><div class="line"></div><div class="line">      &#125; finally &#123;</div><div class="line">        lock.unlock();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  class taskC implements Runnable &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void run() &#123;</div><div class="line">      lock.lock();</div><div class="line">      try &#123;</div><div class="line">        for (int i = 0; i &lt; loopValue; i++) &#123;</div><div class="line">          if (signal != 3) &#123;</div><div class="line">            conditionC.await();</div><div class="line">            conditionB.signalAll();</div><div class="line">            conditionA.signalAll();</div><div class="line">          &#125;</div><div class="line">          signal = 1;</div><div class="line">          System.out.print(&quot;C&quot;);</div><div class="line">          conditionA.signal();</div><div class="line">          conditionC.await();</div><div class="line">        &#125;</div><div class="line">      &#125; catch (Exception ex) &#123;</div><div class="line"></div><div class="line">      &#125; finally &#123;</div><div class="line">        lock.unlock();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public static void main(String[] args) &#123;</div><div class="line">    ExecutorService executorService = Executors.newFixedThreadPool(3);</div><div class="line">    executorService.submit(new PrintABC().new taskC());</div><div class="line">    executorService.submit(new PrintABC().new taskB());</div><div class="line">    executorService.submit(new PrintABC().new taskA());</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先定义了一个可重入锁，然后起了三个监视器用于控制任务a,b,c的状态，signal作为信号量用于表明当前应该哪个线程执行打印操作，实现无论任务往线程池中提交的顺序如何都能正确打印ABC的顺序</p>
+<h3 id="讲讲原理"><a href="#讲讲原理" class="headerlink" title="讲讲原理"></a>讲讲原理</h3><ul>
+<li>ReentrantLock（重入锁）是jdk的concurrent包提供的一种独占锁的实现。它继承自Dong Lea的 AbstractQueuedSynchronizer（同步器）。回到上面的代码，我们提交任务是按照CBA的次序来提交的，也就是打印C的任务会先开始执行，而当前的信号量signal为1,也就是A而不是3，所以通过conditonC.await()来释放锁，同时线程休眠等待唤醒，这时A拿到了，并且打印后将signal置为2即B，同时通过conditionA.await()方法使自己休眠，并唤醒B进行打印。以此类推，总的来说，ReentrantLock�与condition配合，优雅的完成了wait和notify做的事情。</li>
+<li>我们来看看其中是如何实现这种线程的调度过程的：reentrantLock.newCondition() 返回的是Condition的一个实现，该类在AbstractQueuedSynchronizer中被实现，可以访问AbstractQueuedSynchronizer中的方法和其余内部类,await被调用时的代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public final void await() throws InterruptedException &#123;</div><div class="line">if (Thread.interrupted())</div><div class="line"> throw new InterruptedException();</div><div class="line"> //将当前线程包装下后，添加到Condition自己维护的一个链表中。</div><div class="line"> Node node = addConditionWaiter(); </div><div class="line"> //释放当前线程占有的锁</div><div class="line">int savedState = fullyRelease(node);</div><div class="line">int interruptMode = 0;</div><div class="line"> while (!isOnSyncQueue(node)) &#123;</div><div class="line"> //释放完毕后，不断AQS的队列，看当前节点是否在队列中，不在 说明它还没有竞争锁的资格，所以继续将自己沉睡。直到它被重新加入到队列中.</div><div class="line"> LockSupport.park(this);</div><div class="line"> if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)</div><div class="line"> break;</div><div class="line"> &#125;</div><div class="line">//被唤醒后，重新开始正式竞争锁，同样，如果竞争不到还是会将自己沉睡，等待唤醒重新开始竞争。</div><div class="line">if (acquireQueued(node, savedState) &amp;&amp; interruptMode != THROW_IE)</div><div class="line"> interruptMode = REINTERRUPT;</div><div class="line"> if (node.nextWaiter != null)</div><div class="line"> unlinkCancelledWaiters();</div><div class="line"> if (interruptMode != 0)</div><div class="line"> reportInterruptAfterWait(interruptMode);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>signal方法的调用代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">public final void signal() &#123;</div><div class="line"> if (!isHeldExclusively())</div><div class="line"> throw new IllegalMonitorStateException();</div><div class="line"> Node first = firstWaiter; //firstWaiter为condition自己维护的一个链表的头结点，</div><div class="line">                          //取出第一个节点后开始唤醒操作</div><div class="line"> if (first != null)</div><div class="line"> doSignal(first);</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> private void doSignal(Node first) &#123;</div><div class="line"> do &#123;</div><div class="line"> if ( (firstWaiter = first.nextWaiter) == null) //修改头结点，完成旧头结点的移出工作</div><div class="line"> lastWaiter = null;</div><div class="line"> first.nextWaiter = null;</div><div class="line"> &#125; while (!transferForSignal(first) &amp;&amp;//将老的头结点，加入到AQS的等待队列中</div><div class="line"> (first = firstWaiter) != null);</div><div class="line"> &#125;</div><div class="line"></div><div class="line">final boolean transferForSignal(Node node) &#123;</div><div class="line"> /*</div><div class="line"> * If cannot change waitStatus, the node has been cancelled.</div><div class="line"> */</div><div class="line"> if (!compareAndSetWaitStatus(node, Node.CONDITION, 0))</div><div class="line"> return false;</div><div class="line"></div><div class="line">/*</div><div class="line"> * Splice onto queue and try to set waitStatus of predecessor to</div><div class="line"> * indicate that thread is (probably) waiting. If cancelled or</div><div class="line"> * attempt to set waitStatus fails, wake up to resync (in which</div><div class="line"> * case the waitStatus can be transiently and harmlessly wrong).</div><div class="line"> */</div><div class="line"> Node p = enq(node);</div><div class="line"> int ws = p.waitStatus;</div><div class="line">//如果该结点的状态为cancel 或者修改waitStatus失败，则直接唤醒。</div><div class="line"> if (ws &gt; 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))</div><div class="line"> LockSupport.unpark(node.thread);</div><div class="line"> return true;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>其实condition内部维护了一个等待队列，用于存放等待signal的任务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public class ConditionObject implements Condition, java.io.Serializable &#123;</div><div class="line">        private static final long serialVersionUID = 1173984872572414699L;</div><div class="line">        /** First node of condition queue. */</div><div class="line">        private transient Node firstWaiter;</div><div class="line">        /** Last node of condition queue. */</div><div class="line">        private transient Node lastWaiter;</div><div class="line">        </div><div class="line">**</div><div class="line">         * Adds a new waiter to wait queue.</div><div class="line">         * @return its new wait node</div><div class="line">         */</div><div class="line">        private Node addConditionWaiter() &#123;</div><div class="line">            Node t = lastWaiter;</div><div class="line">            // If lastWaiter is cancelled, clean out.</div><div class="line">            if (t != null &amp;&amp; t.waitStatus != Node.CONDITION) &#123;</div><div class="line">                unlinkCancelledWaiters();</div><div class="line">                t = lastWaiter;</div><div class="line">            &#125;</div><div class="line">            Node node = new Node(Thread.currentThread(), Node.CONDITION);</div><div class="line">            if (t == null)</div><div class="line">                firstWaiter = node;</div><div class="line">            else</div><div class="line">                t.nextWaiter = node;</div><div class="line">            lastWaiter = node;</div><div class="line">            return node;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>而AbstractQueuedSynchronizer中也维护了一个队列，就是获取当前资源的等待队列，当资源释放掉之后，会依次从队列中恢复线程，直至为空。每个线程会在这俩个队列中来回切换，但同一时刻仅存在于一个队列中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">线程1-&gt;AQS: ReentrantLock.lock（加入AQS队列，获取资源）</div><div class="line">线程1-&gt;AQS: condition.await()（移除队列，释放资源）</div><div class="line">AQS-&gt;condition队列: 线程1加入condition等待队列</div><div class="line">线程2-&gt;AQS: 线程2加入AQS队列并获取资源</div><div class="line">线程2-&gt;AQS: condition2.await()（移除AQS队列，释放资源）</div><div class="line">线程2-&gt;线程1: condition.signal()（线程2调用signal唤醒线程1）</div><div class="line">线程1-&gt;AQS: ReentrantLock.lock(重新加入AQS队列，获取资源)</div></pre></td></tr></table></figure></p>
+<p>###总结<br>还是得深入源码去看问题，不能只关注业务，否则会成为彻头彻尾的搬砖工，不仅要会用轮子，还要会造轮子。最后分享一片陈浩写的技术人员的职业生涯文章，共勉。<a href="http://coolshell.cn/articles/17583.html" target="_blank" rel="external">技术人员的发展之路</a></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/01/19/记一次失败的debug经历/" data-toggle="tooltip" data-placement="top"
+                           title="记一次失败的debug经历">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一个例子"><span class="toc-text">一个例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#讲讲原理"><span class="toc-text">讲讲原理</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#多线程 ReentrantLock"
+                           title="多线程 ReentrantLock">多线程 ReentrantLock</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
