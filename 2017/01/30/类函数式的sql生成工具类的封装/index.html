@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2017/01/30/类函数式的sql生成工具类的封装/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://jacobs.wanhb.cn/images/background3.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background3.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>类函数式的sql生成工具类的封装</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2017-01-30
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#java8 sqlGenerator 函数式"
+                           title="java8 sqlGenerator 函数式">java8 sqlGenerator 函数式</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            类函数式的sql生成工具类的封装
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自从正式工作以来，公司一直用的是Spring 原生的JDBC Template以及在其上封装的扩展的一些小工具， 而摈弃了Mybatis、ibatis等ORM框架。总的来说，这种做法对于开发效率来说提高不少，由于真正的查库操作不会直接穿透到Mysql，所以抗压性也没有太大的问题。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>虽说直接使用原生的JDBC Template比较方便，但是构造参数条件，以及生成查询语句过于简单粗暴，导致代码不简洁，复用度也不高。举个例子，根据特定的条件查询用户：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">StringBuffer sqlBuilder = new StringBuffer(&quot;select * from user where &quot;);</div><div class="line">Map&lt;String, Object&gt; paramsMap = new HashMap&lt;&gt;();</div><div class="line">if (userId != null) &#123;</div><div class="line">  sqlBuilder.append(&quot;user_id=:userId&quot;);</div><div class="line">  paramsMap.put(&quot;userId&quot;, userId);</div><div class="line">&#125;</div><div class="line">if (batchNumber != null) &#123;</div><div class="line">  sqlBuilder.append(&quot;batch_number=:batchNumber&quot;);</div><div class="line">  paramsMap.put(&quot;batchNumber&quot;, batchNumber);</div><div class="line">&#125;</div><div class="line">if (status != null) &#123;</div><div class="line">  sqlBuilder.append(&quot;status=:status&quot;);</div><div class="line">  paramsMap.put(&quot;stats&quot;, status);</div><div class="line">&#125;</div><div class="line"></div><div class="line">if (page &gt; 0 &amp;&amp; count &gt; 0) &#123;</div><div class="line">  sqlBuilder.append(&quot; limit &quot;)</div><div class="line">      .append(page * count)</div><div class="line">      .append(&quot;, &quot;)</div><div class="line">      .append(count);</div><div class="line">&#125;</div><div class="line">//生成sql语句</div><div class="line">sqlBuilder.toString();</div></pre></td></tr></table></figure></p>
+<p>可以看到上面的代码大部分在重复同样的逻辑，20多行的代码仅仅只是在构造sql语句以及收集参数，而且这些重复的代码将充斥项目所有的DAO层，导致代码非常不整洁。维护困难。</p>
+<h3 id="sql生成工具类封装"><a href="#sql生成工具类封装" class="headerlink" title="sql生成工具类封装"></a>sql生成工具类封装</h3><p>秉承着恶心重复的代码要重构抽象的态度，对sql生成的步骤，做了一次简单的封装：</p>
+<ul>
+<li>先介绍接口<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public interface Order &#123;</div><div class="line">    Where desc();</div><div class="line"></div><div class="line">    Where asc();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">public interface Where &#123;</div><div class="line">    Where ifPresent(Object value, String sql);</div><div class="line"></div><div class="line">    Order orderBy(String field);</div><div class="line"></div><div class="line">    Where limit(int begin, int end);</div><div class="line"></div><div class="line">    Where in(List&lt;Object&gt; values, String sql);</div><div class="line"></div><div class="line">    String sql();//构造的sql</div><div class="line"></div><div class="line">    Map&lt;String, Object&gt; params();//参数值</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>根据sql语句的特点，抽出子句部分的生成单独构造，涵盖Where, in(暂未实现)，limit 以及 order 排序规则。</p>
+<ul>
+<li>来看看接口的实现<br>将所有相关的类通过内部静态类封装入SqlWhereBuffer类中。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">public class SqlWhereBuffer &#123;</div><div class="line"></div><div class="line">  public static SqlWhereBuffer.Where builder() &#123;</div><div class="line">    return new Builder();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  static class Builder implements SqlWhereBuffer.Order, SqlWhereBuffer.Where &#123;</div><div class="line">    private List&lt;String&gt; sql = new ArrayList&lt;&gt;();</div><div class="line">    private Map&lt;String, Object&gt; params = new HashMap&lt;&gt;();</div><div class="line">    private String orderBy = &quot; &quot;;</div><div class="line">    private String limit = &quot; &quot;;</div><div class="line">    private String in = &quot; &quot;;</div><div class="line">    private List&lt;SqlMapperPlugin&gt; sqlMapperPlugins;</div><div class="line"></div><div class="line">    public Builder() &#123;</div><div class="line">      //添加基本类型默认的插件</div><div class="line">      sqlMapperPlugins = Lists.newArrayList();</div><div class="line">      this.mapperPlugins(SqlMapperPlugin.EnumSqlPlugin)</div><div class="line">          .mapperPlugins(SqlMapperPlugin.BooleanSqlPlugin);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Builder mapperPlugins(SqlMapperPlugin sqlMapperPlugin) &#123;</div><div class="line">      if (CollectionUtils.isEmpty(sqlMapperPlugins)) &#123;</div><div class="line">        sqlMapperPlugins = Lists.newArrayList();</div><div class="line">      &#125;</div><div class="line">      sqlMapperPlugins.add(sqlMapperPlugin);</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SqlWhereBuffer.Where ifPresent(Object value, String sql) &#123;</div><div class="line">      Optional.ofNullable(value)</div><div class="line">          .ifPresent(val -&gt; &#123;</div><div class="line">            this.sql.add(sql);</div><div class="line">            Pattern pattern = Pattern.compile(&quot;:([a-z,A-Z,\\w,_]*)&quot;); //固定的sql参数模式</div><div class="line">            Matcher matcher = pattern.matcher(sql);</div><div class="line">            if (!matcher.find()) &#123;</div><div class="line">              throw new IllegalArgumentException(sql + &quot; don&apos;t include :name&quot;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            Optional&lt;SqlMapperPlugin&gt; mapper = sqlMapperPlugins.stream()</div><div class="line">                .filter(sqlMapperPlugin -&gt; sqlMapperPlugin.test(val))</div><div class="line">                .findFirst();</div><div class="line">            if (mapper.isPresent()) &#123;</div><div class="line">              params.putAll(mapper.get()</div><div class="line">                  .getParams(matcher.group(1), value));</div><div class="line">            &#125; else &#123;</div><div class="line">              //匹配不到走默认的插件</div><div class="line">              params.put(matcher.group(1), value);</div><div class="line">            &#125;</div><div class="line">          &#125;);</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SqlWhereBuffer.Order orderBy(String field) &#123;</div><div class="line">      orderBy += &quot;ORDER BY &quot; + field;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SqlWhereBuffer.Where limit(int offset, int count) &#123;</div><div class="line">      limit += &quot;limit &quot; + offset + &quot;,&quot; + count;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public String sql() &#123;</div><div class="line">      if (sql.isEmpty() || params.isEmpty()) &#123;</div><div class="line">        return &quot;&quot;;</div><div class="line">      &#125; else &#123;</div><div class="line">        return &quot; WHERE &quot; + sql.stream()</div><div class="line">            .collect(Collectors.joining(&quot; AND &quot;)) + orderBy + limit;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public ImmutableMap&lt;String, Object&gt; params() &#123;</div><div class="line">      return ImmutableMap.copyOf(params);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SqlWhereBuffer.Where desc() &#123;</div><div class="line">      orderBy += &quot; DESC&quot;;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SqlWhereBuffer.Where asc() &#123;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>静态类Builder实现了SqlWhereBuffer.Order, SqlWhereBuffer.Where这俩个接口的方法。ifPresent是主入口。流程如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1、在ifPresent中参数先进行非空判断，如果是空则直接过滤掉；</div><div class="line">2、然后通过一个正则表达式（**:([a-z,A-Z,\\w,_]*)**）对参数sql进行规则校验，如果不符合也将过滤；</div><div class="line">3、最后value通过一系列的自定义的注册插件的匹配判断，得出sql以及params。</div></pre></td></tr></table></figure></p>
+<ul>
+<li>关于自定义插件，本没想做这么复杂，然而在实际的使用过程中，JDBC Template对Enum的支持不够…不过想也是，Enum大多是自定义的，没法做到一套约定的接口满足所有需求。于是封装了一个插件类，方便以后扩展：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line">public static class SqlMapperPlugin &#123;</div><div class="line">    private final Predicate&lt;Object&gt; predicate;</div><div class="line">    private final ParamValue paramValue;</div><div class="line"></div><div class="line">    private SqlMapperPlugin(Predicate&lt;Object&gt; predicate,</div><div class="line">        ParamValue paramValue) &#123;</div><div class="line">      this.predicate = predicate;</div><div class="line">      this.paramValue = paramValue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //定义枚举插件</div><div class="line">    static SqlMapperPlugin EnumSqlPlugin = of(Enum.class).paramValue((value, sql) -&gt;</div><div class="line">        Collections.singletonMap(sql, getEnumValue(value))</div><div class="line">    );</div><div class="line">    //定义Boolean插件</div><div class="line">    static SqlMapperPlugin BooleanSqlPlugin = of(Boolean.class).paramValue((value, sql) -&gt;</div><div class="line">        Collections.singletonMap(sql, ((boolean) value) ? 1 : 0)</div><div class="line">    );</div><div class="line"></div><div class="line">    public static SqlMapperPlugin.MapperPluginsBuilder of(Predicate&lt;Object&gt; predicate) &#123;</div><div class="line">      return new MapperPluginsBuilder(predicate);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static SqlMapperPlugin.MapperPluginsBuilder of(Class clazz) &#123;</div><div class="line">      return of((pd) -&gt; &#123;</div><div class="line">        return clazz.isAssignableFrom(pd.getClass());</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    boolean test(Object pd) &#123;</div><div class="line">      return this.predicate.test(pd);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Map&lt;String, Object&gt; getParams(String sql, Object value) &#123;</div><div class="line">      return paramValue.getParams(value, sql);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static class MapperPluginsBuilder &#123;</div><div class="line"></div><div class="line">      Predicate&lt;Object&gt; predicate;</div><div class="line"></div><div class="line">      public MapperPluginsBuilder(Predicate&lt;Object&gt; predicate) &#123;</div><div class="line">        this.predicate = predicate;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      public SqlMapperPlugin paramValue(SqlMapperPlugin.ParamValue paramValue) &#123;</div><div class="line">        return new SqlMapperPlugin(this.predicate, paramValue);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @FunctionalInterface</div><div class="line">    public interface ParamValue &#123;</div><div class="line">      Map&lt;String, Object&gt; getParams(Object var1, String var2);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public static String getEnumValue(Object value) &#123;</div><div class="line">    Method method;</div><div class="line">    try &#123;</div><div class="line">      method = value.getClass()</div><div class="line">          .getMethod(&quot;name&quot;);</div><div class="line">      return String.valueOf(method.invoke(value));</div><div class="line">    &#125; catch (NoSuchMethodException e) &#123;</div><div class="line">      throw new RuntimeException(&quot;NoSuchMethodException&quot;, e);</div><div class="line">    &#125; catch (IllegalAccessException e) &#123;</div><div class="line">      throw new RuntimeException(&quot;IllegalAccessException&quot;, e);</div><div class="line">    &#125; catch (InvocationTargetException e) &#123;</div><div class="line">      throw new RuntimeException(&quot;InvocationTargetException&quot;, e);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>主要用到了java8中新增的Predicate接口，用于判断value的Class类型，以及自己定义了一个FunctionalInterface 用于获取查询参数。这里先实现了EnumSqlPlugin，BooleanSqlPlugin俩个插件，之后有其他类型的需求，也可以通过类似的形式加入。对EnumSqlPlugin实现进行解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//定义枚举插件</div><div class="line">    static SqlMapperPlugin EnumSqlPlugin = of(Enum.class).paramValue((value, sql) -&gt;</div><div class="line">        Collections.singletonMap(sql, getEnumValue(value))</div><div class="line">    );</div></pre></td></tr></table></figure></p>
+<p>通过定义的of方法定义赋值Predicate,作为判断value是否为指定类型的方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public static SqlMapperPlugin.MapperPluginsBuilder of(Class clazz) &#123;</div><div class="line">      return of((pd) -&gt; &#123;</div><div class="line">        return clazz.isAssignableFrom(pd.getClass());</div><div class="line">      &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>of方法返回了MapperPluginsBuilder类，紧接着定义函数式接口paramValue的实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Collections.singletonMap(sql, getEnumValue(value))</div></pre></td></tr></table></figure></p>
+<p>最后返回EnumSqlPlugin对应的新实例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">return new SqlMapperPlugin(this.predicate, paramValue);</div></pre></td></tr></table></figure></p>
+<p>使用的时候，在Builder的构造函数中注入默认的插件即可，如日后有扩展，也可调用mapperPlugins方法动态加入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> private List&lt;SqlMapperPlugin&gt; sqlMapperPlugins;</div><div class="line"> public Builder() &#123;</div><div class="line">      //添加基本类型默认的插件</div><div class="line">      sqlMapperPlugins = Lists.newArrayList();</div><div class="line">      this.mapperPlugins(SqlMapperPlugin.EnumSqlPlugin)</div><div class="line">          .mapperPlugins(SqlMapperPlugin.BooleanSqlPlugin);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">public Builder mapperPlugins(SqlMapperPlugin sqlMapperPlugin)    &#123;</div><div class="line">      if (CollectionUtils.isEmpty(sqlMapperPlugins)) &#123;</div><div class="line">        sqlMapperPlugins = Lists.newArrayList();</div><div class="line">      &#125;</div><div class="line">      sqlMapperPlugins.add(sqlMapperPlugin);</div><div class="line">      return this;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="工具的使用"><a href="#工具的使用" class="headerlink" title="工具的使用"></a>工具的使用</h3><p>现在，我们可以使用封装好的工具了:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SqlWhereBuffer.Where where = SqlWhereBuffer.builder()</div><div class="line">        .ifPresent(batchNumber, &quot;batch_number=:batchNumber&quot;)</div><div class="line">        .ifPresent(status, &quot;upload_result=:uploadResult&quot;)</div><div class="line">        .ifPresent(userId, &quot;user_id=:userId&quot;)</div><div class="line">        .limit(page * count, count)</div><div class="line">        .orderBy(&quot;id&quot;)</div><div class="line">        .asc();</div></pre></td></tr></table></figure></p>
+<p>这样，代码变得整洁多了，也符合java8函数式风格的效果。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/01/20/ReentrantLock与condition应用后的思考/" data-toggle="tooltip" data-placement="top"
+                           title="ReentrantLock与condition应用后的思考">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql生成工具类封装"><span class="toc-text">sql生成工具类封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工具的使用"><span class="toc-text">工具的使用</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#java8 sqlGenerator 函数式"
+                           title="java8 sqlGenerator 函数式">java8 sqlGenerator 函数式</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
