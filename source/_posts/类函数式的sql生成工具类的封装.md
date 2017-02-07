@@ -1,7 +1,10 @@
 ---
 title: 类函数式的sql生成工具类的封装
 date: 2017-01-30 00:54:43
-tags: java8 sqlGenerator 函数式
+tags:
+    - java8
+    - sqlGenerator
+    - 函数式编程
 ---
 
 ### 前言

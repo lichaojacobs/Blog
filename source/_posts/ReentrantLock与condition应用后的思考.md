@@ -1,7 +1,9 @@
 ---
 title: ReentrantLock与condition应用后的思考
 date: 2017-01-20 16:02:15
-tags: 多线程 ReentrantLock 
+tags:
+    - 多线程
+    - ReentrantLock 
 ---
 一直在断断续续看《java并发编程实战》这本书，每次看都有不一样的体会，前些日子在知乎上回答了一个关于ReentrantLock的问题[java里是怎么通过condition接口是获取监视器方法的][1] ,那次回答之后也引发了我对其实现的进一步探究。
 
