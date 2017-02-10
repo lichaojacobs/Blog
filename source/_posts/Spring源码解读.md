@@ -14,7 +14,7 @@ tags:
 ![IOC接口设计规范](http://jacobs.wanhb.cn/images/ioc1.jpg)
 
 
-#### 初始化过程
+#### 资源定位与注册
 
 容器的初始化过程是IOC实现的入口，过程如下：
 
@@ -27,25 +27,165 @@ tags:
 4. **值得注意：**容器初始化过程不包括依赖注入的实现，Bean定义的载入和依赖注入是俩个独立的过程。依赖注入一般发生在第一次getBean的时候或者通过设置lazyinit实现预先注入Bean。 
 
 
-AbstractApplicationContext定义了基本的refresh方法，其他的由子类去实现扩展
+1. AbstractApplicationContext定义了基本的refresh方法，其他的由子类去实现扩展,即AbstractApplicationContext是容器初始化的入口
 
+2. DefaultListableBeanFactory是IOC容器的基础，FileSystemXmlApplicationContext、WebXmlApplicationContext都是建立在DefaultListableBeanFactory之上，实现自定义BeanDefinition的载入方式
 
-#### 注入过程
-DefaultListableBeanFactory 是IOC容器的基础，FileSystemXmlApplicationContext、WebXmlApplicationContext都是建立在DefaultListableBeanFactory之上，实现自定义BeanDefinition的载入方式
-IOC容器初始化的入口：Refresh方法。
-IOC getBean实现原理：在使用DefaultListableBeanFactory 作为IOC容器的时候，它的基类是AbstractAutowireCapableBaenFacotoy。基类中判断是否实现了BeanFactoryAware接口，如果实现了，也就是实现了接口方法，这是将IOC容器设置到Bean自身定义的一个属性中去。
+#### 依赖注入
+- 初始化过程完成的主要工作是在IOC容器中建立BeanDefinition数据映射。此过程中并没有实现IOC容器对Bean依赖关系进行注入。
+- 对于依赖注入，其触发条件是用户第一次向IOC容器索要Bean时触发的。当然也可以通过控制lazy-init属性来让容器完成对bean的预实例化。
+- **依赖注入的起点：** IOC容器接口BeanFactory中定义了一个getBean接口，这个接口的实现就是触发依赖注入的地方。可以在DefaultListableBeanFactory的类AbstractBeanFactory入手看看getBean的实现。
+- SimpleInstsntiationStrategy类，这个Strategy是Spring用来生成Bean对象的默认类，提供了俩种实例化Java对象的方法，一种是通过BeanUtils，它使用了JVM的反射功能，一种是CGLIB来生成，代码如下:
 ```
-    if(bean instance BeanFactoryAware){
-        ((BeanFactoryAware) bean).setBeanFactory(this);
-    }
+@Override
+	public Object instantiate(RootBeanDefinition bd, String beanName, BeanFactory owner) {
+		// Don't override the class with CGLIB if no overrides.
+		if (bd.getMethodOverrides().isEmpty()) {
+			Constructor<?> constructorToUse;
+			synchronized (bd.constructorArgumentLock) {
+				constructorToUse = (Constructor<?>) bd.resolvedConstructorOrFactoryMethod;
+				if (constructorToUse == null) {
+					final Class<?> clazz = bd.getBeanClass();
+					if (clazz.isInterface()) {
+						throw new BeanInstantiationException(clazz, "Specified class is an interface");
+					}
+					try {
+						if (System.getSecurityManager() != null) {
+							constructorToUse = AccessController.doPrivileged(new PrivilegedExceptionAction<Constructor<?>>() {
+								@Override
+								public Constructor<?> run() throws Exception {
+									return clazz.getDeclaredConstructor((Class[]) null);
+								}
+							});
+						}
+						else {
+							constructorToUse =	clazz.getDeclaredConstructor((Class[]) null);
+						}
+						bd.resolvedConstructorOrFactoryMethod = constructorToUse;
+					}
+					catch (Throwable ex) {
+						throw new BeanInstantiationException(clazz, "No default constructor found", ex);
+					}
+				}
+			}
+			return BeanUtils.instantiateClass(constructorToUse);
+		}
+		else {
+			// Must generate CGLIB subclass.
+			return instantiateWithMethodInjection(bd, beanName, owner);
+		}
+	}
 ```
-也即是如果需要回调容器一定需要实现BeanFactoryAware 接口
+- **依赖注入最终步骤**：在实例化Bean对象生成的基础上，对于Bean对象生成以后，怎样对这些Bean对象的依赖关系处理好，完成整个依赖注入过程？即通过populateBean方法完成，这个方法在AbstractAutowireCapableBeanFactory中实现，AutoWire的依赖注入等，都做了集中处理。
 
-对于依赖注入，createBean根据Beandefinition生成了目标对象并且初始化了beanpostprocesser返回了代理对象。
-populateBean则根据beandefinition的属性完成了bean的依赖注入。Autowire等之类的注入均在这个方法中完成。
-getBean是依赖注入的起点，之后会调用createBean，在AbstractAutowireCapableBeanFactory中实现了这个方法，还对bean初始化进行了处理，实现了bean后置处理器等。注入过程如下：
+- **Bean的初始化(InitializeBean)：**：在initializeBean方法中，需要使用Bean的名字，完成依赖注入以后的Bean对象，以及这个Bean对应的BeanDefinition。然后开始初始化工作：
+> 
+为类型是BeanNameAware的Bean设置Bean的名字
+为类型是BeanClassLoaderAware的Bean设置类装载器，
+类型是BeanFactoryAware的Bean设置自身所在的IOC容器以供回调使用，
+对PostProcessBeforeInitialization/postAfterInitialization的回调和初始化属性init-method的处理等。
+最后，就可以正常的使用由IOC容器托管的Bean了
+
+- 
 ![注入过程](http://jacobs.wanhb.cn/images/ioc3.jpg)
 
+#### 讲讲预先注入
+我们讲过依赖注入一般发生在用户第一次请求，但是也可以设置lazy-init属性实现预先依赖注入。这部分过程依然属于AbstractApplicationContext的 refresh方法中。在finishBeanFactoryInitialization的方法中，封装了lazy-init属性的处理，实际的处理是在DefaultListableBeanFactory这个基本容器的preInstantiateSingletons方法中完成的。该方法对单件Bean完成预先实例化。
+```
+ public void refresh() throws BeansException, IllegalStateException {
+    Object var1 = this.startupShutdownMonitor;
+    synchronized(this.startupShutdownMonitor) {
+      this.prepareRefresh();
+      ConfigurableListableBeanFactory beanFactory = this.obtainFreshBeanFactory();
+      this.prepareBeanFactory(beanFactory);
+
+      try {
+        this.postProcessBeanFactory(beanFactory);
+        this.invokeBeanFactoryPostProcessors(beanFactory);
+        this.registerBeanPostProcessors(beanFactory);
+        this.initMessageSource();
+        this.initApplicationEventMulticaster();
+        this.onRefresh();
+        this.registerListeners();
+        //预先实例化入口
+        this.finishBeanFactoryInitialization(beanFactory);
+        this.finishRefresh();
+      } catch (BeansException var9) {
+        if(this.logger.isWarnEnabled()) {
+          this.logger.warn("Exception encountered during context initialization - cancelling refresh attempt: " + var9);
+        }
+        this.destroyBeans();
+        this.cancelRefresh(var9);
+        throw var9;
+      } finally {
+        this.resetCommonCaches();
+      }
+    }
+  }
+  
+  //在finishBeanFactoryInitialization方法中进行具体的处理过程
+  protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+    ...
+    beanFactory.setTempClassLoader((ClassLoader)null);
+    beanFactory.freezeConfiguration();
+    beanFactory.preInstantiateSingletons();
+  }
+  
+	public void preInstantiateSingletons() throws BeansException {
+		List<String> beanNames = new ArrayList<String>(this.beanDefinitionNames);
+
+		// Trigger initialization of all non-lazy singleton beans...
+		for (String beanName : beanNames) {
+			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
+				if (isFactoryBean(beanName)) {
+					final FactoryBean<?> factory = (FactoryBean<?>) getBean(FACTORY_BEAN_PREFIX + beanName);
+					boolean isEagerInit;
+					if (System.getSecurityManager() != null && factory instanceof SmartFactoryBean) {
+						isEagerInit = AccessController.doPrivileged(new PrivilegedAction<Boolean>() {
+							@Override
+							public Boolean run() {
+								return ((SmartFactoryBean<?>) factory).isEagerInit();
+							}
+						}, getAccessControlContext());
+					}
+					else {
+						isEagerInit = (factory instanceof SmartFactoryBean &&
+								((SmartFactoryBean<?>) factory).isEagerInit());
+					}
+					if (isEagerInit) {
+						getBean(beanName);
+					}
+				}
+				else {
+					getBean(beanName);
+				}
+			}
+		}
+
+		// Trigger post-initialization callback for all applicable beans...
+		for (String beanName : beanNames) {
+			Object singletonInstance = getSingleton(beanName);
+			if (singletonInstance instanceof SmartInitializingSingleton) {
+				final SmartInitializingSingleton smartSingleton = (SmartInitializingSingleton) singletonInstance;
+				if (System.getSecurityManager() != null) {
+					AccessController.doPrivileged(new PrivilegedAction<Object>() {
+						@Override
+						public Object run() {
+							smartSingleton.afterSingletonsInstantiated();
+							return null;
+						}
+					}, getAccessControlContext());
+				}
+				else {
+					smartSingleton.afterSingletonsInstantiated();
+				}
+			}
+		}
+	}
+```
+
+**存疑：** spring 2 中preInstantiateSingletons的实现是加了个Synchronized内置锁，而在当前版本中，这一步去掉了锁，why?
 
 ### AOP
 
