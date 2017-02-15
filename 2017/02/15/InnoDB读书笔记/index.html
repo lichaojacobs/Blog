@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2017/02/15/InnoDB读书笔记/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background1.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://jacobs.wanhb.cn/images/background3.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://jacobs.wanhb.cn/images/background3.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>InnoDB读书笔记</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2017-02-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#InnoDB"
+                           title="InnoDB">InnoDB</a>
+                        
+                        <a class="tag" href="/tags/#mysql"
+                           title="mysql">mysql</a>
+                        
+                        <a class="tag" href="/tags/#成长"
+                           title="成长">成长</a>
+                        
+                        <a class="tag" href="/tags/#读书"
+                           title="读书">读书</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            InnoDB读书笔记
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><ul>
+<li>数据库的四种隔离级别</li>
+</ul>
+<blockquote>
+<p>1）Read Uncommitted(读未提交):<br>如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。该隔离级别可以通过“排他写锁”实现。<br>避免了更新丢失，却可能出现脏读。也就是说事务B读取到了事务A未提交的数据。 2） Read Committed(读提交):<br>读取数据的事务允许其他事务继续访问该行事务，但是未提交的写事务存在时禁止一切其他事务，该隔离级别避免了脏读，但是却可能出现不可重复读。事务A事先读取了数据，事务B紧接了更新了数据，并提交了事务，而事务A再次读取该数据时，数据已经发生了改变。<br>3）Repeated read （可重复读） 读取数据的事务将会禁止写事务（但允许读事务），写事务则禁止任何其他事务。<br>4）Serializable（序列化）：<br>序列化是最高的事务隔离级别，同时代价也花费最高，性能很低，一般很少使用，在该级别下，事务顺序执行，不仅可以避免脏读、不可重复读，还避免了幻像读。<br>提供严格的事务隔离。它要求事务序列化执行，事务只能一个接着一个地执行，但不能并发执行。如果仅仅通过“行级锁”是无法实现事务序列化的，必须通过其他机制保证新插入的数据不会被刚执行查询操作的事务访问到。</p>
+</blockquote>
+<ul>
+<li>InnoDB关键特性</li>
+</ul>
+<blockquote>
+<ol>
+<li><p>插入缓冲（Insert Buffer）<br>不可能每张表上只有一个聚集索引，在进行插入操作时候，数据页存放还是按照主键a进行顺序存放的，但是对于非聚集索引叶子节点的插入不再是顺序的了，这时会需要离散地访问非聚集索引页，需要注意，辅助索引的插入顺序依然是顺序的，或者说比较顺序的，比如用户购买表中的时间字段，通常情况下，用户购买时间是一个辅助索引，用来根据时间条件进行查询，但是在插入时却是根据时间递增而插入的，因此插入较为顺序。Insert Buffer 对于非聚集索引的插入和更新操作，不是每一次直接插入到索引页面，而是判断插入的是否在非索引页是否在缓冲池，若在，则直接插入。若不在先放入一个Insert Buffer中，好似欺骗。<br>因此  Insert Buffer需要满足的俩个条件： 索引是辅助索引，并且索引不是唯一的。</p>
+</li>
+<li><p>俩次写（Double Write）</p>
+</li>
+<li>自适应哈希索引（Adaptive Hash Index）</li>
+<li>异步IO</li>
+<li>刷新邻接页</li>
+</ol>
+</blockquote>
+<h3 id="索引与算法"><a href="#索引与算法" class="headerlink" title="索引与算法"></a>索引与算法</h3><ul>
+<li>InnoDB存储引擎支持的几种常见索引</li>
+</ul>
+<blockquote>
+<p>（1）B+ 树索引：其下索引又分为：聚集索引，辅助索引（内部均为B+树）<br>（2）全文索引<br>（3）哈希索引<br>（哈希索引是自适应的，根据表的使用情况自动生成）<br>注意：B+ 树索引并不能找到一个给定键值的具体行。B+树索引能找到的只是被查找数据行所在的页，然后数据库通过把页读入到内存，再在内训中进行查找，最后得到想要查找的数据。</p>
+</blockquote>
+<h4 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a>B+树索引</h4><ul>
+<li>B+树定义</li>
+</ul>
+<blockquote>
+<p> 1）由二叉树和平衡二叉树演化而来。是为磁盘或其他直接存取辅助设备设计的一种平衡查找树，在B+树中，所有记录的节点都是按照键值的大小顺序存放在同一层的叶子节点上。由各叶子节点指针进行连接。<br>（2）B+树的插入必须保证插入之后叶子节点的记录依然排序。<br>（3）B+树在数据库中的有一个特点就是高扇出性，因此在数据库中B+树的高度一般都在2～4层，也就是说查找一个键值记录最多只需要2到4次IO。</p>
+</blockquote>
+<h4 id="B-树索引-1"><a href="#B-树索引-1" class="headerlink" title="B+树索引"></a>B+树索引</h4><p>分为聚集索引和辅助索引。俩者的不同之处在于叶子节点存放的是否是一整行的信息。MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址，而InnoDB的辅助索引data域存储相应记录主键的值而不是地址。而聚集索引能够在叶子节点上直接找到数据。此外，由于定义了数据的逻辑顺序，聚集索引能够特别快地针对范围值查询，查询优化器能够快速发现某一段范围的数据页需要扫描。</p>
+<ul>
+<li>聚集索引<br>由于实际的数据页只能按照一棵B+树进行排序，因此每张表只能拥有一个聚集索引。在多数情况下，查询优化器倾向于使用聚集索引。因为:</li>
+</ul>
+<blockquote>
+<p>1）聚集索引能够直接在B+树索引上找到数据。<br>2）定义了数据的逻辑顺序，聚集索引能够特别快地访问针对范围值的查询。能够快速的发现某一段范围的数据页需要扫描</p>
+</blockquote>
+<p>误区：很多书和博客都介绍，聚集索引按照顺序物理地存储数据，其实这样会导致维护成本非常高，所以聚集索引的存储并不是物理上连续的。而是逻辑连续。原因：</p>
+<blockquote>
+<p>1）页通过双向链表链接，页按照主键的顺序排序；</p>
+<p>2）页中的记录也是通过双向链表进行维护的，物理存储上可以同样不按照主键存储。</p>
+</blockquote>
+<ul>
+<li>辅助索引<br>辅助索引的顺序与数据记录的逻辑顺序无关<blockquote>
+<p>1)叶子节点并不包含记录的全部数据，除了包含键值外，还包含了一个书签，用来告诉Innodb存储引擎哪里可以找到与索引对应的行数据。由于Innodb存储引擎是索引组织表，因此Innodb存储引擎的辅助索引的书签就是相应行数据的聚集索引键。通过这个键进行二次查找。得到最终的数据</p>
+<p>2)辅助索引的存在并不影响数据在聚集索引中的组织，因此每张表上可以有多个辅助索引。当通过辅助索引来寻找数据时，Innodb存储引擎会遍历辅助索引并通过叶节点的指针获得之乡主键索引的主键，然后通过主键索引来找到一条完整的行记录。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="B-树索引的分裂"><a href="#B-树索引的分裂" class="headerlink" title="B+树索引的分裂"></a>B+树索引的分裂</h4><h4 id="B-树索引的管理"><a href="#B-树索引的管理" class="headerlink" title="B+树索引的管理"></a>B+树索引的管理</h4><blockquote>
+<p><strong>Cardinality值：</strong><br>1）并不是在所有的查询条件中出现的列都需要添加索引，一般的经验是，在访问表中很少一部分时使用B+树索引才有意义，对于性别、地区、类型字段，它们的可取值范围很小，称为低选择性，于是建索引是完全没有必要的。<br>2）对于高选择性的确定，可以通过show<br>index结果列中的列Cardinality来观察，表示的是索引中不重复记录数量的预估值。注意：仅仅是个预估值，而不是一个准确值。</p>
+</blockquote>
+<h4 id="B-索引树的使用"><a href="#B-索引树的使用" class="headerlink" title="B+索引树的使用"></a>B+索引树的使用</h4><p>1）用Show index table 查看索引的情况<br>2）用explain+sql语句 来分析这条sql的情况，包括使用的possible_keys（可能选择的索引）与key(实际选择的索引)</p>
+<ul>
+<li>联合索引<br>是指对表上的多个列进行索引，创建方法与单个索引的创建方法一样，不同之处在于有多个索引列,如对于联合索引(a,b) ,以下是关于联合索引的一些情况</li>
+</ul>
+<blockquote>
+<p>1）select * from table where a=x and b=x;<br>显然是可以用(a,b)索引的，因为索引的顺序就是按照（a,b）来排序的</p>
+<p>2）select * from table where a=xxx; 这个也是可以使用(a,b)索引的，只不过只能使用一部分</p>
+<p>3) select * from table where b=xxx; 这个是不能使用索引的，因为压根就没按照b做排序。</p>
+</blockquote>
+<p>联合索引的好处是，在第一个索引的基础上，已经给第二个键值做了排序的处理，从而可以减少一次排序操作：比如我们要查某个用户购买商品的情况，并且按照时间排序。</p>
+<ul>
+<li>覆盖索引</li>
+</ul>
+<blockquote>
+<p>1) Innodb存储引擎支持覆盖索引，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。使用覆盖索引的一个好处是辅助索引不包含整行记录的所有信息，因此，大小要远小于聚集索引，可以大大减少IO操作。</p>
+<p>2) 对于Innodb的辅助索引而言，由于其包含了主键信息，因此其叶子节点存放的数据为(primary key1,primary<br>key2,…)例如，下列语句都可以通过使用一次辅助索引来完成查询select primary key1,key2,… from table<br>where<br>key1=xxx;对于覆盖索引的另一个好处是对某些统计问题而言，不会选择通过聚集索引来进行统计。因为辅助索引的量远小于聚集索引，可以大大减少IO操作。</p>
+</blockquote>
+<ul>
+<li>优化器选择不使用索引的情况<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如：select * from order where orderId&gt;10000 and orderId&lt;102000;  （从orderId的基数看来非常大，这是前提）</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这句sql按道理来说可以使用辅助索引的，可选的 KEYS有primary orderId, 等索引，然而最后选择了primary聚集索引，也就是全表扫描。原因在于用户要选取的数据是整行信息，而orderId索引不能覆盖到我们要查询的信息，因此在对orderId索引查询到指定的数据之后，还需要一次书签访问来查询整行信息，虽然orderId索引中的数据是顺序存放的，但是再一次进行书签来查找数据则是无序的，因此变为了磁盘上的离散读操作。如果要求访问的数据量很小。则优化器还会选择辅助索引，但是当访问的数据占整个表中数据的蛮大一部分的时候（通常是百分之二十），优化器则会选择通过聚集索引来查找数据，因此之前已经提到过，顺序读要远远快于离散读。<br>因此，对于不能进行索引覆盖的情况，优化器选择辅助索引的条件是占有的数据量很小。当然这是由当前传统的机械硬盘的特性决定的。</p>
+<ul>
+<li>InnoDB存储引擎中的哈希算法</li>
+</ul>
+<p>自适应哈希索引：数据库自身创建并使用的，经过哈希函数映射到一个哈希表中，因此对于字典类型的查找非常快速。如 select * from table where index_cole=“xxx” 但是对于范围查找久无能为力了。</p>
+<h3 id="锁（未完待续…）"><a href="#锁（未完待续…）" class="headerlink" title="锁（未完待续…）"></a>锁（未完待续…）</h3>
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/02/15/InnoDB读书笔记/"
+                     data-title="InnoDB读书笔记"
+                     data-url="http://jacobs.wanhb.cn/2017/02/15/InnoDB读书笔记/"
+                     data-images=""
+                     data-content="基础知识
+数据库的四种隔离级别
+
+
+1）Read Uncommitted(读未提交):如果一个... | CHAO LI&#39;s blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/02/12/Spring源码解析-事务处理/" data-toggle="tooltip" data-placement="top"
+                           title="Spring源码解析--事务处理">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/02/15/InnoDB读书笔记/"
+                         data-title="InnoDB读书笔记"
+                         data-url="http://jacobs.wanhb.cn/2017/02/15/InnoDB读书笔记/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引与算法"><span class="toc-text">索引与算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#B-树索引"><span class="toc-text">B+树索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-树索引-1"><span class="toc-text">B+树索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-树索引的分裂"><span class="toc-text">B+树索引的分裂</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-树索引的管理"><span class="toc-text">B+树索引的管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-索引树的使用"><span class="toc-text">B+索引树的使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#锁（未完待续…）"><span class="toc-text">锁（未完待续…）</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#InnoDB"
+                           title="InnoDB">InnoDB</a>
+                        
+                        <a class="tag" href="/tags/#mysql"
+                           title="mysql">mysql</a>
+                        
+                        <a class="tag" href="/tags/#成长"
+                           title="成长">成长</a>
+                        
+                        <a class="tag" href="/tags/#读书"
+                           title="读书">读书</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'jacobs';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
