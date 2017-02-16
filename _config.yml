@@ -9,7 +9,7 @@ author: CHAO LI
 language:
 timezone:
 SEOTitle: CHAO LI's blog 
-header_img: http://jacobs.wanhb.cn/images/background1.jpg
+header_img: http://ol7zjjc80.bkt.clouddn.com/lion-blur-bg.jpg
 email: lichaojacobs@tju.edu.cn
 description: jacobs的个人博客
 keyword: # seo key words
@@ -131,8 +131,8 @@ clip-avatar: "?imageView2/2/w/300/h/300/interlace/1/q/90"
 clip-home-post-bg: "?imageView2/1/w/800/h/300/interlace/1/q/70"
 
 # post default images
-post-default-img: http://jacobs.wanhb.cn/images/background3.jpg
-post-default-img-mobile: http://jacobs.wanhb.cn/images/background3.jpg #移动端显示的图片
+post-default-img: http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg
+post-default-img-mobile: http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg #移动端显示的图片
 
 # search api , set your custom key
 swiftype_key: 
