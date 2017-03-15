@@ -188,9 +188,11 @@
 <li>行键：每行都有唯一的行键，行键没有数据类型，它内部被认为是一个字节数组。</li>
 <li>列族：HBase表中的行是按一个叫colomn family的列族分组的，也是在磁盘上也是按列族存储数据的，由于这个原因，故当定义一个hbase表时，除了定义表名外，还必须定义列族。传统数据库没有列族的概念。</li>
 <li>列修饰符：列簇定义真实的列，被称之为列修饰符，你可以认为列修饰符就是列本身。</li>
-<li>存储机制：LSM树。使用日志文件和内存存储来将随机写转换成顺序写，因此也能保证稳定的数据插入速率。由于读和写独立，因此在这俩种操作之间没有冲突。由于存储数据的布局较优，查询一个键需要的磁盘寻到次数在一个可预测的范围内。并且读取与该键连续的任意数量的记录都不会引发任何额外的磁盘寻道。</li>
+</ul>
+<h3 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h3><ul>
+<li>数据结构：LSM树。使用日志文件和内存存储来将随机写转换成顺序写，因此也能保证稳定的数据插入速率。由于读和写独立，因此在这俩种操作之间没有冲突。由于存储数据的布局较优，查询一个键需要的磁盘寻到次数在一个可预测的范围内。并且读取与该键连续的任意数量的记录都不会引发任何额外的磁盘寻道。</li>
 <li>启动HBase时。HMaster负责将所有的region分配到HRegion Server 上，其中也包括特别的-Root-和.META.表。HRegion Server负责打开region,并创建对应的HRegion实例。这些列族是用户之前创建表时定义的。每个store实例包含一个或多个storefile实例，它们实际数据存储文件HFile的轻量级封装。每个Store还有其对应的一个MemStore, 一个HregionServer分享了一个HLog实例。</li>
-<li>基本的请求流程:客户端先联系ZK子集群查找行键。上述过程是通过ZK获取含有-ROOT-的region服务器名来完成的。通过含有-Root-的region服务器可以查询到含有.META表中对应的region服务器名，其中包括请求的行键信息。这俩处主要内容都被缓存起来了。并且都只查询一次。最终通过查询.META.服务器来获取客户端的行键数据所在的region的服务器名。</li>
+<li>基本的请求流程: 客户端先联系ZK子集群查找行键。此过程是通过ZK获取含有-ROOT-的region服务器名来完成的。通过含有-Root-的region服务器可以查询到含有.META表中对应的region服务器名，其中包括请求的行键信息。这俩处主要内容都被缓存起来了。并且都只查询一次。最终通过查询.META.服务器来获取客户端的行键数据所在的region的服务器名。</li>
 <li>写数据的过程。第一步决定数据是否需要写到由HLog类实现的预写日志中。WAL是标准的Hadoop SequenceFile 并且存储了HlogKey实例。这些键包括序列号和实际数据。所以在服务器崩溃时可以回滚还没有持久化的数据。一旦数据被写入WAL中，数据就会被放到MemStore中，同时还会检查memstore是否已经骂了，如果满了，就会被请求刷写到磁盘中去。刷写请求由另外一个HRegionServer的线程处理，它会把数据写成一个新的HFile。同时也会保存最后写入的序号。系统就知道哪些数据现在被持久化了。</li>
 </ul>
 <h3 id="region拆分与合并"><a href="#region拆分与合并" class="headerlink" title="region拆分与合并"></a>region拆分与合并</h3><h4 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h4><ul>
@@ -220,9 +222,11 @@
 <li>salting方式：使用salting前缀来保证数据分散到所有的region服务器。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">byte prefix=(byte)(Long.hashCode(time)%&lt;number of region servers&gt;);</div></pre></td></tr></table></figure>
-<p>缺点：当用户要扫描一个连续的范围时，可能需要跨region请求，这样的话可以通过多线程读取。</p>
 <ul>
-<li>随机化：</li>
+<li><p>缺点：当用户要扫描一个连续的范围时，可能需要跨region请求，这样的话可以通过多线程读取。</p>
+</li>
+<li><p>随机化：</p>
+</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">byte rowkey=MD5(timestamp);</div></pre></td></tr></table></figure>
 <p>利用散列函数能将行键分散到所有的region服务器上，对于时间连续的数据，这样做不好，因为散列之后无法通过时间范围扫描数据。由于用户可以用散列的方式重新生成行键，随机化的方式很适合每次读取一行数据的应用，如果用户的数据不需要连续扫描而只需要随机读取，用户可以使用这种策略。</p>
@@ -282,7 +286,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些基础知识"><span class="toc-text">一些基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#region拆分与合并"><span class="toc-text">region拆分与合并</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#拆分"><span class="toc-text">拆分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rowKey的设计"><span class="toc-text">rowKey的设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关于rowKey的一些认识"><span class="toc-text">关于rowKey的一些认识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设计规范"><span class="toc-text">设计规范</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一些基础知识"><span class="toc-text">一些基础知识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#存储机制"><span class="toc-text">存储机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#region拆分与合并"><span class="toc-text">region拆分与合并</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#拆分"><span class="toc-text">拆分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rowKey的设计"><span class="toc-text">rowKey的设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关于rowKey的一些认识"><span class="toc-text">关于rowKey的一些认识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设计规范"><span class="toc-text">设计规范</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
