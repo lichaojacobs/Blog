@@ -219,14 +219,11 @@
 </li>
 <li><p>防止系统产生热读写的设计：</p>
 <ul>
-<li>salting方式：使用salting前缀来保证数据分散到所有的region服务器。</li>
+<li>salting方式：使用salting前缀来保证数据分散到所有的region服务器。缺点就是当用户要扫描一个连续的范围时，可能需要跨region请求，这样的话可以通过多线程读取。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">byte prefix=(byte)(Long.hashCode(time)%&lt;number of region servers&gt;);</div></pre></td></tr></table></figure>
 <ul>
-<li><p>缺点：当用户要扫描一个连续的范围时，可能需要跨region请求，这样的话可以通过多线程读取。</p>
-</li>
-<li><p>随机化：</p>
-</li>
+<li>随机化：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">byte rowkey=MD5(timestamp);</div></pre></td></tr></table></figure>
 <p>利用散列函数能将行键分散到所有的region服务器上，对于时间连续的数据，这样做不好，因为散列之后无法通过时间范围扫描数据。由于用户可以用散列的方式重新生成行键，随机化的方式很适合每次读取一行数据的应用，如果用户的数据不需要连续扫描而只需要随机读取，用户可以使用这种策略。</p>
@@ -259,6 +256,11 @@
                 
 
                 <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/04/11/Spark学习笔记/" data-toggle="tooltip" data-placement="top"
+                           title="Spark学习笔记">&larr; Previous Post</a>
+                    </li>
                     
                     
                     <li class="next">
