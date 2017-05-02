@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2017/05/02/Kylin学习笔记/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://ol7zjjc80.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/archives/">archives</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Kylin学习笔记</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2017-05-02
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#kylin"
+                           title="kylin">kylin</a>
+                        
+                        <a class="tag" href="/tags/#infrastructure"
+                           title="infrastructure">infrastructure</a>
+                        
+                        <a class="tag" href="/tags/#data"
+                           title="data">data</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Kylin学习笔记
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="OLAP-on-Line-AnalysisProcessing-的实现方式"><a href="#OLAP-on-Line-AnalysisProcessing-的实现方式" class="headerlink" title="OLAP(on-Line AnalysisProcessing)的实现方式"></a>OLAP(on-Line AnalysisProcessing)的实现方式</h3><ul>
+<li>ROLAP:<br>基于关系数据库的OLAP实现（Relational OLAP）。ROLAP将多维数据库的多维结构划分为两类表:一类是事实表,用来存储数据和维关键字;另一类是维表,即对每个维至少使用一个表来存放维的层次、成员类别等维的描述信息。维表和事实表通过主关键字和外关键字联系在一起,形成了”星型模式”。对于层次复杂的维,为避免冗余数据占用过大的存储空间,可以使用多个表来描述,这种星型模式的扩展称为”雪花模式”。特点是将细节数据保留在关系型数据库的事实表中，聚合后的数据也保存在关系型的数据库中。这种方式查询效率最低，不推荐使用。</li>
+<li><p>MOLAP:<br>多维数据组织的OLAP实现（Multidimensional OLAP。以多维数据组织方式为核心,也就是说,MOLAP使用多维数组存储数据。多维数据在存储中将形成”立方块（Cube）”的结构,在MOLAP中对”立方块”的”旋转”、”切块”、”切片”是产生多维数据报表的主要技术。特点是将细节数据和聚合后的数据均保存在cube中，所以以空间换效率，查询时效率高，但生成cube时需要大量的时间和空间。</p>
+</li>
+<li><p>HOLAP: 基于混合数据组织的OLAP实现（Hybrid OLAP）。如低层是关系型的，高层是多维矩阵型的。这种方式具有更好的灵活性。特点是将细节数据保留在关系型数据库的事实表中，但是聚合后的数据保存在cube中,聚合时需要比ROLAP更多的时间,查询效率比ROLAP高，但低于MOLAP。</p>
+</li>
+<li><p>kylin的cube数据是作为key-value结构存储在hbase中的，key是每一个维度成员的组合值，不同的cuboid下面的key的结构是不一样的，例如cuboid={brand，product，year}下面的一个key可能是brand=’Nike’，product=’shoe’，year=2015，那么这个key就可以写成Nike:shoe:2015，但是如果使用这种方式的话会出现很多重复，所以一般情况下我们会把一个维度下的所有成员取出来，然后保存在一个数组里面，使用数组的下标组合成为一个key，这样可以大大节省key的存储空间，kylin也使用了相同的方法，只不过使用了字典树（Trie树），每一个维度的字典树作为cube的元数据以二进制的方式存储在hbase中，内存中也会一直保持一份。</p>
+</li>
+</ul>
+<h3 id="cube-构建"><a href="#cube-构建" class="headerlink" title="cube 构建"></a>cube 构建</h3><ul>
+<li>Dimension：Mandatory、hierarchy、derived</li>
+<li>增量cube: kylin的核心在于预计算缓存数据，因此无法达到真正的实时查询效果。一个cube中包含了多个segment，每一个segment对应着一个物理cube，在实际存储上对应着一个hbase的一个表。每次查询的时候会查询所有的segment聚合之后的值进行返回，但是当segment数量较多时，查询效率会降低，这时会对segment进行合并。被合并的几个segment所对应的hbase表并没有被删除。</li>
+<li>cube词典树：cube数据是作为key-value结构存储在HBase中的。key是每一个维度成员的组合值</li>
+</ul>
+<h3 id="Streaming-cubing"><a href="#Streaming-cubing" class="headerlink" title="Streaming cubing"></a>Streaming cubing</h3><ul>
+<li>支持实时数据的cub。与传统的cub一样，共享storage engine(HBase)以及query engine。kylin Streaming cubing相比其他实时分析系统来说，不需要特别大的内存，也不需要实现真正的实时分析。因为在OLAP中，存在几分钟的数据延迟是完全可以接受的。于是实现手法上采用了micro batch approach。</li>
+<li>micro batch approach:将监听到的数据按照时间窗口的方式划分，并且为每个窗口封装了一个微量批处理，批处理后的结果直接存到HBase。</li>
+<li>Streaming cubing data 最终会慢慢转换成普通的cubes,因为所有的数据是直接保存到HBase中的，并且保存为一个新的segment，当segment数量到达一定程度时，job engine会将segment 合并起来形成一个大的cube。</li>
+</ul>
+<h3 id="实战问题总结"><a href="#实战问题总结" class="headerlink" title="实战问题总结"></a>实战问题总结</h3><p>由于集群环境是CDH集群，所以选择了kylin CDH 1.6的版本，支持从Kafka读取消息建立Streaming cubes直接写入HDFS中</p>
+<ul>
+<li>选择一个集群namenode节点，将解压包放入/opt/cloudrea/parcels/目录中。如果是部署单节点，暂时不用更改配置文件。所有的配置加载都在bin/kylin.sh中。</li>
+<li>直接kylin.sh start/stop 运行脚本，服务就会在7070端口起一个web界面。这个界面是可以进行可视化操作的。</li>
+</ul>
+<h3 id="Hive-数据源"><a href="#Hive-数据源" class="headerlink" title="Hive 数据源"></a>Hive 数据源</h3><ul>
+<li>直接测试hive数据源是没有问题的，这一功能比较完善，也是主打功能。</li>
+</ul>
+<h3 id="kafka数据源"><a href="#kafka数据源" class="headerlink" title="kafka数据源"></a>kafka数据源</h3><p>从kylin 1.6 版本开始正式支持Kafka做数据源，将Streaming Cubes实时写入 HBase中。这一块在测试的时候也出现了问题：</p>
+<h5 id="Kafka版本问题"><a href="#Kafka版本问题" class="headerlink" title="Kafka版本问题"></a>Kafka版本问题</h5><ul>
+<li>由于实验环境的CDH集群Kafka版本是0.9的，而kylin 仅支持0.10以上的版本，所以需要对CDH kafka集群进行升级。</li>
+</ul>
+<h5 id="mapreduce运行环境无jar包"><a href="#mapreduce运行环境无jar包" class="headerlink" title="mapreduce运行环境无jar包"></a>mapreduce运行环境无jar包</h5><p>kylin中提交cube build之后，map reduce任务直接抛错。错误提示是，找不到Kafka的Consumer类。根本原因是kylin默认集群上的map reduce classpath是会加载kafka-clients.jar包的，所以在提交任务的时候没有将kafka-clients.jar包打进去。这时可以有三种做法：</p>
+<ul>
+<li>直接修改kylin的源码，将kafka-clients.jar包给包括进去（待尝试）。</li>
+<li>可以通过修改集群的HADOOP_ClASSPATH的路径，将jar包给包括进去。</li>
+<li>hadoop classpath 查看classpath目录信息 将对应jar包直接拷入map reduce classpath中，这方法简单，但是缺点就是需要逐个得对node进行操作。</li>
+</ul>
+<h4 id="Property-is-not-embedded-format"><a href="#Property-is-not-embedded-format" class="headerlink" title="Property is not embedded format"></a>Property is not embedded format</h4><ul>
+<li><p>现在意识到，使用开源框架不会看其源码是不行的…就在我折腾俩天终于将mapreduce任务跑起来之后，新的错误出现了:”ava.lang.RuntimeException: java.io.IOException: Property ‘xxx’ is not embedded format”。莫名奇妙的错误。迫使我直接去github上看kylin kafka模块的源码。在TimedJsonStreamParser.java中发现代码逻辑中默认json数据中，如果key存在下划线就会将该key按照下划线split… 然后看key对应的value是不是map类型，如果不是直接抛出标题的错误。</p>
+</li>
+<li><p>明确了问题之后，如何复写默认下划线split的配置成为问题。由于官网的文档十分鸡肋，很多坑都没有涉及到，所以继续看源码。发现StreamingParser.java这个类中会去写一些默认的配置。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public static final String PROPERTY_TS_COLUMN_NAME = &quot;tsColName&quot;;</div><div class="line">public static final String PROPERTY_TS_PARSER = &quot;tsParser&quot;;</div><div class="line">public static final String PROPERTY_TS_PATTERN = &quot;tsPattern&quot;;</div><div class="line">public static final String EMBEDDED_PROPERTY_SEPARATOR = &quot;separator&quot;;</div><div class="line"></div><div class="line">static &#123;</div><div class="line">        derivedTimeColumns.put(&quot;minute_start&quot;, 1);</div><div class="line">        derivedTimeColumns.put(&quot;hour_start&quot;, 2);</div><div class="line">        derivedTimeColumns.put(&quot;day_start&quot;, 3);</div><div class="line">        derivedTimeColumns.put(&quot;week_start&quot;, 4);</div><div class="line">        derivedTimeColumns.put(&quot;month_start&quot;, 5);</div><div class="line">        derivedTimeColumns.put(&quot;quarter_start&quot;, 6);</div><div class="line">        derivedTimeColumns.put(&quot;year_start&quot;, 7);</div><div class="line">        defaultProperties.put(PROPERTY_TS_COLUMN_NAME, &quot;timestamp&quot;);</div><div class="line">        defaultProperties.put(PROPERTY_TS_PARSER, &quot;org.apache.kylin.source.kafka.DefaultTimeParser&quot;);</div><div class="line">        defaultProperties.put(PROPERTY_TS_PATTERN, DateFormat.DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS);</div><div class="line">        defaultProperties.put(EMBEDDED_PROPERTY_SEPARATOR, &quot;_&quot;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>自然而然会联想到，这个默认的配置肯定是可以在用户设置的时候通过key（separator）去覆盖的…于是发现在构建Streaming table的时候，可以通过Parse Properties去覆盖配置。<br>于是直接写成如下的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">tsColName=timestamp;separator=no</div><div class="line"></div><div class="line">//源码中拿到这个配置之后会做覆盖处理，然后执行 getValueByKey：</div><div class="line"></div><div class="line">protected String getValueByKey(String key, Map&lt;String, Object&gt; rootMap) throws IOException &#123;</div><div class="line">        if (rootMap.containsKey(key)) &#123;</div><div class="line">            return objToString(rootMap.get(key));</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        String[] names = nameMap.get(key);</div><div class="line">        if (names == null &amp;&amp; key.contains(separator)) &#123;</div><div class="line">            names = key.toLowerCase().split(separator);</div><div class="line">            nameMap.put(key, names);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (names != null &amp;&amp; names.length &gt; 0) &#123;</div><div class="line">            tempMap.clear();</div><div class="line">            tempMap.putAll(rootMap);</div><div class="line">            //这块如果复写了separator属性的话split后的names数组长度为1会跳过这一步循环，防止解析出错</div><div class="line">            for (int i = 0; i &lt; names.length - 1; i++) &#123;</div><div class="line">                Object o = tempMap.get(names[i]);</div><div class="line">                if (o instanceof Map) &#123;</div><div class="line">                    tempMap.clear();</div><div class="line">                    tempMap.putAll((Map&lt;String, Object&gt;) o);</div><div class="line">                &#125; else &#123;</div><div class="line">                    throw new IOException(&quot;Property &apos;&quot; + names[i] + &quot;&apos; is not embedded format&quot;);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            Object finalObject = tempMap.get(names[names.length - 1]);</div><div class="line">            return objToString(finalObject);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return StringUtils.EMPTY;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/05/02/Kylin学习笔记/"
+                     data-title="Kylin学习笔记"
+                     data-url="http://jacobs.wanhb.cn/2017/05/02/Kylin学习笔记/"
+                     data-images=""
+                     data-content="基础知识OLAP(on-Line AnalysisProcessing)的实现方式
+ROLAP... | CHAO LI&#39;s blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/04/11/Spark学习笔记/" data-toggle="tooltip" data-placement="top"
+                           title="Spark学习笔记">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/05/02/Kylin学习笔记/"
+                         data-title="Kylin学习笔记"
+                         data-url="http://jacobs.wanhb.cn/2017/05/02/Kylin学习笔记/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础知识"><span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OLAP-on-Line-AnalysisProcessing-的实现方式"><span class="toc-text">OLAP(on-Line AnalysisProcessing)的实现方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cube-构建"><span class="toc-text">cube 构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Streaming-cubing"><span class="toc-text">Streaming cubing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实战问题总结"><span class="toc-text">实战问题总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive-数据源"><span class="toc-text">Hive 数据源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kafka数据源"><span class="toc-text">kafka数据源</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Kafka版本问题"><span class="toc-text">Kafka版本问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#mapreduce运行环境无jar包"><span class="toc-text">mapreduce运行环境无jar包</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Property-is-not-embedded-format"><span class="toc-text">Property is not embedded format</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#kylin"
+                           title="kylin">kylin</a>
+                        
+                        <a class="tag" href="/tags/#infrastructure"
+                           title="infrastructure">infrastructure</a>
+                        
+                        <a class="tag" href="/tags/#data"
+                           title="data">data</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'jacobs';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
