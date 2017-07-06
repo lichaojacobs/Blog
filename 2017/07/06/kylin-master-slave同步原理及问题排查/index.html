@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="jacobs的个人博客">
+    <meta name="keyword" content="null">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        CHAO LI｜CHAO LI&#39;s blog
+        
+    </title>
+
+    <link rel="canonical" href="http://jacobs.wanhb.cn/2017/07/06/kylin-master-slave同步原理及问题排查/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://ol7zjjc80.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    CHAO LI
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+                        
+                        <li>
+                            <a href="/archives/">archives</a>
+                        </li>
+                        
+                    
+                        
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+                        
+                    
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>kylin master-slave同步原理及问题排查</h1>
+                    
+                    <span class="meta">
+                         作者 CHAO LI
+                        <span>
+                          日期 2017-07-06
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#成长"
+                           title="成长">成长</a>
+                        
+                        <a class="tag" href="/tags/#infrastructure"
+                           title="infrastructure">infrastructure</a>
+                        
+                        <a class="tag" href="/tags/#Kylin"
+                           title="Kylin">Kylin</a>
+                        
+                        <a class="tag" href="/tags/#源码"
+                           title="源码">源码</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            kylin master-slave同步原理及问题排查
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的cluster架构。然而在实际的使用中也出现了一些问题:</p>
+<ul>
+<li>主节点更新了schema而从节点未sync</li>
+<li>从节点中部分sync成功，而不是全部</li>
+</ul>
+<p>而很明显的是kylin中所有的数据，包括所有元数据都是落地在HBase中的，那唯一导致节点间数据不一致的可能就只有各个节点都有本地缓存的情况了。为了理解原理方便debug，我对kylin master-slave的同步原理做了一些源代码层面的剖析。</p>
+<h3 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h3><h4 id="主从配置方式"><a href="#主从配置方式" class="headerlink" title="主从配置方式"></a>主从配置方式</h4><p>关于配置的格式，不得不吐槽官方文档的滑水。并没有给出详细的节点配置格式，查阅相关源码才发现正确的配置格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//kylin.properties下面的配置，根据源码，配置的格式为：user:pwd@host:port</div><div class="line">kylin.server.cluster-servers=user:password@host:port,user:password@host:port,user:password@host:port</div></pre></td></tr></table></figure>
+<h4 id="流程解析"><a href="#流程解析" class="headerlink" title="流程解析"></a>流程解析</h4><p><img src="http://ol7zjjc80.bkt.clouddn.com/master-slave-kylin.png" alt="流程解析"></p>
+<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><ul>
+<li><p>先来看看整个同步机制的核心BroadCaster类的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">//Broadcaster的构造函数</div><div class="line">private Broadcaster(final KylinConfig config) &#123;</div><div class="line">      this.config = config;</div><div class="line">      //获取kylin.properties中&quot;kylin.server.cluster-servers&quot;配置的值</div><div class="line">      //也就是集群中所有节点的配置了</div><div class="line">      final String[] nodes = config.getRestServers();</div><div class="line">      if (nodes == null || nodes.length &lt; 1) &#123;</div><div class="line">          logger.warn(&quot;There is no available rest server; check the &apos;kylin.server.cluster-servers&apos; config&quot;);</div><div class="line">          broadcastEvents = null; // disable the broadcaster</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line">      logger.debug(nodes.length + &quot; nodes in the cluster: &quot; + Arrays.toString(nodes));</div><div class="line"></div><div class="line">      //开一个单线程，不间断的循环从broadcastEvents队列里面获取注册的事件。</div><div class="line">      Executors.newSingleThreadExecutor(new DaemonThreadFactory()).execute(new Runnable() &#123;</div><div class="line">          @Override</div><div class="line">          public void run() &#123;</div><div class="line">              final List&lt;RestClient&gt; restClients = Lists.newArrayList();</div><div class="line">              for (String node : config.getRestServers()) &#123;</div><div class="line">                  //根据配置的节点信息注册RestClient</div><div class="line">                  restClients.add(new RestClient(node));</div><div class="line">              &#125;</div><div class="line">              final ExecutorService wipingCachePool = Executors.newFixedThreadPool(restClients.size(), new DaemonThreadFactory());</div><div class="line">              while (true) &#123;</div><div class="line">                  try &#123;</div><div class="line">                      final BroadcastEvent broadcastEvent = broadcastEvents.takeFirst();</div><div class="line">                      logger.info(&quot;Announcing new broadcast event: &quot; + broadcastEvent);</div><div class="line">                      for (final RestClient restClient : restClients) &#123;</div><div class="line">                          wipingCachePool.execute(new Runnable() &#123;</div><div class="line">                              @Override</div><div class="line">                              public void run() &#123;</div><div class="line">                                  try &#123;</div><div class="line">                                      restClient.wipeCache(broadcastEvent.getEntity(), broadcastEvent.getEvent(), broadcastEvent.getCacheKey());</div><div class="line">                                  &#125; catch (IOException e) &#123;</div><div class="line">                                      logger.warn(&quot;Thread failed during wipe cache at &quot; + broadcastEvent, e);</div><div class="line">                                  &#125;</div><div class="line">                              &#125;</div><div class="line">                          &#125;);</div><div class="line">                      &#125;</div><div class="line">                  &#125; catch (Exception e) &#123;</div><div class="line">                      logger.error(&quot;error running wiping&quot;, e);</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>通过Broadcaster的构造函数其实就能清楚整个同步过程的大概逻辑了。无非就是启动一个线程去轮询阻塞队列里面的元素，有的话就消费下来广播到其他从节点从而达到清理缓存的目的。</p>
+</li>
+<li><p>再来看看广播的实际逻辑实现,基本封装在RestClient中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">//此处是根据配置的节点信息正则匹配：&quot;user:pwd@host:port&quot;</div><div class="line">public RestClient(String uri) &#123;</div><div class="line">   Matcher m = fullRestPattern.matcher(uri);</div><div class="line">   if (!m.matches())</div><div class="line">       throw new IllegalArgumentException(&quot;URI: &quot; + uri + &quot; -- does not match pattern &quot; + fullRestPattern);</div><div class="line"></div><div class="line">   String user = m.group(1);</div><div class="line">   String pwd = m.group(2);</div><div class="line">   String host = m.group(3);</div><div class="line">   String portStr = m.group(4);</div><div class="line">   int port = Integer.parseInt(portStr == null ? &quot;7070&quot; : portStr);</div><div class="line"></div><div class="line">   init(host, port, user, pwd);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>根据配置的节点信息实例化RestClient，然后在init方法中，拼接wipe cache的url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">private void init(String host, int port, String userName, String password) &#123;</div><div class="line">  this.host = host;</div><div class="line">  this.port = port;</div><div class="line">  this.userName = userName;</div><div class="line">  this.password = password;</div><div class="line">  //拼接rest接口</div><div class="line">  this.baseUrl = &quot;http://&quot; + host + &quot;:&quot; + port + &quot;/kylin/api&quot;;</div><div class="line"></div><div class="line">  client = new DefaultHttpClient();</div><div class="line"></div><div class="line">  if (userName != null &amp;&amp; password != null) &#123;</div><div class="line">      CredentialsProvider provider = new BasicCredentialsProvider();</div><div class="line">      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);</div><div class="line">      provider.setCredentials(AuthScope.ANY, credentials);</div><div class="line">      client.setCredentialsProvider(provider);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>发现kylin所有的交互接口基本上底层都是调用的自己的rest接口，它自己所谓的jdbc的查询方式其实也只是在rest接口上封装了一层，底层还是http请求。可谓是挂羊头卖狗肉了。看看RestClient中怎么去通知其他节点wipe cache的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public void wipeCache(String entity, String event, String cacheKey) throws IOException &#123;</div><div class="line">   String url = baseUrl + &quot;/cache/&quot; + entity + &quot;/&quot; + cacheKey + &quot;/&quot; + event;</div><div class="line">   HttpPut request = new HttpPut(url);</div><div class="line"></div><div class="line">   try &#123;</div><div class="line">       HttpResponse response = client.execute(request);</div><div class="line">       String msg = EntityUtils.toString(response.getEntity());</div><div class="line"></div><div class="line">       if (response.getStatusLine().getStatusCode() != 200)</div><div class="line">           throw new IOException(&quot;Invalid response &quot; + response.getStatusLine().getStatusCode() + &quot; with cache wipe url &quot; + url + &quot;\n&quot; + msg);</div><div class="line">   &#125; catch (Exception ex) &#123;</div><div class="line">       throw new IOException(ex);</div><div class="line">   &#125; finally &#123;</div><div class="line">       request.releaseConnection();</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>已经很明了了，就是调的rest接口：/kylin/api/cache/{entity}/{cacaheKey}/{event}</p>
+</li>
+<li><p>当slave节点接收到wipeCache的指令时的处理逻辑如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public void notifyMetadataChange(String entity, Event event, String cacheKey) throws IOException &#123;</div><div class="line">     Broadcaster broadcaster = Broadcaster.getInstance(getConfig());</div><div class="line"></div><div class="line">     //这里会判断当前节点是否注册为listener了，如果注册了，此逻辑会被ignored</div><div class="line">     broadcaster.registerListener(cacheSyncListener, &quot;cube&quot;);</div><div class="line"></div><div class="line">     broadcaster.notifyListener(entity, event, cacheKey);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> //注册listener的逻辑</div><div class="line"> public void registerListener(Listener listener, String... entities) &#123;</div><div class="line">  synchronized (CACHE) &#123;</div><div class="line">      // ignore re-registration</div><div class="line">      List&lt;Listener&gt; all = listenerMap.get(SYNC_ALL);</div><div class="line">      if (all != null &amp;&amp; all.contains(listener)) &#123;</div><div class="line">          return;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      for (String entity : entities) &#123;</div><div class="line">          if (!StringUtils.isBlank(entity))</div><div class="line">              addListener(entity, listener);</div><div class="line">      &#125;</div><div class="line">      //注册几种事件类型</div><div class="line">      addListener(SYNC_ALL, listener);</div><div class="line">      addListener(SYNC_PRJ_SCHEMA, listener);</div><div class="line">      addListener(SYNC_PRJ_DATA, listener);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>notifyListener主要就是对所有事件处理逻辑的划分，根据事件类型选择处理逻辑，一般sheme的更新走的是默认逻辑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">public void notifyListener(String entity, Event event, String cacheKey) throws IOException &#123;</div><div class="line">     synchronized (CACHE) &#123;</div><div class="line">         List&lt;Listener&gt; list = listenerMap.get(entity);</div><div class="line">         if (list == null)</div><div class="line">             return;</div><div class="line"></div><div class="line">         logger.debug(&quot;Broadcasting metadata change: entity=&quot; + entity + &quot;, event=&quot; + event + &quot;, cacheKey=&quot; + cacheKey + &quot;, listeners=&quot; + list);</div><div class="line"></div><div class="line">         // prevents concurrent modification exception</div><div class="line">         list = Lists.newArrayList(list);</div><div class="line">         switch (entity) &#123;</div><div class="line">         case SYNC_ALL:</div><div class="line">             for (Listener l : list) &#123;</div><div class="line">                 l.onClearAll(this);</div><div class="line">             &#125;</div><div class="line">             clearCache(); // clear broadcaster too in the end</div><div class="line">             break;</div><div class="line">         case SYNC_PRJ_SCHEMA:</div><div class="line">             ProjectManager.getInstance(config).clearL2Cache();</div><div class="line">             for (Listener l : list) &#123;</div><div class="line">                 l.onProjectSchemaChange(this, cacheKey);</div><div class="line">             &#125;</div><div class="line">             break;</div><div class="line">         case SYNC_PRJ_DATA:</div><div class="line">             ProjectManager.getInstance(config).clearL2Cache(); // cube&apos;s first becoming ready leads to schema change too</div><div class="line">             for (Listener l : list) &#123;</div><div class="line">                 l.onProjectDataChange(this, cacheKey);</div><div class="line">             &#125;</div><div class="line">             break;</div><div class="line">         //大部分的走向</div><div class="line">         default:</div><div class="line">             for (Listener l : list) &#123;</div><div class="line">                 l.onEntityChange(this, entity, event, cacheKey);</div><div class="line">             &#125;</div><div class="line">             break;</div><div class="line">         &#125;</div><div class="line"></div><div class="line">         logger.debug(&quot;Done broadcasting metadata change: entity=&quot; + entity + &quot;, event=&quot; + event + &quot;, cacheKey=&quot; + cacheKey);</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>看到default分支会执行onEntityChange这个方法，看一下这个方法干的是什么</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">private Broadcaster.Listener cacheSyncListener = new Broadcaster.Listener() &#123;</div><div class="line">   @Override</div><div class="line">   public void onClearAll(Broadcaster broadcaster) throws IOException &#123;</div><div class="line">       removeAllOLAPDataSources();</div><div class="line">       cleanAllDataCache();</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   public void onProjectSchemaChange(Broadcaster broadcaster, String project) throws IOException &#123;</div><div class="line">       removeOLAPDataSource(project);</div><div class="line">       cleanDataCache(project);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   public void onProjectDataChange(Broadcaster broadcaster, String project) throws IOException &#123;</div><div class="line">       removeOLAPDataSource(project); // data availability (cube enabled/disabled) affects exposed schema to SQL</div><div class="line">       cleanDataCache(project);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   @Override</div><div class="line">   public void onEntityChange(Broadcaster broadcaster, String entity, Event event, String cacheKey) throws IOException &#123;</div><div class="line">       if (&quot;cube&quot;.equals(entity) &amp;&amp; event == Event.UPDATE) &#123;</div><div class="line">           final String cubeName = cacheKey;</div><div class="line">           new Thread() &#123; // do not block the event broadcast thread</div><div class="line">               public void run() &#123;</div><div class="line">                   try &#123;</div><div class="line">                       Thread.sleep(1000);</div><div class="line">                       cubeService.updateOnNewSegmentReady(cubeName);</div><div class="line">                   &#125; catch (Throwable ex) &#123;</div><div class="line">                       logger.error(&quot;Error in updateOnNewSegmentReady()&quot;, ex);</div><div class="line">                   &#125;</div><div class="line">               &#125;</div><div class="line">           &#125;.start();</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+<p>看到对于cache的同步是单独实现了一个listener的，Event为update的时候，会单独启动一个线程去执行刷新缓存操作</p>
+</li>
+</ul>
+
+                <hr>
+                
+                <!-- 多说 Share start -->
+                <div class="ds-share"
+                     style="text-align: right"
+                     data-thread-key="2017/07/06/kylin-master-slave同步原理及问题排查/"
+                     data-title="kylin master-slave同步原理及问题排查"
+                     data-url="http://jacobs.wanhb.cn/2017/07/06/kylin-master-slave同步原理及问题排查/"
+                     data-images=""
+                     data-content="背景最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一... | CHAO LI&#39;s blog ">
+                    <div class="ds-share-inline">
+                        <ul class="ds-share-icons-16">
+                            <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                            <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                            <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                            <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                        </ul>
+                        <div class="ds-share-icons-more">
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/25/HBase架构脑图/" data-toggle="tooltip" data-placement="top"
+                           title="HBase架构脑图">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                         data-thread-key="2017/07/06/kylin-master-slave同步原理及问题排查/"
+                         data-title="kylin master-slave同步原理及问题排查"
+                         data-url="http://jacobs.wanhb.cn/2017/07/06/kylin-master-slave同步原理及问题排查/">
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#背景"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理剖析"><span class="toc-text">原理剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#主从配置方式"><span class="toc-text">主从配置方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#流程解析"><span class="toc-text">流程解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#源码解析"><span class="toc-text">源码解析</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#成长"
+                           title="成长">成长</a>
+                        
+                        <a class="tag" href="/tags/#infrastructure"
+                           title="infrastructure">infrastructure</a>
+                        
+                        <a class="tag" href="/tags/#Kylin"
+                           title="Kylin">Kylin</a>
+                        
+                        <a class="tag" href="/tags/#源码"
+                           title="源码">源码</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'jacobs';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user};
+    (function () {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';
+        ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/577448557">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichaojacobs">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; CHAO LI 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="/images/avatar2.jpeg">
+</body>
+
+</html>
