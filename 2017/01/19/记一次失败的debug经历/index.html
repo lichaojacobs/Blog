@@ -6,15 +6,15 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>记一次失败的debug经历 | CHAO LI</title>
+  <title>记一次失败的debug经历 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="昨天使用spring aop的事务注解出现了业务中主动抛出异常却无法回滚脏数据的情形，然后崩溃的debug了一天，最后猛然发现不能通过this去掉加了增强的方法否则将拿不到代理对象。归根结底还是自己不甚理解事务实现的其中原理，才导致了bug的出现而不自知。
 问题还原如果对java如何实现底层的事务机制不太熟悉的话可以看看java事务处理系列文章 自己手动实现事务处理。
 来看看我调用事务的错误示例代">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次失败的debug经历">
-<meta property="og:url" content="http://jacobs.wanhb.cn/2017/01/19/记一次失败的debug经历/index.html">
-<meta property="og:site_name" content="CHAO LI">
+<meta property="og:url" content="http://yoursite.com/2017/01/19/记一次失败的debug经历/index.html">
+<meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="昨天使用spring aop的事务注解出现了业务中主动抛出异常却无法回滚脏数据的情形，然后崩溃的debug了一天，最后猛然发现不能通过this去掉加了增强的方法否则将拿不到代理对象。归根结底还是自己不甚理解事务实现的其中原理，才导致了bug的出现而不自知。
 问题还原如果对java如何实现底层的事务机制不太熟悉的话可以看看java事务处理系列文章 自己手动实现事务处理。
 来看看我调用事务的错误示例代">
@@ -27,7 +27,7 @@
 来看看我调用事务的错误示例代">
 <meta name="twitter:image" content="http://jacobs.wanhb.cn/images/aop1.jpg">
   
-    <link rel="alternate" href="/atom.xml" title="CHAO LI" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -202,27 +202,6 @@
                 <!-- City版安装代码已完成 -->
             
             
-            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
-                <script>
-
-                    /**
-                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-                    /*
-                     var disqus_config = function () {
-                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                     };
-                     */
-                    (function() { // DON'T EDIT BELOW THIS LINE
-                        var d = document, s = d.createElement('script');
-                        s.src = 'https://jacobs-wanhb.disqus.com/embed.js';
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                    })();
-                </script>
-                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-            
         </div>
     </div>
 </section>
@@ -255,7 +234,7 @@
         <!--请您保留作者署名, 主题制作来之不易-->
         Theme by <a href="http://haojen.github.io/">Haojen Ma</a>
         <br>
-        Copyright © CHAO LI 2017
+        Copyright © John Doe 2017
         <br>
         Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       </div>
