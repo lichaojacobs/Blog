@@ -1,797 +1,884 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<html class="full-height">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="jacobs的个人博客">
-    <meta name="keyword" content="null">
-    <meta name="theme-color" content="#600090">
-    <meta name="msapplication-navbutton-color" content="#600090">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
-    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
-    <link rel="alternate" type="application/atom+xml" title="CHAO LI" href="/atom.xml">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
-    <title>
-        
-        CHAO LI｜CHAO LI&#39;s blog
-        
-    </title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="//cdn.bootcss.com/bulma/0.4.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  
+  <title>CHAO LI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="jacobs的个人博客">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CHAO LI">
+<meta property="og:url" content="http://jacobs.wanhb.cn/index.html">
+<meta property="og:site_name" content="CHAO LI">
+<meta property="og:description" content="jacobs的个人博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CHAO LI">
+<meta name="twitter:description" content="jacobs的个人博客">
+  
+    <link rel="alternate" href="/atom.xml" title="CHAO LI" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/nav.css">
+<link rel="stylesheet" href="/css/layout.css">
+  
 
-    <link rel="canonical" href="http://jacobs.wanhb.cn/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/blog-style.css">
-
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
-<style>
-
-    header.intro-header {
-        background-image: url('http://ol7zjjc80.bkt.clouddn.com/lion-blur-bg.jpg')
-    }
-</style>
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="" class="animated fadeIn">
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
-" data-ishome = "true" >
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    CHAO LI
-                </span>
-                's Blog
+<body>
+  <header id="navbar" class="overflow-hidden">
+  <div class="container">
+    <nav class="nav">
+         <div class="nav-left">
+            <a href="/" class="nav-item" style="font-size: 20px;">
+              <span class="logo">CHAO LI</span>'s Blog
             </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <!-- /.navbar-collapse -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-
-                    
-                        
-                        <li>
-                            <a href="/archives/">archives</a>
-                        </li>
-                        
-                    
-                        
-                        <li>
-                            <a href="/tags/">tags</a>
-                        </li>
-                        
-                    
-
-                </ul>
+         </div>
+        <div class="nav-center is-hidden position-relative" id="search_container">
+            <div class="nav-item full-width full-height">
+                <i class="fa fa-search has-padding" aria-hidden="true"></i>
+                <input type="text" id="search_input" class="search-input full-height full-width" placeholder="Search post" autofocus>
+                <i id="close_search" class="fa fa-times" aria-hidden="true"></i>
             </div>
+            <div id="search_result"></div>
         </div>
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
+        <div class="nav-right nav-menu">
+            <a class="nav-item" id="search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+            
+            <a class="nav-item" href="/">
+                Home
+            </a>
+            
+            <a class="nav-item" href="/works">
+                My Works
+            </a>
+            
+            <a class="nav-item" href="/about">
+                About
+            </a>
+            
+        </div>
+        <span class="nav-toggle" id="navMenuDropdown">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+        <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
+            
+            <a class="nav-item flex-1" href="/">
+                Home
+            </a>
+            
+            <a class="nav-item flex-1" href="/works">
+                My Works
+            </a>
+            
+            <a class="nav-item flex-1" href="/about">
+                About
+            </a>
+            
+        </div>
+    </nav>
+  </div>
+</header>
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
+  <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
+      <div class="main-inner-content">
+          <style>
+    .post-hover:hover {
+        box-shadow: inset 0 0 100px #000;
+        transition: box-shadow .2s;
     }
-</script>
 
-<!-- Main Content -->
+    .sub-post-container .post-hover:hover h3 {
+        text-decoration: underline gray;
+    }
 
 
-<style>
-
-    .custom-haojen-container .post-preview:nth-of-type(1),
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        text-align: center;
-        background-repeat: no-repeat;
-        border-radius: 3px;
+    .primary-item-main {
+        height: 330px;
         background-size: cover;
-        padding: 0;
-        height: 300px;
-        display: table;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.16);
     }
 
-    /*去掉诗歌的背景图片*/
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
-        background-image: none !important;
-        background-color: rgba(255, 248, 220, 0.5);
-    }
-
-    .custom-haojen-container .post-preview:nth-child(1) h2,
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
-    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
-        letter-spacing: 1px;
+    .primary-container .title,
+    .primary-container .sub-title,
+    .primary-container .post-content-text,
+    .primary-container .date {
         color: #fff;
-        margin-top: 0;
-        padding-left: 60px;
-        padding-right: 60px;
     }
 
-    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
-        font-size: .9em;
-        font-weight: 300;
-        margin-top: 0;
+    .post-content-text {
+        color: #f1f1f1!important;
     }
 
-    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
-        letter-spacing: 6px;
-        font-size: 18px;
-        font-family: unset;
-        font-weight: 400;
-        color: rgba(0, 0, 0, .75)
+    .primary-container .post-hover {
+        background: black;
     }
 
-    /*不显示摘要*/
-    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
-        display: none
+    .content-bg-mask {
+        background: rgba(0,0,0,.4);
     }
 
-    /*只第一个显示背景图片*/
-    .custom-haojen-container .post-preview:not(:nth-child(1)) {
-        background-image: none !important;
-    }
-
-    /*第一个分界线去掉*/
-    .custom-haojen-container hr:nth-of-type(1) {
-        display: none;
-    }
-
-    /*主题*/
-    .custom-haojen-container .post-preview:nth-of-type(1) > a {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    /*诗词标题*/
-    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-        font-size: 35px;
-        font-family: STKaiti;
-        color: rgba(0, 0, 0, .8);
-    }
-
-    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
-        color: #0e2231;
-    }
-
-    @media (max-width: 768px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 240px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 28px !important;
-            margin-top: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            padding-left: 0;
-            padding-right: 0;
-        }
-
-        .custom-haojen-container .post-preview:nth-of-type(1) > a {
-            padding: 20px
-        }
-    }
-
-    /*手机屏幕*/
-    @media (max-width: 400px) {
-        .custom-haojen-container .post-preview:nth-child(1) {
-            height: 195px;
-        }
-
-        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
-            font-size: 20px !important;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
-            font-size: 16px;
-        }
-
-        .custom-haojen-container .post-preview:nth-child(1) a {
-            padding: 30px 20px;
-        }
-    }
 </style>
 
-<!-- Page Header -->
-<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
-    <div class="row">
-        <header class="intro-header">
-            <div class="container">
-                <div class="site-heading text-center">
-                    <div class="about-me">
-                        <!--移动端头部显示-->
-                        <img src="/images/avatar2.jpeg"/>
-                        <h5><a href="/about/">CHAO LI</a></h5>
-                        <p>混迹于互联网的落魄战士...</p>
+<div style="background: #f5f8f9;">
+    <div id="main-container" class="container" style="padding-top: 20px;">
+        <div class="is-flex main-content justify-center">
+            <section class="column is-9">
+                
+<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
+    <div class="column  is-7-desktop">
+        <a href="/2017/07/06/kylin-master-slave同步原理及问题排查/">
+            <div class="full-height post-hover"
+                 style="
+                         background-image: url('http://ol7zjjc80.bkt.clouddn.com/master-slave-kylin.png');
+                         height: 350px;
+                         background-size: cover;
+                         background-repeat: no-repeat;
+                         ">
+                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
+                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
+                            kylin master-slave同步原理及问题排查
+                        </h1>
+                        <div>
+                        
+                            `
+                                <span class="tag is-post-tag">成长</span>
+                            `
+                                <span class="tag is-post-tag">infrastructure</span>
+                            `
+                                <span class="tag is-post-tag">源码</span>
+                            `
+                                <span class="tag is-post-tag">Kylin</span>
+                            
+                        
+                        </div>
+                        <p class="post-content-text is-marginless has-padding text-shadow">
+                            背景最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin..
+                        </p>
+                        <p class="date text-shadow">2017-07-06</p>
+                        <button class="button is-info is-small">Read More</button>
                     </div>
-                </div>
             </div>
-        </header>
+        </a>
     </div>
-</div>
-<!-- Main Content -->
-<div class="container custom-haojen-container">
-    <!-- Post Container -->
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
-            <!-- Main Content -->
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/07/06/kylin-master-slave同步原理及问题排查/">
-        <h2 class="post-title">
-            kylin master-slave同步原理及问题排查
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-07-06
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                背景最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的clu..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/06/25/HBase架构脑图/">
-        <h2 class="post-title">
-            HBase架构脑图
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-06-25
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
+    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
+        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
+            
+                
+<a class="post-hover" href="/2017/06/25/HBase架构脑图/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                HBase架构脑图
+            </h3>
+            
+            
+            <span class="tag is-post-tag">架构</span>
+            
+            <span class="tag is-post-tag">Hbase</span>
+            
+            <span class="tag is-post-tag">Java</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
                 
 
             </p>
+            <p class="date text-shadow is-marginless">2017-06-25</p>
         </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/05/02/Kylin学习笔记/">
-        <h2 class="post-title">
-            Kylin学习笔记
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-05-02
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
+    </div>
+</a>
+            
+            
+                
+<a class="post-hover" href="/2017/05/02/Kylin学习笔记/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Kylin学习笔记
+            </h3>
+            
+            
+            <span class="tag is-post-tag">kylin</span>
+            
+            <span class="tag is-post-tag">infrastructure</span>
+            
+            <span class="tag is-post-tag">data</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
                 基础知识OLAP(on-Line AnalysisProcessing)的实现方式
-ROLAP:基于关系数据库的OLAP实现（Relational OLAP）。ROLAP将多维数据库的多维结构划分为两类表:一类是事实表,用来存储数据和维关键字;另一类是维表,即对每个维至少使用一个表来存放维的层次..
+ROLAP:..
             </p>
+            <p class="date text-shadow is-marginless">2017-05-02</p>
         </div>
-    </a>
+    </div>
+</a>
+            
+        </div>
+    </div>
+    <div class="column is-12 is-hidden-desktop">
+        
+        
+<a class="post-hover" href="/2017/06/25/HBase架构脑图/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                HBase架构脑图
+            </h3>
+            
+            
+            <span class="tag is-post-tag">架构</span>
+            
+            <span class="tag is-post-tag">Hbase</span>
+            
+            <span class="tag is-post-tag">Java</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                
 
+            </p>
+            <p class="date text-shadow is-marginless">2017-06-25</p>
+        </div>
+    </div>
+</a>
+        
+        
+        
+<a class="post-hover" href="/2017/05/02/Kylin学习笔记/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                Kylin学习笔记
+            </h3>
+            
+            
+            <span class="tag is-post-tag">kylin</span>
+            
+            <span class="tag is-post-tag">infrastructure</span>
+            
+            <span class="tag is-post-tag">data</span>
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                基础知识OLAP(on-Line AnalysisProcessing)的实现方式
+ROLAP:..
+            </p>
+            <p class="date text-shadow is-marginless">2017-05-02</p>
+        </div>
+    </div>
+</a>
+        
+    </div>
 </div>
 
-<hr>
+                    
+                    
+                
+                    
+                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/06/25/HBase架构脑图/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>HBase架构脑图</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">架构</span>
+                                            
+                                                <span class="tag is-post-tag">Hbase</span>
+                                            
+                                                <span class="tag is-post-tag">Java</span>
+                                            
+                                        </p>
+                                        <p>
+                                            
 
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/04/11/Spark学习笔记/">
-        <h2 class="post-title">
-            Spark学习笔记
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-04-11
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                Spark 基础Spark 的构成
+                                        </p>
+                                        <p>2017-06-25</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/05/02/Kylin学习笔记/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Kylin学习笔记</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">kylin</span>
+                                            
+                                                <span class="tag is-post-tag">infrastructure</span>
+                                            
+                                                <span class="tag is-post-tag">data</span>
+                                            
+                                        </p>
+                                        <p>
+                                            基础知识OLAP(on-Line AnalysisProcessing)的实现方式
+ROLAP:基于关系数据库的OLAP实现（Relational OLAP）。ROLAP将多维数据库的多维结构划分为两类表:一类是事实表,用来存储数据和维关键字;另一类是维表,即对每个维至少使用一个表来存放维的层次、成员类别等维的描述信息。维表和事实表通过主关键字和外关键字..
+                                        </p>
+                                        <p>2017-05-02</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/04/11/Spark学习笔记/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Spark学习笔记</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">学习</span>
+                                            
+                                                <span class="tag is-post-tag">大数据</span>
+                                            
+                                                <span class="tag is-post-tag">Spark</span>
+                                            
+                                        </p>
+                                        <p>
+                                            Spark 基础Spark 的构成
 ClusterManager: 在standalone模式中即为，Master主节点，控制整个集群，监控worker。在yarn模式中为资源管理器
-worker :从节点，负责控制计算节点，启动Executro和Driver。在yarn模式中NodeManag..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/03/15/HBase学习与经验总结/">
-        <h2 class="post-title">
-            HBase学习与经验总结
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-03-15
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                前言因为业务的关系，也零零碎碎的接触到了HBase，并对其产生了兴趣。这段时间又抽空看了一下《HBase权威指南》，于是，秉承着学习记录的习惯，把一些知识和经验写成了博客。
+worker :从节点，负责控制计算节点，启动Executro和Driver。在yarn模式中NodeManager,负责计算节点的控制。
+Driver：运行Applica..
+                                        </p>
+                                        <p>2017-04-11</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/03/15/HBase学习与经验总结/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>HBase学习与经验总结</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">HBase</span>
+                                            
+                                                <span class="tag is-post-tag">BigData</span>
+                                            
+                                        </p>
+                                        <p>
+                                            前言因为业务的关系，也零零碎碎的接触到了HBase，并对其产生了兴趣。这段时间又抽空看了一下《HBase权威指南》，于是，秉承着学习记录的习惯，把一些知识和经验写成了博客。
 一些基础知识
-表：HBase将数据组织到自己的HTable表中，这个表是根据列族(colomn family)在物理上保存..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/02/15/InnoDB读书笔记/">
-        <h2 class="post-title">
-            InnoDB读书笔记
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-15
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                基础知识
+表：HBase将数据组织到自己的HTable表中，这个表是根据列族(colomn family)在物理上保存数据的，每个列族都有自己的文件夹和storefiles，不像..
+                                        </p>
+                                        <p>2017-03-15</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/02/15/InnoDB读书笔记/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('http://ol7zjjc80.bkt.clouddn.com/lock.png')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>InnoDB读书笔记</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">InnoDB</span>
+                                            
+                                                <span class="tag is-post-tag">mysql</span>
+                                            
+                                                <span class="tag is-post-tag">成长</span>
+                                            
+                                                <span class="tag is-post-tag">读书</span>
+                                            
+                                        </p>
+                                        <p>
+                                            基础知识
 数据库的四种隔离级别
 
 Read Uncommitted(读未提交): 如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。于是事务B可能读取到了事务A未提交的数据。
-Read -Committed(读提交): 读取数据的事务允许其他事务继续访问..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/02/12/Spring源码解析-事务处理/">
-        <h2 class="post-title">
-            Spring源码解析--事务处理
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-12
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                事务处理相关类的层次结构
-在 Spring事务处理中，可以通过设计一个TransactionProxyFactoryBean来使用AOP功能，通过它可以生成Proxy代理对象。在代理对象中，通过TranscationInterceptor来完成对代理对象方法的拦截。实现声明式事务处理时，是AOP..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2017/02/07/Spring源码解读/">
-        <h2 class="post-title">
-            Spring源码解读(-)
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-02-07
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                IOC设计理念先来看看接口设计预览图：
+Read -Committed(读提交): 读取数据的事务允许其他事务继续访问该行事务，但是未提交的写事务存在时禁止一切其他事务，该隔离级..
+                                        </p>
+                                        <p>2017-02-15</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/02/12/Spring源码解析-事务处理/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('http://ol7zjjc80.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-11%20%E4%B8%8B%E5%8D%887.54.25.png')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Spring源码解析--事务处理</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">spring</span>
+                                            
+                                                <span class="tag is-post-tag">ioc</span>
+                                            
+                                                <span class="tag is-post-tag">aop</span>
+                                            
+                                                <span class="tag is-post-tag">源码</span>
+                                            
+                                                <span class="tag is-post-tag">事务处理</span>
+                                            
+                                        </p>
+                                        <p>
+                                            事务处理相关类的层次结构
+在 Spring事务处理中，可以通过设计一个TransactionProxyFactoryBean来使用AOP功能，通过它可以生成Proxy代理对象。在代理对象中，通过TranscationInterceptor来完成对代理对象方法的拦截。实现声明式事务处理时，是AOP和IOC集成的部分，而对于具体的事物处理实现，是通过设计Pl..
+                                        </p>
+                                        <p>2017-02-12</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    
+                
+                    
+                        <div class="content-box  " style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2017/02/07/Spring源码解读/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile"
+                                         style="margin: 10px; background-size: cover;background-image: url('http://jacobs.wanhb.cn/images/ioc1.jpg')">
+                                    </div>
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>Spring源码解读(-)</h3>
+                                        
+                                        <p>
+                                            
+                                                <span class="tag is-post-tag">spring</span>
+                                            
+                                                <span class="tag is-post-tag">ioc</span>
+                                            
+                                                <span class="tag is-post-tag">aop</span>
+                                            
+                                                <span class="tag is-post-tag">源码</span>
+                                            
+                                        </p>
+                                        <p>
+                                            IOC设计理念先来看看接口设计预览图：
 资源定位与注册容器的初始化过程是IOC实现的入口，过程如下：
 
 
-Resource定位。BeanDefitioin的资源定位，由ResourceLoader通过统一的Resource接口完成，这个Resource对各种形式的BeanDefinition使用..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-
-<!-- 翻页 pager -->
-
-<ul class="pager">
-    
-    
-    <li class="next">
-        <a href="/page/2/">Older Posts &rarr;</a>
-    </li>
-    
-</ul>
-
-
-        </div>
-        <!-- Sidebar Container -->
-        <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
-
-            <!-- About Me -->
-            <section class="visible-md visible-lg" style="padding: 0 18px">
-                <div class="short-about">
-                    <!--侧边栏头像-->
+Resource定位。BeanDefitioin的资源定位，由ResourceLoader通过统一的Resource接口完成，这个Resource对各种形式的BeanDefinition使用都提供了统一接口。
+BeanDefition的载入。这个载入..
+                                        </p>
+                                        <p>2017-02-07</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
                     
-                    <img src="/images/avatar2.jpeg"/>
+                
+                <!--翻頁-->
+                <nav class="pagination is-flex" style="justify-content: flex-end">
                     
-                    <h5><a href="/about/">CHAO LI</a></h5>
-                    
-                    <p>混迹于互联网的落魄战士...</p>
-                    
-                    <hr>
-                    <!-- SNS Link 社交 -->
-                    <ul class="list-inline">
                         
                         
-                        <li>
-                            <a target="_blank" href="https://twitter.com/lichaojacobs">
+                            <a class="pagination-next" href="/page/2/">Next page</a>
+                        
+                    
+                </nav>
+            </section>
+            
+                <style>
+    /*user info start*/
+    .user-info {
+        padding: 15px 0 0;
+    }
+
+    .user-info .avatar {
+        width: 155px;
+        height: 155px;
+        border-radius: 50%;
+    }
+
+    .sns-container {
+        flex-wrap: wrap;
+    }
+
+    .sns-container a{
+        color: black;
+    }
+    /*user info end*/
+
+    /*Tag start*/
+    #tag_cloud .tags-item{
+        display: inline-block;
+        color: #000;
+        border: 1px solid gray;
+
+        margin: 4px 2px;
+        padding: 0 4px;
+        border-radius: 6px;
+    }
+    /*Tag end*/
+
+    /*Site box start*/
+    .site-box {
+        height: 60px;
+    }
+    /*Site box end*/
+
+    .category-list-item,
+    .archive-list-item {
+        display: flex;
+        margin-bottom: 4px;
+        justify-content: space-between;
+    }
+    .category-list-link,
+    .archive-list-link {
+        color: black;
+    }
+
+    .category-list-count,
+    .archive-list-count {
+        width: 32px;
+        text-align: center;
+        border-radius: 4px;
+        color: #fff;
+        background-color: gray;
+    }
+</style>
+<aside class="column is-hidden-touch is-3" style="max-width: 280px; min-width: 230px">
+    <div class="content-box user-info">
+        <div class="has-padding">
+            <header class="has-text-centered">
+                <img class="avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+            </header>
+            <section class="has-text-centered">
+                <h3><strong>CHAO LI</strong></h3>
+                <p class="sub-title">premature optimization is the root of all evil</p>
+                
+                <p class="is-flex center" style=" color: gray">
+                    <i class="fa fa-map-marker" style="padding: 5px"></i>
+                    Earth
+                </p>
+                
+            </section>
+        </div>
+        <div class="top-line">
+            <ul class="sns-container justify-center is-flex has-padding">
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://twitter.com/lichaojacobs">
                                         <span class="fa-stack fa-lg">
                                             <i class="fa fa-circle fa-stack-2x"></i>
                                             <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
                                         </span>
-                            </a>
-                        </li>
-                        
-                        
-                        <li>
-                            <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
+                    </a>
+                </li>
+                
+
+                
+                <li>
+                    <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
                                         <span class="fa-stack fa-lg">
                                             <i class="fa fa-circle fa-stack-2x"></i>
                                             <i class="fa  fa-stack-1x fa-inverse">知</i>
                                         </span>
-                            </a>
-                        </li>
-                        
+                    </a>
+                </li>
+                
 
-                        
-                        <li>
-                            <a target="_blank" href="http://weibo.com/577448557">
+                
+                <li>
+                    <a target="_blank" href="http://weibo.com/577448557">
                                         <span class="fa-stack fa-lg">
                                             <i class="fa fa-circle fa-stack-2x"></i>
                                             <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
                                         </span>
-                            </a>
-                        </li>
-                        
+                    </a>
+                </li>
+                
 
-                        
+                
+                <li>
+                    <a target="_blank" href="https://www.facebook.com/lichaojacobs">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                        </span>
+                    </a>
+                </li>
+                
 
-                        
-                        <li>
-                            <a target="_blank" href="https://github.com/lichaojacobs">
+                
+                <li>
+                    <a target="_blank" href="https://github.com/lichaojacobs">
                                         <span class="fa-stack fa-lg">
                                             <i class="fa fa-circle fa-stack-2x"></i>
                                             <i class="fa fa-github fa-stack-1x fa-inverse"></i>
                                         </span>
-                            </a>
-                        </li>
-                        
+                    </a>
+                </li>
+                
 
-                        
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Featured Tags  标签 -->
+                
+            </ul>
+        </div>
+    </div>
+    <div class="content-box">
+        <!--post数量和tag category 数量-->
+        <div class="site-box is-flex">
+            <div class="flex-1 is-flex flex-column center full-height right-line">
+                <strong>14</strong>
+                <p>Posts</p>
+            </div>
+            <div class="flex-1 is-flex flex-column center full-height">
+                <strong>29</strong>
+                <p>Tags</p>
+            </div>
+        </div>
+    </div>
+    <div id='tag_cloud' class="content-inner content-box">
+        <div class="has-text-centered">
+            <strong>Tags</strong>
+        </div>
+        <div class="content-inner is-flex flex-wrap justify-space-between">
             
-            <section>
-                <div class="tags">
-                    
-                    
-                    
-                    
-                    <a href="/tags/#Hbase" title="Hbase"
-                       rel="2">Hbase</a>
-                    
-                    
-                    
-                    <a href="/tags/#Java" title="Java"
-                       rel="2">Java</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#成长" title="成长"
-                       rel="3">成长</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#infrastructure" title="infrastructure"
-                       rel="2">infrastructure</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <a href="/tags/#源码" title="源码"
-                       rel="3">源码</a>
-                    
-                    
-                    
-                    <a href="/tags/#spring" title="spring"
-                       rel="3">spring</a>
-                    
-                    
-                    
-                    <a href="/tags/#ioc" title="ioc"
-                       rel="2">ioc</a>
-                    
-                    
-                    
-                    <a href="/tags/#aop" title="aop"
-                       rel="2">aop</a>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                </div>
-            </section>
+                <a class="tags-item" href="tags/HBase/" title="HBase" rel="1">
+                    HBase
+                </a>
             
-
+                <a class="tags-item" href="tags/BigData/" title="BigData" rel="1">
+                    BigData
+                </a>
             
-
+                <a class="tags-item" href="tags/架构/" title="架构" rel="1">
+                    架构
+                </a>
+            
+                <a class="tags-item" href="tags/Hbase/" title="Hbase" rel="2">
+                    Hbase
+                </a>
+            
+                <a class="tags-item" href="tags/Java/" title="Java" rel="2">
+                    Java
+                </a>
+            
+                <a class="tags-item" href="tags/InnoDB/" title="InnoDB" rel="1">
+                    InnoDB
+                </a>
+            
+                <a class="tags-item" href="tags/mysql/" title="mysql" rel="1">
+                    mysql
+                </a>
+            
+                <a class="tags-item" href="tags/成长/" title="成长" rel="3">
+                    成长
+                </a>
+            
+                <a class="tags-item" href="tags/读书/" title="读书" rel="1">
+                    读书
+                </a>
+            
+                <a class="tags-item" href="tags/kylin/" title="kylin" rel="1">
+                    kylin
+                </a>
+            
+                <a class="tags-item" href="tags/infrastructure/" title="infrastructure" rel="2">
+                    infrastructure
+                </a>
+            
+                <a class="tags-item" href="tags/data/" title="data" rel="1">
+                    data
+                </a>
+            
+                <a class="tags-item" href="tags/多线程/" title="多线程" rel="1">
+                    多线程
+                </a>
+            
+                <a class="tags-item" href="tags/ReentrantLock/" title="ReentrantLock" rel="1">
+                    ReentrantLock
+                </a>
+            
+                <a class="tags-item" href="tags/学习/" title="学习" rel="1">
+                    学习
+                </a>
+            
+                <a class="tags-item" href="tags/大数据/" title="大数据" rel="1">
+                    大数据
+                </a>
+            
+                <a class="tags-item" href="tags/Spark/" title="Spark" rel="1">
+                    Spark
+                </a>
+            
+                <a class="tags-item" href="tags/spring/" title="spring" rel="3">
+                    spring
+                </a>
+            
+                <a class="tags-item" href="tags/ioc/" title="ioc" rel="2">
+                    ioc
+                </a>
+            
+                <a class="tags-item" href="tags/aop/" title="aop" rel="2">
+                    aop
+                </a>
+            
+                <a class="tags-item" href="tags/源码/" title="源码" rel="3">
+                    源码
+                </a>
+            
+                <a class="tags-item" href="tags/事务处理/" title="事务处理" rel="1">
+                    事务处理
+                </a>
+            
+                <a class="tags-item" href="tags/Kylin/" title="Kylin" rel="1">
+                    Kylin
+                </a>
+            
+                <a class="tags-item" href="tags/Python/" title="Python" rel="1">
+                    Python
+                </a>
+            
+                <a class="tags-item" href="tags/Crawler/" title="Crawler" rel="1">
+                    Crawler
+                </a>
+            
+                <a class="tags-item" href="tags/Spring/" title="Spring" rel="1">
+                    Spring
+                </a>
+            
+                <a class="tags-item" href="tags/java8/" title="java8" rel="1">
+                    java8
+                </a>
+            
+                <a class="tags-item" href="tags/sqlGenerator/" title="sqlGenerator" rel="1">
+                    sqlGenerator
+                </a>
+            
+                <a class="tags-item" href="tags/函数式编程/" title="函数式编程" rel="1">
+                    函数式编程
+                </a>
+            
+        </div>
+    </div>
+    <div class="content-inner content-box">
+        <div class="has-text-centered">
+            <strong>Categories</strong>
+        </div>
+        <div class="content-inner">
+            
+        </div>
+    </div>
+    <div class="content-inner content-box">
+        <div class="has-text-centered">
+            <strong>Archives</strong>
+        </div>
+        <div class="content-inner">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+</aside>
+            
         </div>
     </div>
 </div>
 
-<!-- Footer -->
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
-                <br>
-                <ul class="list-inline text-center">
-                
-                
-                    <li>
-                        <a target="_blank" href="https://twitter.com/lichaojacobs">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/chao-li-11">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
+      </div>
+  </div>
+  <style>
+  #footer {
+    min-height: 10vh;
+    background: black;
+    color: #fff;
+  }
 
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/577448557">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                
-                    <li>
-                        <a target="_blank"  href="https://github.com/lichaojacobs">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; CHAO LI 2017
-                    <br>
-                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
-                    <br>
-                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
-                </p>
-
-            </div>
-        </div>
+  #footer a {
+    color: #e1e1e1;
+  }
+</style>
+<footer id="footer" class="has-text-centered is-flex center">
+  <div class="container has-padding">
+    <div>
+      <div>
+        <!--请您保留作者署名, 主题制作来之不易-->
+        Theme by <a href="http://haojen.github.io/">Haojen Ma</a>
+        <br>
+        Copyright © CHAO LI 2017
+        <br>
+        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      </div>
     </div>
+  </div>
 </footer>
 
-<!-- jQuery -->
-<script src="/js/jquery.min.js"></script>
+<script src="/js/search_core.js"></script>
+<script src="/js/script.js"></script>
 
-<!-- Bootstrap Core JavaScript -->
-<script src="/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/js/blog.js"></script>
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("http://jacobs.wanhb.cn/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-<!-- Google Analytics -->
-
-
-
-<!-- Baidu Tongji -->
-
-
-<!-- swiftype -->
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install','null','2.0.0');
-</script>
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-<!--wechat title img-->
-<img class="wechat-title-img" src="/images/avatar2.jpeg">
 </body>
-
 </html>
