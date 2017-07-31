@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>Mot-clé: Spring | CHAO LI</title>
+  <title>Tag: Spring | CHAO LI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="jacobs的个人博客">
 <meta property="og:type" content="website">
@@ -160,7 +160,89 @@
         <br>
         Copyright © CHAO LI 2017
         <br>
-        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/search_core.js"></script>
+<script src="/js/script.js"></script>
+
+</body>
+</html>/ioc1.jpg" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>Spring源码解读(-)</strong> <small class="post-date">at: 2017-02-07</small>
+                                <br>
+                                IOC设计理念先来看看接口设计预览图：
+资源定位与注册容器的初始化过程是IOC实现的入口，过程如下：
+
+
+Resource定位。BeanDefitioin的资源定位，由ResourceLoader通过统一的Resource接口完成，这个Resource对各种形式的BeanDefinition使用都提供了统一接口。
+BeanDefition的载入。这个载入..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2017/01/19/记一次失败的debug经历/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="http://jacobs.wanhb.cn/images/aop1.jpg" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>记一次失败的debug经历</strong> <small class="post-date">at: 2017-01-19</small>
+                                <br>
+                                昨天使用spring aop的事务注解出现了业务中主动抛出异常却无法回滚脏数据的情形，然后崩溃的debug了一天，最后猛然发现不能通过this去掉加了增强的方法否则将拿不到代理对象。归根结底还是自己不甚理解事务实现的其中原理，才导致了bug的出现而不自知。
+问题还原如果对java如何实现底层的事务机制不太熟悉的话可以看看java事务处理系列文章 自己手动..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+</div>
+      </div>
+  </div>
+  <style>
+  #footer {
+    min-height: 10vh;
+    background: black;
+    color: #fff;
+  }
+
+  #footer a {
+    color: #e1e1e1;
+  }
+</style>
+<footer id="footer" class="has-text-centered is-flex center">
+  <div class="container has-padding">
+    <div>
+      <div>
+        <!--请您保留作者署名, 主题制作来之不易-->
+        Theme by <a href="http://haojen.github.io/">Haojen Ma</a>
+        <br>
+        Copyright © CHAO LI 2017
+        <br>
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       </div>
     </div>
   </div>
