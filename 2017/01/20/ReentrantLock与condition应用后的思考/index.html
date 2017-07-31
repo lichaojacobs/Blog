@@ -6,14 +6,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>ReentrantLock与condition应用后的思考 | Hexo</title>
+  <title>ReentrantLock与condition应用后的思考 | CAHO LI&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一直在断断续续看《java并发编程实战》这本书，每次看都有不一样的体会，前些日子在知乎上回答了一个关于ReentrantLock的问题java里是怎么通过condition接口是获取监视器方法的 ,那次回答之后也引发了我对其实现的进一步探究。
 一个例子举一个简单的例子，是基本上各个公司招聘的时候都会出现的关于多线程间通信的问题：利用多线程循环打印n次”ABC”。当然，这个题目有很多实现方法，有经典">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReentrantLock与condition应用后的思考">
 <meta property="og:url" content="http://yoursite.com/2017/01/20/ReentrantLock与condition应用后的思考/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="CAHO LI's Blog">
 <meta property="og:description" content="一直在断断续续看《java并发编程实战》这本书，每次看都有不一样的体会，前些日子在知乎上回答了一个关于ReentrantLock的问题java里是怎么通过condition接口是获取监视器方法的 ,那次回答之后也引发了我对其实现的进一步探究。
 一个例子举一个简单的例子，是基本上各个公司招聘的时候都会出现的关于多线程间通信的问题：利用多线程循环打印n次”ABC”。当然，这个题目有很多实现方法，有经典">
 <meta property="og:image" content="http://jacobs.wanhb.cn/images/reentrantLock.jpg">
@@ -24,7 +24,7 @@
 一个例子举一个简单的例子，是基本上各个公司招聘的时候都会出现的关于多线程间通信的问题：利用多线程循环打印n次”ABC”。当然，这个题目有很多实现方法，有经典">
 <meta name="twitter:image" content="http://jacobs.wanhb.cn/images/reentrantLock.jpg">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="CAHO LI&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -73,6 +73,10 @@
                 About
             </a>
             
+            <a class="nav-item" href="/tags">
+                Tags
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -91,6 +95,10 @@
             
             <a class="nav-item flex-1" href="/about">
                 About
+            </a>
+            
+            <a class="nav-item flex-1" href="/tags">
+                Tags
             </a>
             
         </div>
@@ -229,7 +237,7 @@
         <br>
         Copyright © John Doe 2017
         <br>
-        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
       </div>
     </div>
   </div>

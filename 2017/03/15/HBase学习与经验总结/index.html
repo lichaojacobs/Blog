@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>HBase学习与经验总结 | Hexo</title>
+  <title>HBase学习与经验总结 | CAHO LI&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前言因为业务的关系，也零零碎碎的接触到了HBase，并对其产生了兴趣。这段时间又抽空看了一下《HBase权威指南》，于是，秉承着学习记录的习惯，把一些知识和经验写成了博客。
 一些基础知识
@@ -14,7 +14,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="HBase学习与经验总结">
 <meta property="og:url" content="http://yoursite.com/2017/03/15/HBase学习与经验总结/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="CAHO LI's Blog">
 <meta property="og:description" content="前言因为业务的关系，也零零碎碎的接触到了HBase，并对其产生了兴趣。这段时间又抽空看了一下《HBase权威指南》，于是，秉承着学习记录的习惯，把一些知识和经验写成了博客。
 一些基础知识
 表：HBase将数据组织到自己的HTable表中，这个表是根据列族(colomn family)在物理上保存数据的，每个列族都有自己的文件夹和storefiles，不像关系型数据库那样将一个表保存成一个文件，表明">
@@ -25,7 +25,7 @@
 一些基础知识
 表：HBase将数据组织到自己的HTable表中，这个表是根据列族(colomn family)在物理上保存数据的，每个列族都有自己的文件夹和storefiles，不像关系型数据库那样将一个表保存成一个文件，表明">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="CAHO LI&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -74,6 +74,10 @@
                 About
             </a>
             
+            <a class="nav-item" href="/tags">
+                Tags
+            </a>
+            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -92,6 +96,10 @@
             
             <a class="nav-item flex-1" href="/about">
                 About
+            </a>
+            
+            <a class="nav-item flex-1" href="/tags">
+                Tags
             </a>
             
         </div>
@@ -265,7 +273,7 @@
         <br>
         Copyright © John Doe 2017
         <br>
-        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
       </div>
     </div>
   </div>
