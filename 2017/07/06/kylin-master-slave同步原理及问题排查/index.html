@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>kylin master-slave同步原理及问题排查 | CAHO LI&#39;s Blog</title>
+  <title>kylin master-slave同步原理及问题排查 | CHAO LI&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的cluster架构。然而在实际的使用中也出现了一些问题:
 
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="kylin master-slave同步原理及问题排查">
 <meta property="og:url" content="http://yoursite.com/2017/07/06/kylin-master-slave同步原理及问题排查/index.html">
-<meta property="og:site_name" content="CAHO LI's Blog">
+<meta property="og:site_name" content="CHAO LI's Blog">
 <meta property="og:description" content="背景最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的cluster架构。然而在实际的使用中也出现了一些问题:
 
 主节点更新了schema而从节点未sync
@@ -30,7 +30,7 @@
 从节点">
 <meta name="twitter:image" content="http://ol7zjjc80.bkt.clouddn.com/master-slave-kylin.png">
   
-    <link rel="alternate" href="/atom.xml" title="CAHO LI&#39;s Blog" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="CHAO LI&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -165,9 +165,9 @@
             
                 <div>
                     
-                         <a class="tag is-post-tag" href="/tags/成长/">成长</a>
-                    
                          <a class="tag is-post-tag" href="/tags/infrastructure/">infrastructure</a>
+                    
+                         <a class="tag is-post-tag" href="/tags/成长/">成长</a>
                     
                          <a class="tag is-post-tag" href="/tags/源码/">源码</a>
                     
@@ -266,7 +266,7 @@
         <br>
         Copyright © John Doe 2017
         <br>
-        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       </div>
     </div>
   </div>
