@@ -18,7 +18,7 @@ superset接入k">
 <meta property="og:description" content="调研背景虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：
 
 superset接入k">
-<meta property="og:updated_time" content="2017-08-07T12:43:00.000Z">
+<meta property="og:updated_time" content="2017-08-07T12:45:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin二次开发——测试环境搭建">
 <meta name="twitter:description" content="调研背景虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：
@@ -181,11 +181,10 @@ superset接入k">
 <li>在执行start_sandbox-hdp.sh的时候需要往映射的端口里面加入hive metastore的thrift端口9083，否则本地跑单元测试的时候连不上metastore</li>
 <li><p>ssh上运行的container，修改admin密码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ssh -p 2222 root@localhost</div><div class="line">或者http://127.0.0.1:4200/ 进入shell浏览器界面</div><div class="line">//执行</div><div class="line">  ambari-admin-password-reset</div></pre></td></tr></table></figure>
-<ul>
-<li>用修改的admin密码登录<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a>，确保dashboard中hive+mapreduce+hdfs+hbase正常启动</li>
-</ul>
 </li>
 </ul>
+</li>
+<li><p>用修改的admin密码登录<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a>，确保dashboard中hive+mapreduce+hdfs+hbase正常启动</p>
 </li>
 <li><p>修改kylin.properties的几个值:</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//KYLIN_HOME/examples/test_case_data/sandbox/kylin.properties</div><div class="line"></div><div class="line">kylin.job.use-remote-cli=true</div><div class="line">kylin.job.remote-cli-hostname=sandbox</div><div class="line">kylin.job.remote-cli-username=root</div><div class="line">kylin.job.remote-cli-password=xxxx</div><div class="line">//这个默认是22端口，由于我本地不生效，就直接设置为2222端口</div><div class="line">kylin.job.remote-cli-port=2222</div></pre></td></tr></table></figure>
