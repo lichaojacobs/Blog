@@ -3,6 +3,54 @@
   
     
     <entry>
+      <title><![CDATA[Kylin二次开发——测试环境搭建]]></title>
+      <url>/2017/08/07/Kylin%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E2%80%94%E2%80%94%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+      <content type="html"><![CDATA[<h3 id="调研背景"><a href="#调研背景" class="headerlink" title="调研背景"></a>调研背景</h3><p>虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：</p>
+<ul>
+<li>superset接入kylin，完成了自编译集成进了docker，并修改了 flask-appbuilder的源码逻辑，兼容ldap与原本的账号系统。</li>
+<li>airflow 正在考虑从输出信息中判断task是否执行成功，而不是单纯的靠进程是否异常退出判断（主要考虑到支持kylin的任务调度）</li>
+</ul>
+<p>其实在kylin的官网对于开发环境搭建大致的步骤都做了介绍下面描述整个过程</p>
+<h3 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h3><ul>
+<li><p>想应用经过自己二次开发的kylin当然必须得全覆盖的跑一遍所有的单元测试。这就意味着必须得有Hadoop+hive+hbase等一整套测试环境。这里使用kylin官方推荐的Hortonworks Sandbox。为了方便，直接使用Sandbox on docker。</p>
+<ul>
+<li><a href="https://hortonworks.com/tutorial/sandbox-deployment-and-install-guide/section/3/" target="_blank" rel="external">按照官网的教程（docker占用的内存至少8G以上，否则运行不了）</a></li>
+<li>在执行start_sandbox-hdp.sh的时候需要往映射的端口里面加入hive metastore的thrift端口9083，否则本地跑单元测试的时候连不上metastore</li>
+<li><p>ssh上运行的container，修改admin密码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ssh -p 2222 root@localhost</div><div class="line">或者http://127.0.0.1:4200/ 进入shell浏览器界面</div><div class="line">//执行</div><div class="line">  ambari-admin-password-reset</div></pre></td></tr></table></figure>
+<ul>
+<li>用修改的admin密码登录<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a>，确保dashboard中hive+mapreduce+hdfs+hbase正常启动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>修改kylin.properties的几个值:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//KYLIN_HOME/examples/test_case_data/sandbox/kylin.properties</div><div class="line"></div><div class="line">kylin.job.use-remote-cli=true</div><div class="line">kylin.job.remote-cli-hostname=sandbox</div><div class="line">kylin.job.remote-cli-username=root</div><div class="line">kylin.job.remote-cli-password=xxxx</div><div class="line">//这个默认是22端口，由于我本地不生效，就直接设置为2222端口</div><div class="line">kylin.job.remote-cli-port=2222</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>如果单个单元进行测试，不想每次从头开始，方便集中debug某个moudle的错误，可以注释掉pom.xml中的check-style插件</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!-- &lt;plugin&gt;</div><div class="line">                  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">                  &lt;artifactId&gt;maven-checkstyle-plugin&lt;/artifactId&gt;</div><div class="line">                  &lt;version&gt;2.17&lt;/version&gt;</div><div class="line">                  &lt;dependencies&gt;</div><div class="line">                      &lt;dependency&gt;</div><div class="line">                          &lt;groupId&gt;com.puppycrawl.tools&lt;/groupId&gt;</div><div class="line">                          &lt;artifactId&gt;checkstyle&lt;/artifactId&gt;</div><div class="line">                          &lt;version&gt;6.19&lt;/version&gt;</div><div class="line">                      &lt;/dependency&gt;</div><div class="line">                  &lt;/dependencies&gt;</div><div class="line">                  &lt;executions&gt;</div><div class="line">                      &lt;execution&gt;</div><div class="line">                          &lt;id&gt;check-style&lt;/id&gt;</div><div class="line">                          &lt;phase&gt;validate&lt;/phase&gt;</div><div class="line">                          &lt;configuration&gt;</div><div class="line">                              &lt;configLocation&gt;dev-support/checkstyle.xml&lt;/configLocation&gt;</div><div class="line">                              &lt;suppressionsLocation&gt;dev-support/checkstyle-suppressions.xml&lt;/suppressionsLocation&gt;</div><div class="line">                              &lt;includeTestSourceDirectory&gt;true&lt;/includeTestSourceDirectory&gt;</div><div class="line">                              &lt;consoleOutput&gt;true&lt;/consoleOutput&gt;</div><div class="line">                              &lt;failsOnError&gt;true&lt;/failsOnError&gt;</div><div class="line">                          &lt;/configuration&gt;</div><div class="line">                          &lt;goals&gt;</div><div class="line">                              &lt;goal&gt;check&lt;/goal&gt;</div><div class="line">                          &lt;/goals&gt;</div><div class="line">                      &lt;/execution&gt;</div><div class="line">                  &lt;/executions&gt;</div><div class="line">              &lt;/plugin&gt; --&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>执行测试命令</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//base</div><div class="line">mvn test -fae -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -P sandbox -X</div><div class="line">//全覆盖</div><div class="line">mvn verify -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -fae 2&gt;&amp;1 | tee mvnverify.log</div></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> kylin </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[kylin master-slave同步原理及问题排查]]></title>
       <url>/2017/07/06/kylin-master-slave%E5%90%8C%E6%AD%A5%E5%8E%9F%E7%90%86%E5%8F%8A%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/</url>
       <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的cluster架构。然而在实际的使用中也出现了一些问题:</p>
@@ -41,11 +89,11 @@
         
         <tags>
             
-            <tag> 源码 </tag>
+            <tag> 成长 </tag>
             
             <tag> infrastructure </tag>
             
-            <tag> 成长 </tag>
+            <tag> 源码 </tag>
             
             <tag> Kylin </tag>
             
@@ -755,9 +803,9 @@
         
         <tags>
             
-            <tag> spring </tag>
-            
             <tag> 成长 </tag>
+            
+            <tag> spring </tag>
             
         </tags>
         
