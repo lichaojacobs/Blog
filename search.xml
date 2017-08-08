@@ -34,16 +34,25 @@
 </ul>
 <ul>
 <li><p>执行测试命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//base</div><div class="line">mvn test -fae -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -P sandbox -X</div><div class="line">//全覆盖</div><div class="line">mvn verify -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -fae 2&gt;&amp;1 | tee mvnverify.log</div></pre></td></tr></table></figure></li>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//base</div><div class="line">mvn test -fae -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1.0-129&quot;&#125; -P sandbox -X</div><div class="line">//全覆盖</div><div class="line">mvn verify -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1.0-129&quot;&#125; -fae 2&gt;&amp;1 | tee mvnverify.log</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
+<li><p>该暴露的端口得暴露出来，否则本地测试的时候对指定的端口无法进行tcp通信</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">9083:9083 //hive metastore</div><div class="line">8050:8050 // kylin 获取job output信息端口</div><div class="line">50010:50010 // dfs.datanode.address，这里踩坑很久,不配置的话会有：createBlockOutputStream when copying data into HDFS错误</div></pre></td></tr></table></figure>
+</li>
+<li><p>启动start_sandbox-hdp脚本的时候，可能会出现postgresql服务启动不了，这很可能是因为其申请的共享内存超过了系统的，只需要进入到容器里面做相关操作</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ssh -p root@localhost</div><div class="line">sudo sysctl -w kernel.shmmax=17179869184 //假设你有16G内存，按实际扩充</div><div class="line">sudo service postgresql start</div><div class="line">//postgresql启动之后在容器外重新执行</div><div class="line">./start_sandbox-hdp.sh 就可以了</div></pre></td></tr></table></figure>
+</li>
 </ul>
 ]]></content>
       
         
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> kylin </tag>
+            
+            <tag> Java </tag>
             
         </tags>
         
@@ -92,9 +101,9 @@
             
             <tag> infrastructure </tag>
             
-            <tag> 源码 </tag>
-            
             <tag> Kylin </tag>
+            
+            <tag> 源码 </tag>
             
         </tags>
         
@@ -109,11 +118,11 @@
         
         <tags>
             
+            <tag> Java </tag>
+            
             <tag> 架构 </tag>
             
             <tag> Hbase </tag>
-            
-            <tag> Java </tag>
             
         </tags>
         
@@ -625,13 +634,13 @@
         
         <tags>
             
+            <tag> 源码 </tag>
+            
             <tag> spring </tag>
             
             <tag> ioc </tag>
             
             <tag> aop </tag>
-            
-            <tag> 源码 </tag>
             
             <tag> 事务处理 </tag>
             
@@ -695,13 +704,13 @@
         
         <tags>
             
+            <tag> 源码 </tag>
+            
             <tag> spring </tag>
             
             <tag> ioc </tag>
             
             <tag> aop </tag>
-            
-            <tag> 源码 </tag>
             
         </tags>
         
@@ -877,9 +886,9 @@
         
         <tags>
             
-            <tag> Hbase </tag>
-            
             <tag> Java </tag>
+            
+            <tag> Hbase </tag>
             
             <tag> Spring </tag>
             

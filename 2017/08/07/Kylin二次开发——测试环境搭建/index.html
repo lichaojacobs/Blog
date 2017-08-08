@@ -18,7 +18,7 @@ superset接入k">
 <meta property="og:description" content="调研背景虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：
 
 superset接入k">
-<meta property="og:updated_time" content="2017-08-07T12:45:07.000Z">
+<meta property="og:updated_time" content="2017-08-08T17:25:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kylin二次开发——测试环境搭建">
 <meta name="twitter:description" content="调研背景虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：
@@ -160,9 +160,9 @@ superset接入k">
             
                 <div>
                     
-                         <a class="tag is-post-tag" href="/tags/Java/">Java</a>
-                    
                          <a class="tag is-post-tag" href="/tags/kylin/">kylin</a>
+                    
+                         <a class="tag is-post-tag" href="/tags/Java/">Java</a>
                     
                 </div>
             
@@ -197,7 +197,16 @@ superset接入k">
 </ul>
 <ul>
 <li><p>执行测试命令</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//base</div><div class="line">mvn test -fae -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -P sandbox -X</div><div class="line">//全覆盖</div><div class="line">mvn verify -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1&quot;&#125; -fae 2&gt;&amp;1 | tee mvnverify.log</div></pre></td></tr></table></figure></li>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//base</div><div class="line">mvn test -fae -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1.0-129&quot;&#125; -P sandbox -X</div><div class="line">//全覆盖</div><div class="line">mvn verify -Dhdp.version=$&#123;HDP_VERSION:-&quot;2.6.1.0-129&quot;&#125; -fae 2&gt;&amp;1 | tee mvnverify.log</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h3><ul>
+<li><p>该暴露的端口得暴露出来，否则本地测试的时候对指定的端口无法进行tcp通信</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">9083:9083 //hive metastore</div><div class="line">8050:8050 // kylin 获取job output信息端口</div><div class="line">50010:50010 // dfs.datanode.address，这里踩坑很久,不配置的话会有：createBlockOutputStream when copying data into HDFS错误</div></pre></td></tr></table></figure>
+</li>
+<li><p>启动start_sandbox-hdp脚本的时候，可能会出现postgresql服务启动不了，这很可能是因为其申请的共享内存超过了系统的，只需要进入到容器里面做相关操作</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ssh -p root@localhost</div><div class="line">sudo sysctl -w kernel.shmmax=17179869184 //假设你有16G内存，按实际扩充</div><div class="line">sudo service postgresql start</div><div class="line">//postgresql启动之后在容器外重新执行</div><div class="line">./start_sandbox-hdp.sh 就可以了</div></pre></td></tr></table></figure>
+</li>
 </ul>
 
         </div>

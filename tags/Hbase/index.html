@@ -6,11 +6,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   
-  <title>Tag: HBase | CHAO LI&#39;s Blog</title>
+  <title>Tag: Hbase | CHAO LI&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="CHAO LI's Blog">
-<meta property="og:url" content="http://yoursite.com/tags/HBase/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Hbase/index.html">
 <meta property="og:site_name" content="CHAO LI's Blog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CHAO LI's Blog">
@@ -116,7 +116,7 @@
 
 <div class="container tag-cate-wrap">
     <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·HBase</strong></h1>
+        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">tag·Hbase</strong></h1>
     </div>
 
     
@@ -124,16 +124,21 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2017/03/15/HBase学习与经验总结/">
+                <a href="/2017/06/25/HBase架构脑图/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>HBase学习与经验总结</strong> <small class="post-date">at: 2017-03-15</small>
+                                <strong>HBase架构脑图</strong> <small class="post-date">at: 2017-06-25</small>
                                 <br>
-                                前言因为业务的关系，也零零碎碎的接触到了HBase，并对其产生了兴趣。这段时间又抽空看了一下《HBase权威指南》，于是，秉承着学习记录的习惯，把一些知识和经验写成了博客。
-一些基础知识
-表：HBase将数据组织到自己的HTable表中，这个表是根据列族(colomn family)在物理上保存数据的，每个列族都有自己的文件夹和storefiles，不像..
+                                
+
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -142,40 +147,18 @@
             </article>
         </div>
     
-</div>
-      </div>
-  </div>
-  <style>
-  #footer {
-    min-height: 10vh;
-    background: black;
-    color: #fff;
-  }
-
-  #footer a {
-    color: #e1e1e1;
-  }
-</style>
-<footer id="footer" class="has-text-centered is-flex center">
-  <div class="container has-padding">
-    <div>
-      <div>
-        <!--请您保留作者署名, 主题制作来之不易-->
-        Theme by <a href="http://haojen.github.io/">Haojen Ma</a>
-        <br>
-        Copyright © John Doe 2017
-        <br>
-        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script src="/js/search_core.js"></script>
-<script src="/js/script.js"></script>
-
-</body>
-</html>及改进
+        <div class="box">
+            <article class="media">
+                
+                <a href="/2016/10/09/手动封装HbaseTemplate-mapper类/">
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>手动封装HbaseTemplate mapper类</strong> <small class="post-date">at: 2016-10-09</small>
+                                <br>
+                                前言最近因为业务关系，用到了Hbase，因为用的是Spring boot框架 ，所以自然而然就用到了spring封装的HbaseTemplate工具类。然而HbaseTemplate封装的代码实在比较糟糕，出了一些基本的CRUD操作之外并没有给我们提供太多便利之处。先来看看痛处：
+痛处一及改进
 我们先来看看HabaseTemplate最基本的查询操作(以..
                             </p>
                             <button class="button is-info">Read</button>
