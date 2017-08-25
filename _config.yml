@@ -1,147 +1,61 @@
-# Hexo Configuration
-## Docs: https://hexo.io/docs/configuration.html
-## Source: https://github.com/hexojs/hexo/
+# Header
+menu:
+  Home: /
+  My Works: /works
+  About: /about
+  Tags: /tags
 
-# Site
-title: CHAO LI
-subtitle: CHAO LI
-author: CHAO LI
-language:
-timezone:
-SEOTitle: CHAO LI's blog 
-header_img: http://ol7zjjc80.bkt.clouddn.com/lion-blur-bg.jpg
-email: lichaojacobs@tju.edu.cn
-description: jacobs的个人博客
-keyword: # seo key words
+rss: /atom.xml
 
-favicon: # your favicon png
-# custom end
+title: CHAO LI's Blog
 
-# URL
-## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://jacobs.wanhb.cn
-root: /
-permalink: :year/:month/:day/:title/
-permalink_defaults:
+# User Info
+user_name: CHAO LI
+user_avatar: http://ol7zjjc80.bkt.clouddn.com/avatar.jpeg
+user_location: Earth
+user_description: "premature optimization is the root of all evil"
+user_contact: lichaojacobs@tju.edu.cn
+user_introduction: "混迹于互联网的落魄战士..."
 
-# SNS settings
-# RSS:
-weibo_username: 577448557
-zhihu_username: chao-li-11
 github_username: lichaojacobs
 twitter_username: lichaojacobs
-facebook_username: 
-linkedin_username:  
+weibo_username: 577448557
+zhihu_username: chao-li-11
+facebook_username: lichaojacobs
+linkedin_username:
 
-# Directory
-source_dir: source
-public_dir: public
-tag_dir: tags
-archive_dir: archives
-category_dir: categories
-code_dir: downloads/code
-i18n_dir: :lang
-skip_render:
+# Content
+excerpt_link: Read More
+fancybox: true
 
-# Writing
-new_post_name: :title.md # File name of new posts
-default_layout: post
-titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
-filename_case: 0
-render_drafts: false
-post_asset_folder: false
-relative_link: false
-future: true
-highlight:
-  enable: true
-  line_number: true
-  auto_detect: false
-  tab_replace:
+theme: Claudia
 
-# Category & Tag
-default_category: uncategorized
-category_map:
-tag_map:
+# display widgets at the bottom of index pages (pagination == 2)
+#index_widgets:
+# - category
+# - tagcloud
+# - archive
 
-# Build settings
-anchorjs: false     
+# widget behavior
+#archive_type: 'monthly'
+#show_count: false
 
-# Disqus settings 
-disqus_username: 
+# 评论系统
+# 不要用别人的 uid, 自己去注册一个吧
+use_livere: false
+livere_uid: MTAyMC8yOTg3MC82NDM1
 
-# Duoshuo settings
-duoshuo_username: jacobs
-# Share component is depend on Comment so we can NOT use share only.
-duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+use_disqus: true
+disqus_url: https://jacobs-wanhb.disqus.com/embed.js
 
+# Miscellaneous
+google_analytics:
+favicon: /favicon.png
+#twitter:
+#google_plus:
+#fb_admins:
+#fb_app_id:
 
-# Analytics settings
-# Baidu Analytics
-ba_track_id:
-# Google Analytics
-ga_track_id:             # Format: UA-xxxxxx-xx
-ga_domain:
-
-# Sidebar settings
-sidebar-about-description: 混迹于互联网的落魄战士...
-sidebar-avatar: /images/avatar2.jpeg # use absolute URL
-
-# Featured Tags
-featured-tags: true                     # whether or not using Feature-Tags
-featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
-
-# friends
-friends:  # 友链
-
-# Date / Time format
-## Hexo uses Moment.js to parse and display date
-## You can customize the date format as defined in
-## http://momentjs.com/docs/#/displaying/format/
-date_format: YYYY-MM-DD
-time_format: HH:mm:ss
-
-# Pagination
-## Set per_page to 0 to disable pagination
-per_page: 8
-pagination_dir: page
-
-# Extensions
-## Plugins: https://hexo.io/plugins/
-
-markdown:
-  plugins:
-    - markdown-it-abbr
-    - markdown-it-footnote
-    - markdown-it-ins
-    - markdown-it-sub
-    - markdown-it-sup
-    - markdown-it-emoji
-
-## Themes: https://hexo.io/themes/
-theme: Anisina
-
-# img CDN path
-cdn-url:  # 你的CDN地址
-
-# Qiniu imageView2 API
-# More info http://developer.qiniu.com/code/v6/api/kodo-api/image/imageview2.html
-clip-content: "?imageView2/1/w/1400/h/400/interlace/1/q/90"
-clip-avatar: "?imageView2/2/w/300/h/300/interlace/1/q/90"
-clip-home-post-bg: "?imageView2/1/w/800/h/300/interlace/1/q/70"
-
-# post default images
-post-default-img: http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg
-post-default-img-mobile: http://ol7zjjc80.bkt.clouddn.com/16-8-new-bg.jpg #移动端显示的图片
-
-# search api , set your custom key
-swiftype_key: 
-
-
-# archive page title 
-archive:
-    title: archives
-    description: 可以根据归档日期检索所有文件
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -149,9 +63,4 @@ deploy:
   type: git
   repo: git@github.com:lichaojacobs/Blog.git
   branch: gh-pages
-# admin mark down
-Admin:
-  name: hexo
-  password: hey
-  secret: hey hexo
-  expire: 60*1
+

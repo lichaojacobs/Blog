@@ -278,3 +278,71 @@ kylin.server.cluster-servers=user:password@host:port,user:password@host:port,use
   ```
 
   看到对于cache的同步是单独实现了一个listener的，Event为update的时候，会单独启动一个线程去执行刷新缓存操作
+
+### 加入简单的重试逻辑
+
+由于目前对于同步失败的猜想是目标服务短暂不可用（响应超时或者处于失败重启阶段），于是我只是单纯的将失败的任务重新塞入broadcastEvents队列尾部供再一次调用。当然这种操作过于草率和暴力，却也是验证猜想最简单快速的方式。
+
+```
+
+ for (final RestClient restClient : restClients) {
+            wipingCachePool.execute(new Runnable() {
+              @Override
+              public void run() {
+                try {
+                  restClient.wipeCache(broadcastEvent.getEntity(), broadcastEvent.getEvent(),
+                      broadcastEvent.getCacheKey());
+                } catch (IOException e) {
+                  logger
+                      .warn("Thread failed during wipe cache at {}, error msg: {}", broadcastEvent,
+                          e.getMessage());
+                  try {
+                    //这里重新塞入队列尾部，等待重新执行
+                    broadcastEvents.putLast(broadcastEvent);
+                    logger.info("put failed broadcastEvent to queue. broacastEvent: {}",
+                        broadcastEvent);
+                  } catch (InterruptedException ex) {
+                    logger.warn("error reentry failed broadcastEvent to queue, broacastEvent:{}, error: {} ",
+                        broadcastEvent, ex);
+                  }
+                }
+              }
+            });
+          }
+        }
+
+```
+
+编译部署之后，日志中出现了如下错误：
+
+```
+Thread failed during wipe cache at java.lang.IllegalStateException: Invalid use of BasicClientConnManager: connection still allocated.
+
+```
+
+比较意外，不过也终于发现了问题的所在。Kylin在启动的时候会按照配置的nodes实例化一次RestClient，之后就直接从缓存中拿了，而kylin用的DefaultHttpClient每次只允许一次请求，请求完必须释放链接，否则无法复用HttpClient。所以需要修改wipeCache方法的逻辑如下:
+
+```
+    public void wipeCache(String entity, String event, String cacheKey) throws IOException {
+        String url = baseUrl + "/cache/" + entity + "/" + cacheKey + "/" + event;
+        HttpPut request = new HttpPut(url);
+
+        HttpResponse response =null;
+        try {
+            response = client.execute(request);
+            String msg = EntityUtils.toString(response.getEntity());
+
+            if (response.getStatusLine().getStatusCode() != 200)
+                throw new IOException("Invalid response " + response.getStatusLine().getStatusCode() + " with cache wipe url " + url + "\n" + msg);
+        } catch (Exception ex) {
+            throw new IOException(ex);
+        } finally {
+            //确保释放连接
+            if(response!=null) {
+              EntityUtils.consume(response.getEntity());
+            }
+            request.releaseConnection();
+        }
+    }
+
+```

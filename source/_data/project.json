@@ -1,0 +1,11 @@
+{
+  "Kylin jdbc pool": {
+    "title": "Kylin jdbc pool",
+    "subTitle": "levelrage kylin jdbc",
+    "img_link": "http://ol7zjjc80.bkt.clouddn.com/data.png",
+    "use" : ["jQuery"],
+    "link": "https://github.com/lichaojacobs/kylin-jdbc-pool",
+    "data":"2017.4",
+    "direction": "封装kylin jdbc pool，使开发简洁效率提高"
+  }
+}

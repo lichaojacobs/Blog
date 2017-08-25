@@ -10,14 +10,14 @@ tags:
 	- Java
 ---
 
-## 前言 ##
+## 前言
 最近因为业务关系，用到了Hbase，因为用的是Spring boot框架 ，所以自然而然就用到了spring封装的HbaseTemplate工具类。然而HbaseTemplate封装的代码实在比较糟糕，出了一些基本的CRUD操作之外并没有给我们提供太多便利之处。先来看看痛处：
 
 ### 痛处一及改进 ###
 
  - 我们先来看看HabaseTemplate最基本的查询操作(以下只是demo演示)：
  
-``` java
+```
  class UserInfo{
 	 string name;
 	 string password;
@@ -38,8 +38,10 @@ tags:
       return true;
     });
   }
+
 ```
 相信大家也看出来了，如果待插入的对象有很多字段呢？还要逐个写if语句来判读非空么？这明显使得代码非常地不简洁。于是，个人封装了一个插入更新模版类（其实只是简单的对Put对象的一个扩展）：
+
 
 ```
 //继承并扩展Put对象
@@ -60,9 +62,13 @@ public class PutExtension extends Put {
     return this;
   }
 }
+
 ```
+
 封装之后，之前累赘的查询操作可以变得如下所示：
-``` java
+
+``` 
+
 //然后操作如下
 hBaseTemplate.execute(TABLE_NAME, (table) -> {
       PutExtension putExtension = new PutExtension(familyName, rowKey.getBytes());
@@ -71,6 +77,7 @@ hBaseTemplate.execute(TABLE_NAME, (table) -> {
       table.put(putExtension);
       return true;
     })
+
 ```
 其实这也就是一个简单的封装，只不过把冗余的逻辑判断给丢出去了而已。
 
@@ -78,7 +85,8 @@ hBaseTemplate.execute(TABLE_NAME, (table) -> {
 
  - 在HbaseTemplate中，根据rowKey查询出来的原始数据是字节数组，我们要将字节数组转化成业务逻辑中希望的java bean需要做很多重复的判断匹配逻辑，以下是没改进前的代码：
  
-``` java
+```
+
  public UserInfo getUserInfo() {
     return (UserInfo) hBaseTemplate.get(TABLE_NAME, rowKey, familyName,(result, i) ->{
      UserInfo userInfo=new UserInfo()
@@ -94,10 +102,12 @@ if(passwordBytes!=null){
 }
   });
 }
+
 ```
 
- 可以看出，这样做的缺点是一旦java bean的字段一多，重复的非空判断逻辑也会增多，从而使得代码变得十分累赘且不可维护。于是我参考Spring JDBC的RowMapper的封装，利用了Spring框架自带的反射工具beanUtils和beanWrapper，自己实现了如下封装：
-``` java
+可以看出，这样做的缺点是一旦java bean的字段一多，重复的非空判断逻辑也会增多，从而使得代码变得十分累赘且不可维护。于是我参考Spring JDBC的RowMapper的封装，利用了Spring框架自带的反射工具beanUtils和beanWrapper，自己实现了如下封装：
+
+``` 
 public class HBaseResultBuilder<T> {
   private Class<T> mappedClass;
   private Map<String, PropertyDescriptor> mappedFields;
@@ -184,13 +194,17 @@ public class HBaseResultBuilder<T> {
       return null;
     }
   }
+
 ```
 
 通过利用反射的基本原理，我们可以通过结果数据构造出我们需要的java bean。最后我们的调用过程可以简化成如下：
-``` java
+
+``` 
+
 public UserInfo getUserInfo() {
     return (UserInfo) hBaseTemplate.get(TABLE_NAME, rowKey,    familyName,
         (result, i) -> new HBaseResultBuilder<>(familyName, result, UserInfo.class).build("name").build("password").fetch());
   }
+
 ```
 成功！！！是不是代码整洁多了，其实也就是将一些复杂的逻辑给抽出去了，正好最近看了Java8实战，从而萌生的一点小想法。
