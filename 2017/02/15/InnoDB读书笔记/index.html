@@ -1,186 +1,4 @@
-<!DOCTYPE html>
-<html class="full-height">
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="//cdn.bootcss.com/bulma/0.4.1/css/bulma.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-  
-  <title>InnoDB读书笔记 | CHAO LI&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="基础知识
-数据库的四种隔离级别
-
-Read Uncommitted(读未提交): 如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。于是事务B可能读取到了事务A未提交的数据。
-Read -Committed(读提交): 读取数据的事务允许其他事务继续访问该行事务，但是未提交的写事务存在时禁止一切其他事务，该隔离级别避免了脏读，但是却可能出现不可重复读。事务">
-<meta property="og:type" content="article">
-<meta property="og:title" content="InnoDB读书笔记">
-<meta property="og:url" content="http://yoursite.com/2017/02/15/InnoDB读书笔记/index.html">
-<meta property="og:site_name" content="CHAO LI's Blog">
-<meta property="og:description" content="基础知识
-数据库的四种隔离级别
-
-Read Uncommitted(读未提交): 如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。于是事务B可能读取到了事务A未提交的数据。
-Read -Committed(读提交): 读取数据的事务允许其他事务继续访问该行事务，但是未提交的写事务存在时禁止一切其他事务，该隔离级别避免了脏读，但是却可能出现不可重复读。事务">
-<meta property="og:image" content="http://ol7zjjc80.bkt.clouddn.com/lock.png">
-<meta property="og:updated_time" content="2017-02-16T11:06:59.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="InnoDB读书笔记">
-<meta name="twitter:description" content="基础知识
-数据库的四种隔离级别
-
-Read Uncommitted(读未提交): 如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。于是事务B可能读取到了事务A未提交的数据。
-Read -Committed(读提交): 读取数据的事务允许其他事务继续访问该行事务，但是未提交的写事务存在时禁止一切其他事务，该隔离级别避免了脏读，但是却可能出现不可重复读。事务">
-<meta name="twitter:image" content="http://ol7zjjc80.bkt.clouddn.com/lock.png">
-  
-    <link rel="alternate" href="/atom.xml" title="CHAO LI&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/common.css">
-<link rel="stylesheet" href="/css/nav.css">
-<link rel="stylesheet" href="/css/layout.css">
-  
-
-</head>
-
-<body>
-  <header id="navbar" class="overflow-hidden">
-  <div class="container">
-    <nav class="nav">
-         <div class="nav-left">
-            <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">CHAO LI</span>'s Blog
-            </a>
-         </div>
-        <div class="nav-center is-hidden position-relative" id="search_container">
-            <div class="nav-item full-width full-height">
-                <i class="fa fa-search has-padding" aria-hidden="true"></i>
-                <input type="text" id="search_input" class="search-input full-height full-width" placeholder="Search post" autofocus>
-                <i id="close_search" class="fa fa-times" aria-hidden="true"></i>
-            </div>
-            <div id="search_result"></div>
-        </div>
-        <div class="nav-right nav-menu">
-            <a class="nav-item" id="search">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
-            
-            <a class="nav-item" href="/">
-                Home
-            </a>
-            
-            <a class="nav-item" href="/works">
-                My Works
-            </a>
-            
-            <a class="nav-item" href="/about">
-                About
-            </a>
-            
-            <a class="nav-item" href="/tags">
-                Tags
-            </a>
-            
-        </div>
-        <span class="nav-toggle" id="navMenuDropdown">
-            <span></span>
-            <span></span>
-            <span></span>
-        </span>
-        <div class="navbar-menu position-absolute full-width content-box is-hidden-desktop is-flex flex-column center" style="top: 100%;">
-            
-            <a class="nav-item flex-1" href="/">
-                Home
-            </a>
-            
-            <a class="nav-item flex-1" href="/works">
-                My Works
-            </a>
-            
-            <a class="nav-item flex-1" href="/about">
-                About
-            </a>
-            
-            <a class="nav-item flex-1" href="/tags">
-                Tags
-            </a>
-            
-        </div>
-    </nav>
-  </div>
-</header>
-
-  <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
-      <div class="main-inner-content">
-          <!--博文页面-->
-
-<style>
-    .header-box {
-        height: 370px;
-        filter: blur(10px);
-        background-size: cover;
-        background-color: lightsteelblue;
-    }
-
-    .post-box {
-        padding: 15px;
-        padding-top: 60px;
-        min-height: 80vh;
-        margin-top: -200px;
-        border-radius: 4px;
-        background-color: rgba(255,255,255,.8);
-    }
-
-    .post-avatar {
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-    }
-
-    .flow-chart {
-        text-align: center;
-    }
-
-    img[alt="post-cover"] {
-        display: none;
-    }
-</style>
-<header>
-    <div id="header_box" class="header-box"></div>
-</header>
-<section>
-    <div class="container post-box">
-        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
-            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>InnoDB读书笔记</strong>
-            </h1>
-            
-            <div class="is-flex align-center">
-                <img class="post-avatar" src="http://ol7zjjc80.bkt.clouddn.com/avatar.jpeg">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> CHAO LI</span>
-                <span class="post-date sub-title">at: 2017-02-15</span>
-            </div>
-            
-                <div>
-                    
-                         <a class="tag is-post-tag" href="/tags/InnoDB/">InnoDB</a>
-                    
-                         <a class="tag is-post-tag" href="/tags/mysql/">mysql</a>
-                    
-                         <a class="tag is-post-tag" href="/tags/成长/">成长</a>
-                    
-                         <a class="tag is-post-tag" href="/tags/读书/">读书</a>
-                    
-                </div>
-            
-        </div>
-        <div class="content" style="overflow: auto">
-            <h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><ol>
+<!DOCTYPE html><html lang=""><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>InnoDB读书笔记 | CHAO LI's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">InnoDB读书笔记</h1><a id="logo" href="/.">CHAO LI's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/about/"><i class="fa fa-user"> Über</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">InnoDB读书笔记</h1><div class="post-meta">Feb 15, 2017</div><a data-disqus-identifier="2017/02/15/InnoDB读书笔记/" href="/2017/02/15/InnoDB读书笔记/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><ol>
 <li><p>数据库的四种隔离级别</p>
 <ul>
 <li>Read Uncommitted(读未提交): 如果一个事务已经开始写数据，则另外一个事务则不允许同时进行写操作，但允许其他事务读此行数据。于是事务B可能读取到了事务A未提交的数据。</li>
@@ -359,74 +177,36 @@ Read -Committed(读提交): 读取数据的事务允许其他事务继续访问�
 <li>死锁的示例</li>
 <li>锁升级</li>
 </ol>
-
-        </div>
-        <div class="post-reply">
-            
-            
-            <div id="disqus_thread" style="width: 80%; margin: 0 auto;"></div>
-                <script>
-
-                    /**
-                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-                    /*
-                     var disqus_config = function () {
-                     this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-                     this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                     };
-                     */
-                    (function() { // DON'T EDIT BELOW THIS LINE
-                        var d = document, s = d.createElement('script');
-                        s.src = 'https://jacobs-wanhb.disqus.com/embed.js';
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                    })();
-                </script>
-                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-            
-        </div>
-    </div>
-</section>
-<script>
-    // 获取第一张图, 用以当封面背景图
-    var img = document.querySelectorAll('img')[1]
-
-    if (img) {
-        var header_box = document.querySelector('#header_box')
-        header_box.style.backgroundImage = 'url('+ img.src +')'
-    }
-</script>
-      </div>
-  </div>
-  <style>
-  #footer {
-    min-height: 10vh;
-    background: black;
-    color: #fff;
+</div><div class="tags"><a href="/tags/InnoDB/">InnoDB</a><a href="/tags/mysql/">mysql</a><a href="/tags/成长/">成长</a><a href="/tags/读书/">读书</a></div><div class="post-nav"><a href="/2017/03/15/HBase学习与经验总结/" class="pre">HBase学习与经验总结</a><a href="/2017/02/12/Spring源码解析-事务处理/" class="next">Spring源码解析--事务处理</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'https://jacobs-wanhb.disqus.com/embed.js';
+var disqus_identifier = '2017/02/15/InnoDB读书笔记/';
+var disqus_title = 'InnoDB读书笔记';
+var disqus_url = 'http://yoursite.com/2017/02/15/InnoDB读书笔记/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/next/config.json',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
   }
-
-  #footer a {
-    color: #e1e1e1;
-  }
-</style>
-<footer id="footer" class="has-text-centered is-flex center">
-  <div class="container has-padding">
-    <div>
-      <div>
-        <!--请您保留作者署名, 主题制作来之不易-->
-        Theme by <a href="http://haojen.github.io/">Haojen Ma</a>
-        <br>
-        Copyright © John Doe 2017
-        <br>
-        Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script src="/js/search_core.js"></script>
-<script src="/js/script.js"></script>
-
-</body>
-</html>
+});</script><script id="dsq-count-scr" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/count.js" async></script></div><div id="lv-container" data-id="city" data-uid="MTAyMC8yOTg3MC82NDM1"><script>(function(d, s) {
+   var j, e = d.getElementsByTagName(s)[0];
+   if (typeof LivereTower === 'function') { return; }
+   j = d.createElement(s);
+   j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+   j.async = true;
+   e.parentNode.insertBefore(j, e);
+})(document, 'script');</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/07/Kylin二次开发——测试环境搭建/">Kylin二次开发——测试环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/kylin-master-slave同步原理及问题排查/">kylin master-slave同步原理及问题排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/HBase架构脑图/">HBase架构脑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/02/Kylin学习笔记/">Kylin学习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/11/Spark学习笔记/">Spark学习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/15/HBase学习与经验总结/">HBase学习与经验总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/15/InnoDB读书笔记/">InnoDB读书笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/12/Spring源码解析-事务处理/">Spring源码解析--事务处理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/Spring源码解读/">Spring源码解读(-)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/30/类函数式的sql生成工具类的封装/">类函数式的sql生成工具类的封装</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
