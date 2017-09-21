@@ -58,7 +58,7 @@ favicon: /favicon.png
 
 
 # Deployment
-## Docs: https://hexo.io/docs/deployment.html
+language: zh-CN
 deploy: 
   type: git
   repo: git@github.com:lichaojacobs/Blog.git
