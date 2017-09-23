@@ -3,6 +3,70 @@
   
     
     <entry>
+      <title><![CDATA[lombok builder 泛型擦除]]></title>
+      <url>/2017/09/23/lombok-builder-%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ul>
+<li><p>众所周知，Java长期以来比较遭业界嫌弃的是太笨重，代码冗余过大。然而依托于Java庞大健全的开源社区，这些缺点正在逐渐改善。Java 8 引进的lambda以及函数式编程的思想让我们的代码越来越简洁。lombok等各大开源神器让我们的冗余代码越来越少。</p>
+</li>
+<li><p>使用lombok已经很长时间了，一直很好用，然而最近发现使用lombok builder构造泛型的时候会出现泛型擦除的情况，导致得到的对象是Object类型</p>
+</li>
+</ul>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><ul>
+<li>定义一个待使用builder构造的泛型类</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@NoArgsConstructor</div><div class="line">@AllArgsConstructor</div><div class="line">@Builder</div><div class="line">public class PageableResponse&lt;T&gt; &#123;</div><div class="line"></div><div class="line">  List&lt;T&gt; results;</div><div class="line">  @SerializedName(&quot;total_pages&quot;)</div><div class="line">  long totalPages;</div><div class="line">  @SerializedName(&quot;total_elements&quot;)</div><div class="line">  long totalElements;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>正常情况下，我是可以这样使用的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public PageableResponse&lt;String&gt; getPageableResponse() &#123;</div><div class="line">  return PageableResponse</div><div class="line">      .builder()</div><div class="line">      .results(Lists.newArrayList())</div><div class="line">      .totalElements(0)</div><div class="line">      .totalPages(0)</div><div class="line">      .build();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然而出现类型转换错误，PageableResponse.builder()生成的是PageableResponse.PageableResponseBuilder\<object> 想来也是，我这里调用builder方法时候并没有指定任何类型。</object></p>
+<h3 id="泛型基础知识"><a href="#泛型基础知识" class="headerlink" title="泛型基础知识"></a>泛型基础知识</h3><p>那为什么会得到这样的结果？这里就要回顾一下泛型的知识了，这里我们的场景比较复杂一点，属于泛型类里面的静态泛型方法。这里提一下知识点：</p>
+<h5 id="java泛型转换的几个事实："><a href="#java泛型转换的几个事实：" class="headerlink" title="java泛型转换的几个事实："></a>java泛型转换的几个事实：</h5><ul>
+<li>虚拟机中没有泛型，只有普通的类和方法</li>
+<li>无论何时定义一个泛型类型，都自动提供了一个相应的原始类型。原始类型的名字就是删去类型参数后的泛型类型名。擦除类型变量，替换为限定类型（无限定的变量用Object）。当程序调用泛型方法时，如果擦除返回类型，编译器插入强制类型转换。</li>
+<li>所有的类型参数都用它们的限定类型替换<ul>
+<li>如:Pair\<t> 擦除类型之后就变成了Pair\<object></object></t></li>
+</ul>
+</li>
+<li>桥方法被合成来保持多态</li>
+<li>为保证类型安全性，必要时插入强制类型转换</li>
+</ul>
+<h5 id="泛型类里面的泛型方法和静态泛型方法是有区别的："><a href="#泛型类里面的泛型方法和静态泛型方法是有区别的：" class="headerlink" title="泛型类里面的泛型方法和静态泛型方法是有区别的："></a>泛型类里面的泛型方法和静态泛型方法是有区别的：</h5><ul>
+<li>泛型类定义的泛型 在整个类中有效 如果被方法使用，当泛型类确定类型之后，泛型方法也就确定类型了</li>
+<li>而对于静态泛型方法而言，其泛型的类型是不依赖于泛型类的类型，也就是这两者的类型完全不相干（依据上一条的事实一）</li>
+</ul>
+<h5 id="泛型类型的继承规则"><a href="#泛型类型的继承规则" class="headerlink" title="泛型类型的继承规则"></a>泛型类型的继承规则</h5><ul>
+<li>考虑一个类和一个子类，如Employee和Manager。Pair\<manager> 却不是Pair\<employee>的子类。事实上，它们的关系如下图所示</employee></manager></li>
+</ul>
+<p><img src="http://ol7zjjc80.bkt.clouddn.com/generics1.png" alt=""></p>
+<ul>
+<li>泛型类可以扩展或实现其他泛型类。这一点与普通的类没什么区别。如：ArrayList\<t> 类实现List\<t>接口，意味着一个ArrayList\<manager> 可以被转换为一个List\<manager>。但是一个ArrayList\<manager> 不是一个ArrayList\<employee> 或者List<employee>，它们的关系如下图:</employee></employee></manager></manager></manager></t></t></li>
+</ul>
+<p><img src="http://ol7zjjc80.bkt.clouddn.com/generics2.png" alt=""></p>
+<h3 id="案例解释"><a href="#案例解释" class="headerlink" title="案例解释"></a>案例解释</h3><ul>
+<li>泛型知识作了一番复习之后，我们再回到上面的案例。之所以无法正常的使用builder，是因为静态泛型方法不继承泛型类的类型。下面是案例类生成的代码：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class PageableResponse&lt;T&gt; &#123;</div><div class="line">  List&lt;T&gt; results;</div><div class="line">  @JSONField(</div><div class="line">    name = &quot;total_pages&quot;</div><div class="line">  )</div><div class="line">  long totalPages;</div><div class="line">  @JSONField(</div><div class="line">    name = &quot;total_elements&quot;</div><div class="line">  )</div><div class="line">  long totalElements;</div><div class="line"></div><div class="line">  //这个T不依赖于PageableResponse&lt;T&gt;的T</div><div class="line">  public static &lt;T&gt; PageableResponse.PageableResponseBuilder&lt;T&gt; builder() &#123;</div><div class="line">    return new PageableResponse.PageableResponseBuilder();</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  ...</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>而正常的没有泛型的生成代码如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class Address &#123;</div><div class="line">  private String city;</div><div class="line"></div><div class="line">  //不带泛型</div><div class="line">  public static Address.AddressBuilder builder() &#123;</div><div class="line">    return new Address.AddressBuilder();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public Address() &#123;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @ConstructorProperties(&#123;&quot;city&quot;&#125;)</div><div class="line">  public Address(String city) &#123;</div><div class="line">    this.city = city;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public static class AddressBuilder &#123;</div><div class="line">    private String city;</div><div class="line"></div><div class="line">    AddressBuilder() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Address.AddressBuilder city(String city) &#123;</div><div class="line">      this.city = city;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public Address build() &#123;</div><div class="line">      return new Address(this.city);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String toString() &#123;</div><div class="line">      return &quot;Address.AddressBuilder(city=&quot; + this.city + &quot;)&quot;;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>所以如果必须要使用泛型且如果这种情况不是太多的话，可以自己实现lombok的builder生成的代码，以案例定义的类为例，改造完的代码如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@NoArgsConstructor</div><div class="line">@AllArgsConstructor</div><div class="line">public class PageableResponse&lt;T&gt; &#123;</div><div class="line"></div><div class="line">  List&lt;T&gt; results;</div><div class="line">  @SerializedName(&quot;total_pages&quot;)</div><div class="line">  long totalPages;</div><div class="line">  @SerializedName(&quot;total_elements&quot;)</div><div class="line">  long totalElements;</div><div class="line"></div><div class="line">  //这里使用非静态方法的写法可以达到继承泛型类型的目的</div><div class="line">  public PageableResponseBuilder&lt;T&gt; builder() &#123;</div><div class="line">    return new PageableResponseBuilder&lt;T&gt;();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  public class PageableResponseBuilder&lt;T&gt; &#123;</div><div class="line"></div><div class="line">    List&lt;T&gt; results;</div><div class="line">    long totalPages;</div><div class="line">    long totalElements;</div><div class="line"></div><div class="line">    public PageableResponseBuilder&lt;T&gt; totalPages(long totalPages) &#123;</div><div class="line">      this.totalPages = totalPages;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public PageableResponseBuilder&lt;T&gt; totalElements(long totalElements) &#123;</div><div class="line">      this.totalElements = totalElements;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public PageableResponseBuilder&lt;T&gt; results(List&lt;T&gt; results) &#123;</div><div class="line">      this.results = results;</div><div class="line">      return this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public PageableResponse&lt;T&gt; build() &#123;</div><div class="line">      return new PageableResponse&lt;&gt;(results, totalPages, totalElements);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 成长 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Kylin二次开发——测试环境搭建]]></title>
       <url>/2017/08/07/Kylin%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E2%80%94%E2%80%94%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
       <content type="html"><![CDATA[<h3 id="调研背景"><a href="#调研背景" class="headerlink" title="调研背景"></a>调研背景</h3><p>虽然公司目前在生产环境上正式用上了kylin，但是由于其本身年龄不长，社区并不完善，难难免会暴露出各种各样的源码级别的问题(包括上一篇介绍的kylin的同步机制的问题)。这时候使用者想等着官方推出新的release未免太过于被动。于是，我们想着对kylin进行二次开发以满足我们对定制化需求。事实上，目前我们使用的所有开源框架在一定程度上都进行了多多少少的二次开发：</p>
