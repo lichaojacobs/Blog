@@ -205,7 +205,8 @@
     <entry>
       <title><![CDATA[HBase架构脑图]]></title>
       <url>/2017/06/25/HBase%E6%9E%B6%E6%9E%84%E8%84%91%E5%9B%BE/</url>
-      <content type="html"><![CDATA[<p><img src="http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png" alt="HBase 架构图"></p>
+      <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近，由于我司数据基础新架构正在陆续往以Kylin为中心的方向上走，而Kylin的底层存储又是重度依赖HBase，为了保证数据服务的稳定性，无奈最近开始研究HBase的源码以及工作原理。翻阅各种书籍博客之余，大致总结了一张初期的HBase架构脑图，之后会随着认知的深入去不断更新。结合源码方面的分析也会陆续进行…比较蛋疼的是，HBase的源码太过庞大，不如Kylin的结构清晰，慢慢看吧…</p>
+<h3 id="脑图"><a href="#脑图" class="headerlink" title="脑图"></a>脑图</h3><p><img src="http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png" alt="HBase 架构图"></p>
 ]]></content>
       
         
