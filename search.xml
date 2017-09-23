@@ -17,15 +17,12 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@NoArgsConstructor</div><div class="line">@AllArgsConstructor</div><div class="line">@Builder</div><div class="line">public class PageableResponse&lt;T&gt; &#123;</div><div class="line"></div><div class="line">  List&lt;T&gt; results;</div><div class="line">  @SerializedName(&quot;total_pages&quot;)</div><div class="line">  long totalPages;</div><div class="line">  @SerializedName(&quot;total_elements&quot;)</div><div class="line">  long totalElements;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>正常情况下，我是可以这样使用的:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public PageableResponse&lt;String&gt; getPageableResponse() &#123;</div><div class="line">  return PageableResponse</div><div class="line">      .builder()</div><div class="line">      .results(Lists.newArrayList())</div><div class="line">      .totalElements(0)</div><div class="line">      .totalPages(0)</div><div class="line">      .build();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然而出现类型转换错误，PageableResponse.builder()生成的是PageableResponse.PageableResponseBuilder\<object> 想来也是，我这里调用builder方法时候并没有指定任何类型。</object></p>
+<p>然而出现类型转换错误，PageableResponse.builder()生成的是PageableResponse.PageableResponseBuilder<object> 想来也是，我这里调用builder方法时候并没有指定任何类型。</object></p>
 <h3 id="泛型基础知识"><a href="#泛型基础知识" class="headerlink" title="泛型基础知识"></a>泛型基础知识</h3><p>那为什么会得到这样的结果？这里就要回顾一下泛型的知识了，这里我们的场景比较复杂一点，属于泛型类里面的静态泛型方法。这里提一下知识点：</p>
 <h5 id="java泛型转换的几个事实："><a href="#java泛型转换的几个事实：" class="headerlink" title="java泛型转换的几个事实："></a>java泛型转换的几个事实：</h5><ul>
 <li>虚拟机中没有泛型，只有普通的类和方法</li>
 <li>无论何时定义一个泛型类型，都自动提供了一个相应的原始类型。原始类型的名字就是删去类型参数后的泛型类型名。擦除类型变量，替换为限定类型（无限定的变量用Object）。当程序调用泛型方法时，如果擦除返回类型，编译器插入强制类型转换。</li>
-<li>所有的类型参数都用它们的限定类型替换<ul>
-<li>如:Pair\<t> 擦除类型之后就变成了Pair\<object></object></t></li>
-</ul>
-</li>
+<li>所有的类型参数都用它们的限定类型替换 如:Pair<t> 擦除类型之后就变成了Pair<object></object></t></li>
 <li>桥方法被合成来保持多态</li>
 <li>为保证类型安全性，必要时插入强制类型转换</li>
 </ul>
@@ -34,11 +31,11 @@
 <li>而对于静态泛型方法而言，其泛型的类型是不依赖于泛型类的类型，也就是这两者的类型完全不相干（依据上一条的事实一）</li>
 </ul>
 <h5 id="泛型类型的继承规则"><a href="#泛型类型的继承规则" class="headerlink" title="泛型类型的继承规则"></a>泛型类型的继承规则</h5><ul>
-<li>考虑一个类和一个子类，如Employee和Manager。Pair\<manager> 却不是Pair\<employee>的子类。事实上，它们的关系如下图所示</employee></manager></li>
+<li>考虑一个类和一个子类，如Employee和Manager。Pair<manager> 却不是Pair<employee>的子类。事实上，它们的关系如下图所示</employee></manager></li>
 </ul>
 <p><img src="http://ol7zjjc80.bkt.clouddn.com/generics1.png" alt=""></p>
 <ul>
-<li>泛型类可以扩展或实现其他泛型类。这一点与普通的类没什么区别。如：ArrayList\<t> 类实现List\<t>接口，意味着一个ArrayList\<manager> 可以被转换为一个List\<manager>。但是一个ArrayList\<manager> 不是一个ArrayList\<employee> 或者List<employee>，它们的关系如下图:</employee></employee></manager></manager></manager></t></t></li>
+<li>泛型类可以扩展或实现其他泛型类。这一点与普通的类没什么区别。如：ArrayList<t> 类实现List<t>接口，意味着一个ArrayList<manager> 可以被转换为一个List<manager>。但是一个ArrayList<manager> 不是一个ArrayList<employee> 或者List<employee>，它们的关系如下图:</employee></employee></manager></manager></manager></t></t></li>
 </ul>
 <p><img src="http://ol7zjjc80.bkt.clouddn.com/generics2.png" alt=""></p>
 <h3 id="案例解释"><a href="#案例解释" class="headerlink" title="案例解释"></a>案例解释</h3><ul>
