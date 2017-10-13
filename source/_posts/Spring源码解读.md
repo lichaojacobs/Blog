@@ -11,7 +11,7 @@ tags:
 ### IOC
 #### **设计理念**
 先来看看接口设计预览图：
-![IOC接口设计规范](http://jacobs.wanhb.cn/images/ioc1.jpg)
+![IOC接口设计规范](http://ol7zjjc80.bkt.clouddn.com/ioc1.jpg)
 
 
 #### 资源定位与注册
@@ -87,7 +87,7 @@ tags:
 最后，就可以正常的使用由IOC容器托管的Bean了
 
 - 
-![注入过程](http://jacobs.wanhb.cn/images/ioc3.jpg)
+![注入过程](http://ol7zjjc80.bkt.clouddn.com/ioc3.jpg)
 
 #### 讲讲预先注入
 我们讲过依赖注入一般发生在用户第一次请求，但是也可以设置lazy-init属性实现预先依赖注入。这部分过程依然属于AbstractApplicationContext的 refresh方法中。在finishBeanFactoryInitialization的方法中，封装了lazy-init属性的处理，实际的处理是在DefaultListableBeanFactory这个基本容器的preInstantiateSingletons方法中完成的。该方法对单件Bean完成预先实例化。
@@ -205,7 +205,7 @@ tags:
 #### **设计原理及流程**
 Advice、PointCut、Advisor(通知器，组织起Advice与PointCut)
 
-![接口设计](http://jacobs.wanhb.cn/images/aopinterface.jpg)
+![接口设计](http://ol7zjjc80.bkt.clouddn.com/aopinterface.jpg)
 AopProxy代理对象生成过程：ProxyFactoryBean和ProxyFactory都提供了AOP的功能封装，但是ProxyFactoryBean与IOC进行了结合，利用BeanFactoryAware获取ApplicationContext,从而可以利用context对IOC注入的bean进行获取
 
 初始化通知链—— >获取单例，没有的话去创建——>判断是否为接口，如果为接口使用JDK,如果不是使用CGlib最后返回AopProxy
