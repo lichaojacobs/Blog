@@ -842,20 +842,18 @@
       <url>/2017/02/07/Spring%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/</url>
       <content type="html"><![CDATA[<h3 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h3><h4 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a><strong>设计理念</strong></h4><p>先来看看接口设计预览图：<br><img src="http://ol7zjjc80.bkt.clouddn.com/ioc1.jpg" alt="IOC接口设计规范"></p>
 <h4 id="资源定位与注册"><a href="#资源定位与注册" class="headerlink" title="资源定位与注册"></a>资源定位与注册</h4><p>容器的初始化过程是IOC实现的入口，过程如下：</p>
-<blockquote>
 <ol>
 <li>Resource定位。BeanDefitioin的资源定位，由ResourceLoader通过统一的Resource接口完成<br>，这个Resource对各种形式的BeanDefinition使用都提供了统一接口。</li>
 <li>BeanDefition的载入。这个载入过程是用户定义好的Bean表示成IOC容器内部的数据结构，而这个容器的数据<br>结构就是BeanDefition。BeanDefition实际上就是POJO对象在IOC容器中的抽象，通过这个BeanDefition定义<br>的数据结构，使得IOC容器能够方便地对POJO对象也就是Bean进行管理。</li>
 <li>向IOC容器注册这些BeanDefition的过程。调用BeanDefitionRegistry接口的实现来完成。把解析得到的BeanDefition向容器中进行注册。在IOC内部将BeanDefition注入到一个HasMap中去(BeanDefitionHolder),IOC容器就是通过这个HashMap来持有这些BeanDefition数据的。</li>
 <li><strong>值得注意：</strong>容器初始化过程不包括依赖注入的实现，Bean定义的载入和依赖注入是俩个独立的过程。依赖注入一般发生在第一次getBean的时候或者通过设置lazyinit实现预先注入Bean。 </li>
 </ol>
-</blockquote>
-<ol>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
 <li><p>AbstractApplicationContext定义了基本的refresh方法，其他的由子类去实现扩展,即AbstractApplicationContext是容器初始化的入口</p>
 </li>
 <li><p>DefaultListableBeanFactory是IOC容器的基础，FileSystemXmlApplicationContext、WebXmlApplicationContext都是建立在DefaultListableBeanFactory之上，实现自定义BeanDefinition的载入方式</p>
 </li>
-</ol>
+</ul>
 <h4 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h4><ul>
 <li>初始化过程完成的主要工作是在IOC容器中建立BeanDefinition数据映射。此过程中并没有实现IOC容器对Bean依赖关系进行注入。</li>
 <li>对于依赖注入，其触发条件是用户第一次向IOC容器索要Bean时触发的。当然也可以通过控制lazy-init属性来让容器完成对bean的预实例化。</li>
