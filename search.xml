@@ -261,9 +261,9 @@
         
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> 成长 </tag>
+            
+            <tag> Java </tag>
             
         </tags>
         
@@ -370,9 +370,9 @@
         
         <tags>
             
-            <tag> infrastructure </tag>
-            
             <tag> 成长 </tag>
+            
+            <tag> infrastructure </tag>
             
             <tag> 源码 </tag>
             
@@ -694,28 +694,37 @@
 <li><p>分析<br>1）用Show index table 查看索引的情况<br>2）用explain+sql语句 来分析这条sql的情况，包括使用的possible_keys（可能选择的索引）与key(实际选择的索引)</p>
 </li>
 <li><p>联合索引<br>是指对表上的多个列进行索引，创建方法与单个索引的创建方法一样，不同之处在于有多个索引列,如对于联合索引(a,b) ,以下是关于联合索引的一些情况</p>
-<blockquote>
-<p>1）select * from table where a=x and b=x;<br>显然是可以用(a,b)索引的，因为索引的顺序就是按照（a,b）来排序的</p>
-<p>2）select * from table where a=xxx; 这个也是可以使用(a,b)索引的，只不过只能使用一部分</p>
-<p>3) select * from table where b=xxx; 这个是不能使用索引的，因为压根就没按照b做排序。<br>联合索引的好处是，在第一个索引的基础上，已经给第二个键值做了排序的处理，从而可以减少一次排序操作：比如我们要查某个用户购买商品的情况，并且按照时间排序。</p>
-</blockquote>
+<ul>
+<li><p>select * from table where a=x and b=x;<br>  显然是可以用(a,b)索引的，因为索引的顺序就是按照（a,b）来排序的</p>
+</li>
+<li><p>select * from table where a=xxx; 这个也是可以使用(a,b)索引的，只不过只能使用一部分</p>
+</li>
+<li>select * from table where b=xxx; 这个是不能使用索引的，因为压根就没按照b做排序。</li>
+<li>联合索引的好处是，在第一个索引的基础上，已经给第二个键值做了排序的处理，从而可以减少一次排序操作：比如我们要查某个用户购买商品的情况，并且按照时间排序。</li>
+</ul>
 </li>
 <li><p>覆盖索引</p>
-<blockquote>
-<p>1) Innodb存储引擎支持覆盖索引，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。使用覆盖索引的一个好处是辅助索引不包含整行记录的所有信息，因此，大小要远小于聚集索引，可以大大减少IO操作。</p>
-<p>2) 对于Innodb的辅助索引而言，由于其包含了主键信息，因此其叶子节点存放的数据为(primary key1,primary<br>key2,…)例如，下列语句都可以通过使用一次辅助索引来完成查询select primary key1,key2,… from table<br>where<br>key1=xxx;对于覆盖索引的另一个好处是对某些统计问题而言，不会选择通过聚集索引来进行统计。因为辅助索引的量远小于聚集索引，可以大大减少IO操作。</p>
-</blockquote>
+<ul>
+<li>Innodb存储引擎支持覆盖索引，即从辅助索引中就可以得到查询的记录，而不需要查询聚集索引中的记录。使用覆盖索引的一个好处是辅助索引不包含整行记录的所有信息，因此，大小要远小于聚集索引，可以大大减少IO操作。</li>
+<li><p>对于Innodb的辅助索引而言，由于其包含了主键信息，因此其叶子节点存放的数据为(primary key1,primary key2,…)例如，下列语句都可以通过使用一次辅助索引来完成查询</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">select primary key1,key2,… from table</div><div class="line">where</div><div class="line">key1=xxx;</div><div class="line">对于覆盖索引的另一个好处是对某些统计问题而言，</div><div class="line">不会选择通过聚集索引来进行统计。因为辅助索引的量远小于聚集索引，</div><div class="line">可以大大减少IO操作。</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>优化器选择不使用索引的情况</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">select * from order </div><div class="line">where orderId&gt;10000 and orderId&lt;102000; </div><div class="line">（从orderId的基数看来非常大，这是前提）</div></pre></td></tr></table></figure>
+<ul>
+<li>这句sql按道理来说可以使用辅助索引的，可选的 KEYS有primary orderId, 等索引，然而最后选择了primary聚集索引，也就是全表扫描。</li>
+<li>原因在于用户要选取的数据是整行信息，而orderId索引不能覆盖到我们要查询的信息，因此在对orderId索引查询到指定的数据之后，还需要一次书签访问来查询整行信息，虽然orderId索引中的数据是顺序存放的，但是再一次进行书签来查找数据则是无序的，因此变为了磁盘上的离散读操作。</li>
+<li>如果要求访问的数据量很小。则优化器还会选择辅助索引，但是当访问的数据占整个表中数据的蛮大一部分的时候（通常是百分之二十），优化器则会选择通过聚集索引来查找数据，因此之前已经提到过，顺序读要远远快于离散读。</li>
+<li>因此，对于不能进行索引覆盖的情况，优化器选择辅助索引的条件是占有的数据量很小。当然这是由当前传统的机械硬盘的特性决定的。</li>
+</ul>
+</li>
+<li><p>InnoDB存储引擎中的哈希算法<br>自适应哈希索引：数据库自身创建并使用的，经过哈希函数映射到一个哈希表中，因此对于字典类型的查找非常快速。如 select * from table where index_cole=“xxx” 但是对于范围查找久无能为力了。</p>
 </li>
 </ul>
 </li>
 </ol>
-<pre><code>- 优化器选择不使用索引的情况
-**如：select * from order where orderId&gt;10000 and orderId&lt;102000;  （从orderId的基数看来非常大，这是前提）**
-这句sql按道理来说可以使用辅助索引的，可选的 KEYS有primary orderId, 等索引，然而最后选择了primary聚集索引，也就是全表扫描。原因在于用户要选取的数据是整行信息，而orderId索引不能覆盖到我们要查询的信息，因此在对orderId索引查询到指定的数据之后，还需要一次书签访问来查询整行信息，虽然orderId索引中的数据是顺序存放的，但是再一次进行书签来查找数据则是无序的，因此变为了磁盘上的离散读操作。如果要求访问的数据量很小。则优化器还会选择辅助索引，但是当访问的数据占整个表中数据的蛮大一部分的时候（通常是百分之二十），优化器则会选择通过聚集索引来查找数据，因此之前已经提到过，顺序读要远远快于离散读。
-因此，对于不能进行索引覆盖的情况，优化器选择辅助索引的条件是占有的数据量很小。当然这是由当前传统的机械硬盘的特性决定的。
-
-- InnoDB存储引擎中的哈希算法
-</code></pre><p>自适应哈希索引：数据库自身创建并使用的，经过哈希函数映射到一个哈希表中，因此对于字典类型的查找非常快速。如 select * from table where index_cole=“xxx” 但是对于范围查找久无能为力了。</p>
 <h3 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h3><h4 id="lock-与-latch"><a href="#lock-与-latch" class="headerlink" title="lock 与 latch"></a>lock 与 latch</h4><ul>
 <li>latch一般称为轻量级锁，因为其要求锁定的时间必须非常短。若持续的时间长，则应用的性能会非常差。在InnoDB存储引擎中，latch又可以氛围mutex（互斥量）与 rwlock 读写锁。目的是用来保证并发线程的操作临界资源的正确性，并且通常没有死锁检测的机制，仅仅通过应用程序加锁的顺序来保证无死锁的情况发生。</li>
 <li>lock的对象是事务，用来锁定的是数据库中的对象。如表，页，行。并且一般lock的对象仅在事务commit或rollback后进行释放。且有死锁机制</li>
@@ -768,11 +777,12 @@
 <li>采用的锁定技术为Next-Key Locking,锁定的不是单个值，而是一个范围，是谓词索引的一种改进。若事务T1已经通过next-key locking锁定了范围：(10,11]、(11,13] 当插入新的记录12时，则锁定的范围会变成:(10,11]、(11,12],(12,13]。 然而当查询的索引含有<strong>唯一属性</strong>时，InnoDB会对Next-Key Lock进行优化降级为Record Lock，即仅仅锁住索引本身，而不是范围。</li>
 </ul>
 </li>
-<li>解决Phantom Problem<ul>
+<li><p>解决Phantom Problem</p>
+<ul>
 <li><strong>Phantom Problem定义：</strong> 是指在同一事务下，连续执行俩次同样的SQL语句可能导致不同的结果，第二次执行的SQL语句可能会返回之前不存在的行。</li>
-<li><strong>在默认的事务隔离级别下，即REPEATABLE READ下</strong>，InnoDB存储引擎采用Next-Key Locking机制来避免幻象问题。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">举例说明：表t由1，2，5三个值组成，事务T1执行：select * from t where a&gt;2 for update;</div><div class="line">这时，T1并没有提交操作，此时结果返回5，与此同时，另一个事务T2插入了4这个值，在执行一遍sql</div><div class="line">会返回4，5，即俩次的结果不一致。InnoDB的next-key locking算法避免Phantom Problem,是对（2，+8）这个范围加了X锁，因此对于任何这个范围插入的操作都是不被允许的。</div></pre></td></tr></table></figure>
-</li>
+<li><strong>在默认的事务隔离级别下，即REPEATABLE READ下</strong>，InnoDB存储引擎采用Next-Key Locking机制来避免幻象问题。</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">举例说明：表t由1，2，5三个值组成，事务T1执行：select * from t where a&gt;2 for update;</div><div class="line">这时，T1并没有提交操作，此时结果返回5，与此同时，另一个事务T2插入了4这个值，在执行一遍sql</div><div class="line">会返回4，5，即俩次的结果不一致。InnoDB的next-key locking算法避免Phantom Problem,是对（2，+8）这个范围加了X锁，因此对于任何这个范围插入的操作都是不被允许的。</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <h4 id="锁问题"><a href="#锁问题" class="headerlink" title="锁问题"></a>锁问题</h4><ol>
@@ -815,9 +825,11 @@
 </li>
 </ul>
 </li>
-<li>阻塞<ul>
+<li><p>阻塞</p>
+<ul>
 <li>因为不同锁之间的兼容性关系，在有些时刻一个事务中的锁需要等待另一个事务中的锁释放它所占用的资源，这就是阻塞。阻塞不是一件坏事，是为了确保事务可以并发且正常地运行。</li>
-<li>在InnoDB中，参数 <strong>innodb_lock_wait_timeout</strong>用来控制等待的时间<strong>（默认是50秒）</strong>，innodb_rollback_on_timeout用来设定是否在等待超时时对进行中的事务进行回滚操作，默认不回滚。可以通过代码调整： <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">set @@innodb_lock_wait_time=60</div><div class="line">innodb_rollback_on_timeout是静态的，不可在启动时进行修改。</div><div class="line">默认情况下，innoDB存储引擎不会回滚超时引发的错误异常，其实InnoDB存储引擎在大部分情况下，都不会对异常进行回滚。</div></pre></td></tr></table></figure>
+<li><p>在InnoDB中，参数 <strong>innodb_lock_wait_timeout</strong>用来控制等待的时间<strong>（默认是50秒）</strong>，innodb_rollback_on_timeout用来设定是否在等待超时时对进行中的事务进行回滚操作，默认不回滚。可以通过代码调整： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">set @@innodb_lock_wait_time=60</div><div class="line">innodb_rollback_on_timeout是静态的，不可在启动时进行修改。</div><div class="line">默认情况下，innoDB存储引擎不会回滚超时引发的错误异常，其实InnoDB存储引擎在大部分情况下，都不会对异常进行回滚。</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
