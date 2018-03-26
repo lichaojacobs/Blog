@@ -370,9 +370,9 @@
         
         <tags>
             
-            <tag> infrastructure </tag>
-            
             <tag> 成长 </tag>
+            
+            <tag> infrastructure </tag>
             
             <tag> 源码 </tag>
             
@@ -517,9 +517,12 @@
 <ul>
 <li>FIFO模式，用户先提交的作业1优先分配需要的资源，之后提交的作业2再分配资源，依次类推。</li>
 <li>Mesos: 粗粒度模式和细粒度模式</li>
-<li>YARN模式：独占模式，可以控制应用分配资源<ul>
-<li>yarn-cluster: 适用于生产环境。client将用户程序提交到到spark集群中就与spark集群断开联系了，此时client将不会发挥其他任何作用，仅仅负责提交。在此模式下。AM和driver是同一个东西，但官网上给的是driver运行在AM里，可以理解为AM包括了driver的功能就像Driver运行在AM里一样，此时的AM既能够向AM申请资源并进行分配，又能完成driver划分RDD提交task等工作</li>
-<li>yarn-client: y适用于交互、调试，希望立即看到app的输出。Driver运行在客户端上，先有driver再用AM，此时driver负责RDD生成、task生成和分发，向AM申请资源等 ,AM负责向RM申请资源，其他的都由driver来完成</li>
+<li><p>YARN模式：独占模式，可以控制应用分配资源</p>
+<ul>
+<li><p>yarn-cluster: 适用于生产环境。client将用户程序提交到到spark集群中就与spark集群断开联系了，此时client将不会发挥其他任何作用，仅仅负责提交。在此模式下。AM和driver是同一个东西，但官网上给的是driver运行在AM里，可以理解为AM包括了driver的功能就像Driver运行在AM里一样，此时的AM既能够向AM申请资源并进行分配，又能完成driver划分RDD提交task等工作</p>
+</li>
+<li><p>yarn-client: y适用于交互、调试，希望立即看到app的输出。Driver运行在客户端上，先有driver再用AM，此时driver负责RDD生成、task生成和分发，向AM申请资源等 ,AM负责向RM申请资源，其他的都由driver来完成</p>
+</li>
 </ul>
 </li>
 </ul>
