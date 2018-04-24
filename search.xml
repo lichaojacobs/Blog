@@ -33,24 +33,15 @@
 </li>
 <li><p>大致的策略还是跟RetryAndFollowUpInterceptor一样，对followUpRequest的方法做了修改</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">case 300:</div><div class="line">  case 301:</div><div class="line">case 302:</div><div class="line">case 303:</div><div class="line">case 307:</div></pre></td></tr></table></figure>
+<p>  将307放到了300-303并列的位置，进入redirect逻辑。去掉将method统一替换成GET的逻辑:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (HttpMethod.redirectsToGet(method)) &#123;</div><div class="line">	requestBuilder.method(&quot;GET&quot;, (RequestBody)null);</div><div class="line">&#125; else &#123;</div><div class="line">	RequestBody requestBody = maintainBody ?userResponse.request().body() : null;</div><div class="line">	requestBuilder.method(method, requestBody);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  改为:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">boolean maintainBody = HttpMethod.requiresRequestBody(method);</div><div class="line">                                   RequestBody requestBody = maintainBody ? userResponse.request().body() : null;</div><div class="line">                                   requestBuilder.method(method, requestBody);</div></pre></td></tr></table></figure>
+<p>  为了带上用户名密码，去掉逻辑:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> if (!this.sameConnection(userResponse, url))&#123;</div><div class="line"> 	requestBuilder.removeHeader(&quot;Authorization&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<pre><code>将307放到了300-303并列的位置，进入redirect逻辑。去掉将method统一替换成GET的逻辑:
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (HttpMethod.redirectsToGet(method)) &#123;</div><div class="line">	requestBuilder.method(&quot;GET&quot;, (RequestBody)null);</div><div class="line">&#125; else &#123;</div><div class="line">	RequestBody requestBody = maintainBody ?userResponse.request().body() : null;</div><div class="line">	requestBuilder.method(method, requestBody);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-
-改为:
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">boolean maintainBody = HttpMethod.requiresRequestBody(method);</div><div class="line">                                   RequestBody requestBody = maintainBody ? userResponse.request().body() : null;</div><div class="line">                                   requestBuilder.method(method, requestBody);</div></pre></td></tr></table></figure>
-
-
-为了带上用户名密码，去掉逻辑:
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> if (!this.sameConnection(userResponse, url))&#123;</div><div class="line"> 	requestBuilder.removeHeader(&quot;Authorization&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</code></pre><ul>
+<ul>
 <li>至此，Palo http-mini-load put 307 Temporary 重定向问题得到了解决</li>
 </ul>
 <h4 id="使用apache-httpcomponents"><a href="#使用apache-httpcomponents" class="headerlink" title="使用apache httpcomponents"></a>使用apache httpcomponents</h4><ul>
