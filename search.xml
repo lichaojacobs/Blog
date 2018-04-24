@@ -37,6 +37,7 @@
 </ul>
 <pre><code>将307放到了300-303并列的位置，进入redirect逻辑。去掉将method统一替换成GET的逻辑:
 
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (HttpMethod.redirectsToGet(method)) &#123;</div><div class="line">	requestBuilder.method(&quot;GET&quot;, (RequestBody)null);</div><div class="line">&#125; else &#123;</div><div class="line">	RequestBody requestBody = maintainBody ?userResponse.request().body() : null;</div><div class="line">	requestBuilder.method(method, requestBody);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
 
@@ -46,6 +47,7 @@
 
 
 为了带上用户名密码，去掉逻辑:
+
 
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> if (!this.sameConnection(userResponse, url))&#123;</div><div class="line"> 	requestBuilder.removeHeader(&quot;Authorization&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </code></pre><ul>
@@ -692,11 +694,11 @@
             
             <tag> 成长 </tag>
             
-            <tag> Kylin </tag>
-            
             <tag> infrastructure </tag>
             
             <tag> 源码 </tag>
+            
+            <tag> Kylin </tag>
             
         </tags>
         
@@ -1253,13 +1255,13 @@
         
         <tags>
             
-            <tag> 源码 </tag>
-            
             <tag> spring </tag>
             
             <tag> ioc </tag>
             
             <tag> aop </tag>
+            
+            <tag> 源码 </tag>
             
             <tag> 事务处理 </tag>
             
@@ -1339,13 +1341,13 @@
         
         <tags>
             
-            <tag> 源码 </tag>
-            
             <tag> spring </tag>
             
             <tag> ioc </tag>
             
             <tag> aop </tag>
+            
+            <tag> 源码 </tag>
             
         </tags>
         
