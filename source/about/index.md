@@ -3,7 +3,6 @@ date: 2017-05-31 10:05:56
 layout: about
 ---
 
-- 混迹于互联网，人工智能的落魄战士
 - 信仰技术，相信技术能改变世界
 - 专注于Java服务端开发，大数据开源解决方案领域
 
@@ -13,7 +12,7 @@ layout: about
 - 掌握大数据的各种开源框架,对Cloudera、Hadoop、Hive、HBase、Kafka、Spark、Flume等工具有过实际的使用，开发以及运维经验
 - 掌握关系型数据库 MySQL，以及常用的 NoSQL，例如 Redis、MongoDB、Elasticsearch
 - 掌握Python的 Flask Web开发、小工具开发、以及偶尔使用Pandas和scikit-learn包做常见的机器学习模型训练
-- 给开源的OLAP框架Kylin项目提交过代码。读过部分HBase源码，熟悉HBase整个工作原理与流程
+- Kylin开源贡献者。读过部分HBase源码，熟悉HBase整个工作原理与流程
 - 了解微服务相关生态，了解Spring Cloud生态，服务注册发现、分布式链路追踪及 API Gateway
 - 了解常见的机器学习算法，如 SVM、Random Forest 、Logistic Regression、Linear Regression
 
