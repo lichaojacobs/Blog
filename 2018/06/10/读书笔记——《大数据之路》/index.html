@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>读书笔记——《大数据之路》 | CHAO LI's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">读书笔记——《大数据之路》</h1><a id="logo" href="/.">CHAO LI's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">读书笔记——《大数据之路》</h1><div class="post-meta">Jun 10, 2018<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><a data-disqus-identifier="2018/06/10/读书笔记——《大数据之路》/" href="/2018/06/10/读书笔记——《大数据之路》/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>阿里一直是国内乃至国外技术领域的标杆，无论是双十一的峰值应对，超大规模数据采集，处理，分析，存储等经验，都值得所有有技术追求的人学习，最近得空拜读了阿里出品的《大数据之路》，对其数十年积累下来的一整套数据处理经验深感佩服。于是写下读书笔记，以备日后翻阅。 </p>
+<h2 id="实时技术"><a href="#实时技术" class="headerlink" title="实时技术"></a>实时技术</h2><ul>
+<li>去重指标<ul>
+<li>精确去重</li>
+<li>模糊去重</li>
+<li>布隆过滤器<ul>
+<li>位数组算法应用，不保存真实的明细数据，只保存明细数据对应哈希值的标记位。存储一亿条数据只需要100MB的空间</li>
+<li>使用场景：统计精确度不高，统计维度非常多的情况，在各个维度之间，布隆过滤器是可以共用的</li>
+</ul>
+</li>
+<li>基数估计<ul>
+<li>按照数据的分散程度来估算现有数据集的边界，从而得出大概的去重值总和。这里估算的去重值可能比真实值大，也可能比真实值小，一亿条数据只需要几KB的内存</li>
+<li>适用场景：统计精确度要求不高，统计维度非常粗的情况。比如整个大盘的UV数据，每天的结果只有一条记录，在各个维度不能共用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据倾斜<ul>
+<li>去重指标分桶<ul>
+<li>对去重指标进行分桶Hash，相同值一定会被放在同一个桶中去重，最后再把每个桶里面的值进行加和即可</li>
+</ul>
+</li>
+<li>非去重指标分桶<ul>
+<li>数据随机分发到每个桶中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实时处理幂等性<ul>
+<li>超时时间：超时重发</li>
+<li>事务信息</li>
+<li>备份机制</li>
+</ul>
+</li>
+<li>大促期间数据链路保障<ul>
+<li>链路长： 数据同步-&gt;数据计算-&gt; 数据存储 -&gt; 数据服务，无法在秒级别定位问题。</li>
+<li>多链路搭建，多机房容灾，异地容灾： 通过多链路数据对比发现差异，配置中心秒级切换备用链路</li>
+</ul>
+</li>
+<li>如何压测<ul>
+<li>数据压测<ul>
+<li>蓄洪压测: 几天，几小时数据积累，在某个时刻开放，模拟洪峰情况</li>
+</ul>
+</li>
+<li>产品压测<ul>
+<li>产品本身压测</li>
+<li>前端页面稳定性测试</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据服务最佳实践"><a href="#数据服务最佳实践" class="headerlink" title="数据服务最佳实践"></a>数据服务最佳实践</h2><ul>
+<li>资源分配<ul>
+<li>剥离计算资源： 有些指标需要多天数据的聚合，有序需要包含一些复杂的计算逻辑如成交回头率。如此逻辑，如果放在每次调用接口时进行处理，其成本是非常高的。剥离复杂的计算统计逻辑，将其全部交由底层的数据公共层进行处理，只保留核心的业务处理逻辑</li>
+<li>查询资源分配<ul>
+<li>GET接口只返回一条数据，List接口返回多条数据，此时应该进行查询线程隔离</li>
+</ul>
+</li>
+<li>执行计划优化<ul>
+<li>查询拆分</li>
+<li>查询优化：将一些List查询转化为GET查询，优化查询效率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缓存优化<ul>
+<li>元数据缓存: 服务启动时将全量的元数据加载到本地内存，一旦有新的发布，就重新加载一次元数据（增量更新）</li>
+<li>模型缓存</li>
+<li>结果缓存<ul>
+<li>不太适合用缓存的场景: 获取某个卖家对应的指标，由于每个卖家只能请求自己的指标，会导致绝大部分请求都需要从DB查询，再写入缓存。这样不仅使得单次请求成本提升机 ，缓存记录数也会大幅增大。直接走DB比较合适</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>查询能力</p>
+<ul>
+<li>合并查询：离线与实时合并查询</li>
+<li>推送服务</li>
+</ul>
+</li>
+<li><p>稳定性</p>
+<ul>
+<li>元数据隔离：预发布环境与线上环境元数据隔离，预发布环境进行验证，发布则同步到线上计算引擎中</li>
+<li>隔离发布：不同用户的发布不会相互影响<ul>
+<li>资源划分</li>
+<li>资源独占：用户修改时，系统会锁定正在修改的逻辑表及其下挂的物理表等资源，禁止其他用户修改。当用户正式发布变更后，就会释放锁定的资源，这时其他用户才可以怼相关元数据进行修改。</li>
+</ul>
+</li>
+<li>增量更新：元数据增量更新，不需要每次重新load一次全量数据</li>
+<li>机房隔离<ul>
+<li>每个机房独立部署一个集群，且机器数量尽量保持均衡，以实现双机房容灾。当一个机房发生故障时，另一个机房中的应用仍然可以对外提供服务。</li>
+<li>分组隔离<ul>
+<li>不同调用者优先级不尽相同</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>监控<ul>
+<li>调用日志采集：<ul>
+<li>基础信息：调用时间，接口名称，方法名，返回记录数</li>
+<li>调用者信息</li>
+<li>调用新消息，包括调用指标，查询筛选条件等</li>
+<li>性能指标，包括响应时间，是否走缓存等</li>
+<li>错误信息，包括出错原因，错误类型，数据源，错误堆栈等</li>
+</ul>
+</li>
+<li>调用监控<ul>
+<li>性能趋势：总体QPS趋势图，RT趋势图，响应时长区间分布，分组性能统计，单机QPS统计</li>
+<li>零调用统计：进行下线处理，节约成本</li>
+<li>慢SQL查找。找出响应时间较长的SQL，及时优化</li>
+<li>错误排查</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>限流，降级<ul>
+<li>限流<ul>
+<li>针对调用者以及数据源等关键角色做了QPS阈值控制。</li>
+</ul>
+</li>
+<li>降级<ul>
+<li>理想的做法是将多个数据源，表全部隔离成独立的模块，单个模块的故障不会引起整体不可用。但是，实际中隔离带来的成本比较大，且有可能造成资源的浪费。假如没有隔离措施，共享资源，就需要通过降级将故障影响降到最低</li>
+<li>通过限流措施将QPS置为0</li>
+<li>通过修改元数据，将存在问题的资源置为失效状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据挖掘"><a href="#数据挖掘" class="headerlink" title="数据挖掘"></a>数据挖掘</h2></div><iframe src="/donate/?AliPayQR=null&amp;WeChatQR=http://ol7zjjc80.bkt.clouddn.com/271524552778_.pic.jpg&amp;GitHub=null&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2018/06/10/读书笔记——《大数据之路》/" data-id="cji8ok1sg00121a46fe342fco" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvklEQVR42u3awW4iMRAE0Pz/T7PSnnaVgKq6bcLhzQlNCJ5nJLsp99dXfD3+Xq/vf3/P45/r9f3Ht+v1/cMXHh4e3ujRn135oyfDv35PgsyfGQ8PD+82L1/0T01HMkq+CT29j4eHh/ervNdD5ltCvoXkeDw8PLzP5B1Ypkt8vvHg4eHhvZ+XlMh5lNDyNvHEsawFDw8PL+btF+73v754voeHh4e3OFWfbRj5Ij6bvuIJ8fDw8C7w8nK5XYc3AW6OjD4TDw8P7ygvjxiSSnUWcOThb97G+sO+h4eHh3eIlxxuzY7zk8K6fdB8QqPvBw8PD2/By0ltabtHDgMIPDw8vGu8fQwxa9jKi/X8/U+LaTw8PLyjvKSkblua9vFr29q1+sWAh4eHN+K1JfJsmFWUMIqP8fDw8O7x2mg1jxtmJXgbQ+Dh4eF9Gq89AMujhLYlq21BwMPDw7vBa4dsj/lnrzehw39/xcPDw3sLL1ma90dWmzaCBB8Nj4eHh7fgnYpck+OuNlZYtTLg4eHhXeDlYUS76LeBQrHct1sUHh4e3jVeXvjmceqpRX/V0ICHh4f3Ft7sCKptIGibDGbRBh4eHt5ZXhtGzADttpF/QtQ6gIeHh3eU97po3ocImy2hDYuj7xAPDw/vKG+2HJ8qr2eFeHSchoeHh3eBNytzTzVg5WV3skkUaQoeHh7egpc/brEEzw6rgq2lniY8PDy8a7w8Hm0HSIrvPM6otzQ8PDy8o7wDP+/jDaBNVjf3f2gdwMPDwzvEa5fd9pd+Wzq3m80qd8HDw8Nb8JLNoD3Cz9sIZlNZjI6Hh4d3jZcc6icPkQw520jyycLDw8P7TF4bLiSLezu5UYsYHh4e3q/y8oaqWeiQT0oRbeDh4eFd4yVFcAJr/7eNOdrpw8PDw7vB2/zUz4eftQUcKKnx8PDwTvL+AECfNcrej9mXAAAAAElFTkSuQmCC" class="article-share-link">分享</a><div class="tags"><a href="/tags/成长/">成长</a><a href="/tags/大数据/">大数据</a></div><div class="post-nav"><a href="/2018/04/24/okhttp-support-100-continue-for-palo/" class="next">okhttp support 307 redirect for palo</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'https://jacobs-wanhb.disqus.com/embed.js';
+var disqus_identifier = '2018/06/10/读书笔记——《大数据之路》/';
+var disqus_title = '读书笔记——《大数据之路》';
+var disqus_url = 'http://yoursite.com/2018/06/10/读书笔记——《大数据之路》/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/next/config.json',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/count.js" async></script></div><div id="lv-container" data-id="city" data-uid="MTAyMC8yOTg3MC82NDM1"><script>(function(d, s) {
+   var j, e = d.getElementsByTagName(s)[0];
+   if (typeof LivereTower === 'function') { return; }
+   j = d.createElement(s);
+   j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+   j.async = true;
+   e.parentNode.insertBefore(j, e);
+})(document, 'script');</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/06/10/读书笔记——《大数据之路》/">读书笔记——《大数据之路》</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/okhttp-support-100-continue-for-palo/">okhttp support 307 redirect for palo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/26/JVM知识总结/">JVM知识总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/31/kylin-query原理剖析/">kylin query原理剖析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/superset-customization/">superset customization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/lombok-builder-泛型擦除问题/">lombok builder 泛型擦除</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/07/Kylin二次开发——测试环境搭建/">Kylin二次开发——测试环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/kylin-master-slave同步原理及问题排查/">kylin master-slave同步原理及问题排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/25/HBase架构脑图/">HBase架构脑图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/02/Kylin学习笔记/">Kylin学习笔记</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985## Your Baidu Analytics tracking id, e.g. 8006843039519956000";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
