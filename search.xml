@@ -11,20 +11,11 @@
       
         <tags>
             
-            <tag> BigData </tag>
-            
             <tag> Impala </tag>
             
+            <tag> BigData </tag>
+            
         </tags>
-      
-    </entry>
-    
-    <entry>
-      <title></title>
-      <link href="/2018/06/20/6%E6%9C%8820%E6%97%A5/"/>
-      <url>/2018/06/20/6%E6%9C%8820%E6%97%A5/</url>
-      <content type="html"><![CDATA[<h2 id="6月20日"><a href="#6月20日" class="headerlink" title="6月20日"></a>6月20日</h2><h3 id="扩缩容任务"><a href="#扩缩容任务" class="headerlink" title="扩缩容任务"></a>扩缩容任务</h3><ul><li>展示topic，taskId，更新时间收起来，ips和num都展示出来</li><li>搜索筛选条件提供基于topicKey维度的筛选</li><li>管理端topic管理每一个topic 行提供扩缩容任务查询快捷键，直接跳到扩缩容任务界面，并且按照topicKey筛选出来（通过跳转的时候传参数实现）</li></ul><h3 id="资源报表"><a href="#资源报表" class="headerlink" title="资源报表"></a>资源报表</h3><ul><li>topic跳资源报表，同样也得按照当前topic查看资源而不是简单的跳到资源报表页面，这里也通过跳转携带参数实现</li></ul><h3 id="产品管理权限优化"><a href="#产品管理权限优化" class="headerlink" title="产品管理权限优化"></a>产品管理权限优化</h3><ul><li>管理端也提供一个产品管理界面，具备审核功能。<ul><li>创建产品刚开始的状态是待审核，待审核状态无法创建topic</li><li>审核通过后状态变成启用状态，且可以创建topic，但是有一定的数量限制</li></ul></li></ul>]]></content>
-      
       
     </entry>
     
@@ -232,9 +223,9 @@
       
         <tags>
             
-            <tag> HBase </tag>
-            
             <tag> BigData </tag>
+            
+            <tag> HBase </tag>
             
         </tags>
       
