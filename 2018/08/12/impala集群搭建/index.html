@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>impala集群搭建 | CHAO LI's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">impala集群搭建</h1><a id="logo" href="/.">CHAO LI's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">impala集群搭建</h1><div class="post-meta">Aug 12, 2018<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><a data-disqus-identifier="2018/08/12/impala集群搭建/" href="/2018/08/12/impala集群搭建/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ul>
+<li>说起Impala，很多人都不会陌生。它区别于MapReduce 中间结果溢写，跨节点数据获取的低效，采用MPP 查询引擎，各查询节点并发执行查询语句，并将生成的查询结果汇总输出。</li>
+<li>近期开始真正的使用impala，之前只是小玩过已经集成好的环境，并没有真正的从0到1的去构建Impala集群。基于我司所有的大数据组件都是采用容器的方式部署以便统一管理，我们需要先构建Impala镜像</li>
+</ul>
+<h2 id="impala-相关介绍"><a href="#impala-相关介绍" class="headerlink" title="impala 相关介绍"></a>impala 相关介绍</h2><ul>
+<li>impala是由cloudera公司主导开发的一款大数据实时查询的分析工具，区别于Hive底层传统的MapReduce批处理方式，采用MPP查询引擎架构，相比于Hive 能带来查询性能30-90倍的提升</li>
+<li><p>特点</p>
+<ul>
+<li>查询速度快: 底层MPP查询引擎。基于内存计算，中间结果不写入磁盘，由coordinator汇总数据结果</li>
+<li>灵活性高：可以兼容存储在HDFS上的原生数据，也可以兼容优化处理过的压缩数据，与Hive共用metastore兼容从Hive上导入的所有sql语句</li>
+<li>可伸缩性：可以很好的和一些BI工具去配合使用，如Microstrategy、Tableau、Qlikview等。</li>
+</ul>
+</li>
+<li><p>架构</p>
+</li>
+</ul>
+<p><img src="http://ol7zjjc80.bkt.clouddn.com/impala-architecture.png" alt="impala-architecture"></p>
+<ul>
+<li><p>集群角色</p>
+<ul>
+<li><p>impalad(query planner,coordinator, exec engine)：</p>
+<ul>
+<li>分布在datanode节点上，接受客户端的查询请求</li>
+<li>接收查询请求的impalad 会作为本次查询的coordinator，生成查询计划树，并分发给具有相应数据的impalad执行</li>
+<li>汇总各个impalad上执行的查询结果，返回给客户端</li>
+</ul>
+</li>
+<li>statestore<ul>
+<li>跟踪集群中impalad的健康状态及信息位置，并把健康状况同步到所有的impalad进程节点</li>
+</ul>
+</li>
+<li>catalog<ul>
+<li>将元数据的变化通知给集群的各个节点，减少refresh和invalidate metadata语句使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="镜像构建篇"><a href="#镜像构建篇" class="headerlink" title="镜像构建篇"></a>镜像构建篇</h2><h3 id="hive镜像构建"><a href="#hive镜像构建" class="headerlink" title="hive镜像构建"></a>hive镜像构建</h3><ul>
+<li>因为Impala依赖hive metastore，所以在构建impala镜像之前，先要构建hive镜像</li>
+<li><p>构建过程</p>
+<ul>
+<li>impala 不支持 hive 2.x以上的系列，于是选择1.1.0版本，在cloudera官网下载编译好的tarball</li>
+<li>原本的hive lib 中缺少连接metastore的mysql jdbc驱动，自己下载jdbc connector jar放入lib目录下即可</li>
+<li>由于我hive 用的cdh的版本，而hadoop用的是apache的版本，导致真正运行hive的时候会找不到mapreduce指定的类，为此lib目录下需加入hadoop-core-2.6.0-mr1-cdh5.9.1.jar</li>
+<li><p>使用自带的schematool 创建元数据表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./schematool -initSchema -dbType mysql</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="impala镜像构建"><a href="#impala镜像构建" class="headerlink" title="impala镜像构建"></a>impala镜像构建</h3><ul>
+<li>impala 我使用的是2.12.0的版本，这个版本cloudera官方没有提供tarball文件，只提供的rpm包。考虑到自身编译impala 成本比较大，于是采用rpm 安装的方法</li>
+<li>详细的安装流程参考链接 <a href="http://lxw1234.com/archives/2017/06/862.htm" target="_blank" rel="noopener">Impala安装配置–RPM方式</a> 我这边只记录一下安装过程中遇到的坑</li>
+<li><p>坑一：跟hive一样，由于我使用的hadoop是apache开源版本，有些class对应的包中没有</p>
+<ul>
+<li>软链hadoop-core-2.6.0-mr1-cdh5.9.1.jar到impala/lib中</li>
+<li><p>需要对服务的启动文件catalogd, impalad, stastored改动</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for JAR_FILE in $&#123;IMPALA_HOME&#125;/lib/*.jar; do</span><br><span class="line"> 			export CLASSPATH=&quot;$&#123;JAR_FILE&#125;:$&#123;CLASSPATH&#125;&quot;</span><br><span class="line">done</span><br><span class="line">#hadoop share lib</span><br><span class="line">for HADOOP_JAR_FILE in $HADOOP_HOME/share/hadoop/tools/lib/*.jar; do</span><br><span class="line"> 			export CLASSPATH=&quot;$&#123;HADOOP_JAR_FILE&#125;:$&#123;CLASSPATH&#125;&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>坑二：软链jdbc driver到impala/lib 并修改catalogd，其他启动文件相应都要修改</p>
+</li>
+<li><p>坑三：启动catalogd,impala-server时报错</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">		E0804 16:42:09.008862   543 MetaStoreUtils.java:1274] Got exception: java.io.IOException No FileSystem for scheme: hdfs</span><br><span class="line">Java exception follows:</span><br><span class="line">		java.io.IOException: No FileSystem for scheme: hdfs</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>    core-site.xml中加入配置
+
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">   		&lt;name&gt;fs.file.impl&lt;/name&gt;</span><br><span class="line">   		&lt;value&gt;org.apache.hadoop.fs.LocalFileSystem&lt;/value&gt;</span><br><span class="line">   		&lt;description&gt;The FileSystem for file: uris.&lt;/description&gt;</span><br><span class="line"> 		&lt;/property&gt;</span><br><span class="line"> 		&lt;property&gt;</span><br><span class="line">   		&lt;name&gt;fs.hdfs.impl&lt;/name&gt;</span><br><span class="line">   		&lt;value&gt;org.apache.hadoop.hdfs.DistributedFileSystem&lt;/value&gt;</span><br><span class="line">   		&lt;description&gt;The FileSystem for hdfs: uris.&lt;/description&gt;</span><br><span class="line"> 		&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+
+- 坑四 (class org.apache.hdfs.DistributedFileSystem not found)：
+
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在hadoop2.8.3的版本中org.apache.hadoop.hdfs.DistributedFileSystem can be found in hadoop-hdfs-client jar. </span><br><span class="line">只需要将包引入impala/lib 目录下即可</span><br></pre></td></tr></table></figure>
+
+
+- 坑五：HBase client各种依赖包没有
+
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">		ln -s $HBASE_HOME/lib/hbase-shaded-miscellaneous-2.1.0.jar hbase-shaded-miscellaneous.jar</span><br><span class="line">		ln -s $HBASE_HOME/lib/hbase-shaded-protobuf-2.1.0.jar hbase-shaded-protobuf.jar</span><br><span class="line">		ln -s $HBASE_HOME/lib/commons-lang3-3.6.jar commons-lang3.jar</span><br><span class="line">以</span><br></pre></td></tr></table></figure>
+
+
+- 坑六: 启动impala-server提示sasl plugin not found
+
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install cyrus-sasl* </span><br><span class="line">restart impala service</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="impala-集群搭建"><a href="#impala-集群搭建" class="headerlink" title="impala 集群搭建"></a>impala 集群搭建</h2><h3 id="集群规划"><a href="#集群规划" class="headerlink" title="集群规划"></a>集群规划</h3><ul>
+<li>20 个 impalad服务 与datanode混部，以最大化利用分布式本地查询的优势</li>
+<li>catalog, statestore 与namenode节点混部以减少namenode网络IO带来的影响</li>
+<li>全部服务部署docker化，脚本化，提供200与503脚本以便统一批量操作服务启动终止</li>
+<li><p>200启动脚本是对impala提供的原生的启动命令的封装，包括监听运行进程的存活，便于对集群机器批量操作</p>
+</li>
+<li><p>200脚本封装代码</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env bash</span><br><span class="line">EXEC_FILE=/impala/impala-server</span><br><span class="line">PROGRESS=/usr/lib/impala/bin/impalad</span><br><span class="line"></span><br><span class="line">function usage() &#123;</span><br><span class="line">    echo -e &quot;\n A tool used for starting impala services</span><br><span class="line">Usage: 200.sh &#123;statestore|catalog|server&#125;</span><br><span class="line">&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">check_alive() &#123;</span><br><span class="line">    PID=`ps -ef | grep $IMPALA_USER_NAME | grep &quot;$PROGRESS&quot; | awk &apos;&#123;print $2&#125;&apos;`</span><br><span class="line">    [ -n &quot;$PID&quot; ] &amp;&amp; return 0 || return 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">start_service() &#123;</span><br><span class="line">    if [ ! -f $EXEC_FILE ];then</span><br><span class="line">        echo &quot;file not exists&quot;</span><br><span class="line">        exit 1</span><br><span class="line">    fi</span><br><span class="line">    check_alive</span><br><span class="line">    if [ $? -ne 0 ];then</span><br><span class="line">        $EXEC_FILE restart</span><br><span class="line">        sleep 10</span><br><span class="line">        check_alive</span><br><span class="line">        if [ $? -ne 0 ];then</span><br><span class="line">            echo &quot;service start error&quot;</span><br><span class="line">            exit 1</span><br><span class="line">        else</span><br><span class="line">            echo &quot;service start success&quot;</span><br><span class="line">            exit 0</span><br><span class="line">        fi</span><br><span class="line">    else</span><br><span class="line">        echo &quot;service alreay started&quot;</span><br><span class="line">        exit 0</span><br><span class="line">    fi</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function main() &#123;</span><br><span class="line">    # $SERVICE_POOL是对应的服务池，通过docker run -e 参数传入</span><br><span class="line">    [[ -f /data0/hcp/conf/pools/$&#123;SERVICE_POOL&#125;/init-env.sh ]] &amp;&amp; source /data0/hcp/conf/pools/$&#123;HCP_POOL&#125;/init-env.sh</span><br><span class="line">    [[ -f /data0/hcp/sbin/impala/init-impala.sh ]] &amp;&amp; source /data0/hcp/sbin/impala/init-impala.sh</span><br><span class="line">    case &quot;$1&quot; in</span><br><span class="line">    	statestore)</span><br><span class="line">            echo &quot;starting impala statestore&quot;</span><br><span class="line">    	    EXEC_FILE=/data0/hcp/sbin/impala/impala-state-store</span><br><span class="line">            PROGRESS=/usr/lib/impala/sbin/statestored</span><br><span class="line">            start_service</span><br><span class="line">    	    ;;</span><br><span class="line">        server)</span><br><span class="line">            echo &quot;starting impala server&quot;</span><br><span class="line">            EXEC_FILE=/data0/hcp/sbin/impala/impala-server</span><br><span class="line">            PROGRESS=/usr/lib/impala/sbin/impalad</span><br><span class="line">            start_service</span><br><span class="line">    	    ;;</span><br><span class="line">        catalog)</span><br><span class="line">            echo &quot;starting impala catalog&quot;</span><br><span class="line">            EXEC_FILE=/data0/hcp/sbin/impala/impala-catalog</span><br><span class="line">            PROGRESS=/usr/lib/impala/sbin/catalogd</span><br><span class="line">            start_service</span><br><span class="line">    	    ;;            </span><br><span class="line">        *)</span><br><span class="line">            usage</span><br><span class="line">            exit 1</span><br><span class="line">    esac</span><br><span class="line">&#125;</span><br><span class="line">main &quot;$@&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>503脚本设计思路类似</li>
+</ul>
+</div><iframe src="/donate/?AliPayQR=null&amp;WeChatQR=http://ol7zjjc80.bkt.clouddn.com/271524552778_.pic.jpg&amp;GitHub=null&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2018/08/12/impala集群搭建/" data-id="cjnaixwlh000mdc8kfyaohby0" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3ay07DMBAF0P7/TxeJFQglvXfcIsU5XqEUiI8X03n48YjX83slv/NznT8/+jR513BhYGBclvE8XX8ZyUaPtjt7b0TFwMC4AeM8yLbbmgXl5L2HzzEwMDDKQJyscyQGBgbGSsBtk7+VJxgYGBizYrItTT8XxDEwMO7DaAcD//nzB+cbGBgYF2E8R2s2mMxL1no/GBgYWzPyhn5SRubNsvYgokCMgYGxKaMdCdQtsPKY2gTx1/cGBgbGpoy2pdWOClrSUlsNAwNjU0b775JUbzaMzJPI+nsDAwNjI0YyShwmbXHSOWvGYWBg3IExu+7QNt3aaxZFMoqBgbE1o22fJZtuX5+nmxgYGHdmzArRFplfqmiPCQMD4w6MfEOzqxJtmdqOMTAwMPZmzLbbpnrvKmsP34KBgXEzxmzcuBJYk2T0xXFjYGBszVjfdB6Ii0q6bMNhYGDszVhv088aausheKkaxsDAuBRjpXxt23MrY9EioGNgYGzKSNpeeeBLQnbbpHtxtQIDA+OWjFn7fjaMzNtqUZ6LgYGxKWNWOuabSI4pYS8VsRgYGJdlPMs1a+6vXM6IjhIDA2NrRr7aYDprveXpYBumMTAwrs6YjRjbgrYdWNYBFwMD4waMPPDN8EniOEs0MTAwMPKBQT6AzIvkYpCJgYGBsdCMm40n31BnY2BgbMeYhcgkFM6ugtWtfwwMjK0ZbVBeD8Tv/SsMDIytGV8sNUHPQXhsxwAAAABJRU5ErkJggg==" class="article-share-link">分享</a><div class="tags"></div><div class="post-nav"><a href="/2018/08/30/airflow实战总结/" class="pre">airflow实战总结</a><a href="/2018/06/10/读书笔记——《大数据之路》/" class="next"></a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'https://jacobs-wanhb.disqus.com/embed.js';
+var disqus_identifier = '2018/08/12/impala集群搭建/';
+var disqus_title = 'impala集群搭建';
+var disqus_url = 'http://yoursite.com/2018/08/12/impala集群搭建/';
+$('.btn_click_load').click(function() {
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+  $('.btn_click_load').css('display','none');
+});
+$.ajax({
+  url: 'https://disqus.com/next/config.json',
+  timeout: 3000,
+  type: 'GET',
+  success: (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    $('.btn_click_load').css('display','none');
+  })(),
+  error: function() {
+    $('.btn_click_load').css('display','block');
+  }
+});</script><script id="dsq-count-scr" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/count.js" async></script></div><div id="lv-container" data-id="city" data-uid="MTAyMC8yOTg3MC82NDM1"><script>(function(d, s) {
+   var j, e = d.getElementsByTagName(s)[0];
+   if (typeof LivereTower === 'function') { return; }
+   j = d.createElement(s);
+   j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+   j.async = true;
+   e.parentNode.insertBefore(j, e);
+})(document, 'script');</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/15/Spark学习笔记/">Spark实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/04/hello-world/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/30/airflow实战总结/">airflow实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/12/impala集群搭建/">impala集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/10/读书笔记——《大数据之路》/">读书笔记——《大数据之路》</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/okhttp-support-100-continue-for-palo/">okhttp support 100-continue for palo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/26/JVM知识总结/">JVM知识总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/31/kylin-query原理剖析/">kylin query原理剖析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/superset-customization/">superset customization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/lombok-builder-泛型擦除问题/">lombok builder 泛型擦除</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985## Your Baidu Analytics tracking id, e.g. 8006843039519956000";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
