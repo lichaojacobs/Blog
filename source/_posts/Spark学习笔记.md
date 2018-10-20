@@ -73,11 +73,11 @@ tags:
 - 在yarn中application Master 与Application Driver 运行于同一个JVM进程中
 - standalone架构图
 
-	![standalone](http://ol7zjjc80.bkt.clouddn.com/standalone.png)
+	![standalone](http://imgs.wanhb.cn/standalone.png)
 	
 - on yarn架构图
 
-	![on yarn](http://ol7zjjc80.bkt.clouddn.com/on%20yarn.png)
+	![on yarn](http://imgs.wanhb.cn/on%20yarn.png)
 	
 
 ### application调度
@@ -147,7 +147,7 @@ Job调度就是在application内部的一组Job集合，在application分配到�
 	- 存储格式(storage format)
 	- 对象模型转换器(object model converters)
 	- 对象模型(object models) ：简单理解为数据在内存中的表示
-	![parquet](http://ol7zjjc80.bkt.clouddn.com/parquet.png)
+	![parquet](http://imgs.wanhb.cn/parquet.png)
 	
 - 列式存储
 	- 把某一列数据连续存储，每一行数据离散存储技术

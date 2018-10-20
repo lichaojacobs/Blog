@@ -13,4 +13,4 @@ tags:
 
 ### 脑图
 
-![HBase 架构图](http://ol7zjjc80.bkt.clouddn.com/HBase%E6%9E%B6%E6%9E%84.png)
+![HBase 架构图](http://imgs.wanhb.cn/HBase%E6%9E%B6%E6%9E%84.png)

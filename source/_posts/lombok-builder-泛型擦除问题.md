@@ -140,11 +140,11 @@ public class PageableResponse<T> {
 
 - 考虑一个类和一个子类，如Employee和Manager。Pair`<Manager>` 却不是Pair`<Employee>`的子类。事实上，它们的关系如下图所示
 
-![](http://ol7zjjc80.bkt.clouddn.com/generics1.png)
+![](http://imgs.wanhb.cn/generics1.png)
 
 - 泛型类可以扩展或实现其他泛型类。这一点与普通的类没什么区别。如：ArrayList`<T>` 类实现List`<T>`接口，意味着一个ArrayList`<Manager>` 可以被转换为一个List`<Manager>`。但是一个ArrayList`<Manager>` 不是一个ArrayList`<Employee>` 或者List`<Employee>`，它们的关系如下图:
 
-![](http://ol7zjjc80.bkt.clouddn.com/generics2.png)
+![](http://imgs.wanhb.cn/generics2.png)
 
 
 ###  案例解释

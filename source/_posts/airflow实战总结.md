@@ -13,17 +13,17 @@ tags:
     - task原子性：工作流上每个task都是原子可重试的，一个工作流某个环节的task失败可自动或手动进行重试，不必从头开始任务
 - 工作流示意图
 
-    ![airflow-dags](http://ol7zjjc80.bkt.clouddn.com/airflow-dags.png)
+    ![airflow-dags](http://imgs.wanhb.cn/airflow-dags.png)
 
     - 一个dag表示一个定时的工作流，包含一个或者多个具有依赖关系的task
 
 - task依赖图
 
-    ![airflow-tasks](http://ol7zjjc80.bkt.clouddn.com/airflow-graph.png)
+    ![airflow-tasks](http://imgs.wanhb.cn/airflow-graph.png)
 
 - 架构图及集群角色
 
-    ![airflow-infra](http://ol7zjjc80.bkt.clouddn.com/airflow-infra.png)
+    ![airflow-infra](http://imgs.wanhb.cn/airflow-infra.png)
 
     - webserver : 提供web端服务，以及会定时生成子进程去扫描对应的目录下的dags，并更新数据库
     - scheduler : 任务调度服务，根据dags生成任务，并提交到消息中间件队列中 (redis或rabbitMq)

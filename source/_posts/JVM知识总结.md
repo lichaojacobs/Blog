@@ -8,7 +8,7 @@ tags:
 
 ## HotSpot JVM Architecture
 
-![HotSpot JVM Architecture](http://ol7zjjc80.bkt.clouddn.com/hotspotjvm-1.png)
+![HotSpot JVM Architecture](http://imgs.wanhb.cn/hotspotjvm-1.png)
 
 ## JVM运行时数据区域
 
