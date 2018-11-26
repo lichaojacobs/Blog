@@ -76,38 +76,38 @@
 </li>
 </ul>
 <h2 id="spark-transformation和action的算子"><a href="#spark-transformation和action的算子" class="headerlink" title="spark transformation和action的算子"></a>spark transformation和action的算子</h2><h3 id="transformation"><a href="#transformation" class="headerlink" title="transformation"></a>transformation</h3><ul>
-<li>[ ] map(func) 返回一个新的分布式数据集，由每个原元素经过func函数处理后的新元素组成 </li>
-<li>[ ] filter(func) 返回一个新的数据集，由经过func函数处理后返回值为true的原元素组成 </li>
-<li>[ ] flatMap(func) 类似于map，但是每一个输入元素，会被映射为0个或多个输出元素，(因此，func函数的返回值是一个seq，而不是单一元素) </li>
-<li>[ ] mapPartitions(func) 类似于map，对RDD的每个分区起作用，在类型为T的RDD上运行时，func的函数类型必须是Iterator[T]=&gt;Iterator[U]</li>
-<li>[ ] mapPartitionsWithIndex(func) 和mapPartitions类似，但func带有一个整数参数表上分区的索引值，在类型为T的RDD上运行时，func的函数参数类型必须是(int,Iterator[T])=&gt;Iterator[U] </li>
-<li>[ ] sample(withReplacement,fraction,seed) 根据给定的随机种子seed，随机抽样出数量为fraction的数据 </li>
-<li>[ ] pipe(command,[envVars]) 通过管道的方式对RDD的每个分区使用shell命令进行操作，返回对应的结果 </li>
-<li>[ ] union(otherDataSet) 返回一个新的数据集，由原数据集合参数联合而成 </li>
-<li>[ ] intersection(otherDataset) 求两个RDD的交集 </li>
-<li>[ ] distinct([numtasks]) 返回一个包含源数据集中所有不重复元素的i新数据集 </li>
-<li>[ ] groupByKey([numtasks]) 在一个由(K,v)对组成的数据集上调用，返回一个(K,Seq[V])对组成的数据集。默认情况下，输出结果的并行度依赖于父RDD的分区数目，如果想要对key进行聚合的话，使用reduceByKey或者combineByKey会有更好的性能 </li>
-<li>[ ] reduceByKey(func,[numTasks]) 在一个(K,V)对的数据集上使用，返回一个(K,V)对的数据集，key相同的值，都被使用指定的reduce函数聚合到一起，reduce任务的个数是可以通过第二个可选参数来配置的 </li>
-<li>[ ] sortByKey([ascending],[numTasks]) 在类型为(K,V)的数据集上调用，返回以K为键进行排序的(K,V)对数据集，升序或者降序有boolean型的ascending参数决定 </li>
-<li>[ ] join(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个(K,(V,W))对，每个key中的所有元素都在一起的数据集 </li>
-<li>[ ] cogroup(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个数据集，组成元素为(K,Iterable[V],Iterable[W]) tuples </li>
-<li>[ ] cartesian(otherDataset) 笛卡尔积，但在数据集T和U上调用时，返回一个(T,U)对的数据集，所有元素交互进行笛卡尔积 </li>
-<li>[ ] coalesce(numPartitions) 对RDD中的分区减少指定的数目，通常在过滤完一个大的数据集之后进行此操作 </li>
-<li>[ ] repartition(numpartitions) 将RDD中所有records平均划分到numparitions个partition中</li>
+<li>map(func) 返回一个新的分布式数据集，由每个原元素经过func函数处理后的新元素组成 </li>
+<li>filter(func) 返回一个新的数据集，由经过func函数处理后返回值为true的原元素组成 </li>
+<li>flatMap(func) 类似于map，但是每一个输入元素，会被映射为0个或多个输出元素，(因此，func函数的返回值是一个seq，而不是单一元素) </li>
+<li>mapPartitions(func) 类似于map，对RDD的每个分区起作用，在类型为T的RDD上运行时，func的函数类型必须是Iterator[T]=&gt;Iterator[U]</li>
+<li>mapPartitionsWithIndex(func) 和mapPartitions类似，但func带有一个整数参数表上分区的索引值，在类型为T的RDD上运行时，func的函数参数类型必须是(int,Iterator[T])=&gt;Iterator[U] </li>
+<li>sample(withReplacement,fraction,seed) 根据给定的随机种子seed，随机抽样出数量为fraction的数据 </li>
+<li>pipe(command,[envVars]) 通过管道的方式对RDD的每个分区使用shell命令进行操作，返回对应的结果 </li>
+<li>union(otherDataSet) 返回一个新的数据集，由原数据集合参数联合而成 </li>
+<li>intersection(otherDataset) 求两个RDD的交集 </li>
+<li>distinct([numtasks]) 返回一个包含源数据集中所有不重复元素的i新数据集 </li>
+<li>groupByKey([numtasks]) 在一个由(K,v)对组成的数据集上调用，返回一个(K,Seq[V])对组成的数据集。默认情况下，输出结果的并行度依赖于父RDD的分区数目，如果想要对key进行聚合的话，使用reduceByKey或者combineByKey会有更好的性能 </li>
+<li>reduceByKey(func,[numTasks]) 在一个(K,V)对的数据集上使用，返回一个(K,V)对的数据集，key相同的值，都被使用指定的reduce函数聚合到一起，reduce任务的个数是可以通过第二个可选参数来配置的 </li>
+<li>sortByKey([ascending],[numTasks]) 在类型为(K,V)的数据集上调用，返回以K为键进行排序的(K,V)对数据集，升序或者降序有boolean型的ascending参数决定 </li>
+<li>join(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个(K,(V,W))对，每个key中的所有元素都在一起的数据集 </li>
+<li>cogroup(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个数据集，组成元素为(K,Iterable[V],Iterable[W]) tuples </li>
+<li>cartesian(otherDataset) 笛卡尔积，但在数据集T和U上调用时，返回一个(T,U)对的数据集，所有元素交互进行笛卡尔积 </li>
+<li>coalesce(numPartitions) 对RDD中的分区减少指定的数目，通常在过滤完一个大的数据集之后进行此操作 </li>
+<li>repartition(numpartitions) 将RDD中所有records平均划分到numparitions个partition中</li>
 </ul>
 <h3 id="action算子操作"><a href="#action算子操作" class="headerlink" title="action算子操作"></a>action算子操作</h3><ul>
-<li>[ ] reduce(func) 通过函数func聚集数据集中的所有元素，这个函数必须是关联性的，确保可以被正确的并发执行 </li>
-<li>[ ] collect() 在driver的程序中，以数组的形式，返回数据集的所有元素，这通常会在使用filter或者其它操作后，返回一个足够小的数据子集再使用 </li>
-<li>[ ] count() 返回数据集的元素个数 </li>
-<li>[ ] first() 返回数据集的第一个元素(类似于take(1)) </li>
-<li>[ ] take(n)  返回一个数组，由数据集的前n个元素组成。注意此操作目前并非并行执行的，而是driver程序所在机器 </li>
-<li>[ ] takeSample(withReplacement,num,seed) 返回一个数组，在数据集中随机采样num个元素组成，可以选择是否用随机数替换不足的部分，seed用于指定的随机数生成器种子 </li>
-<li>[ ] saveAsTextFile(path) 将数据集的元素，以textfile的形式保存到本地文件系统hdfs或者任何其他hadoop支持的文件系统，spark将会调用每个元素的toString方法，并将它转换为文件中的一行文本 </li>
-<li>[ ] takeOrderd(n,[ordering]) 排序后的limit(n) </li>
-<li>[ ] saveAsSequenceFile(path) 将数据集的元素，以sequencefile的格式保存到指定的目录下，本地系统，hdfs或者任何其他hadoop支持的文件系统，RDD的元素必须由key-value对组成。并都实现了hadoop的writable接口或隐式可以转换为writable </li>
-<li>[ ] saveAsObjectFile(path) 使用java的序列化方法保存到本地文件，可以被sparkContext.objectFile()加载 </li>
-<li>[ ] countByKey()  对(K,V)类型的RDD有效，返回一个(K,Int)对的map，表示每一个可以对应的元素个数 </li>
-<li>[ ] foreache(func) 在数据集的每一个元素上，运行函数func,t通常用于更新一个累加器变量，或者和外部存储系统做交互</li>
+<li>reduce(func) 通过函数func聚集数据集中的所有元素，这个函数必须是关联性的，确保可以被正确的并发执行 </li>
+<li>collect() 在driver的程序中，以数组的形式，返回数据集的所有元素，这通常会在使用filter或者其它操作后，返回一个足够小的数据子集再使用 </li>
+<li>count() 返回数据集的元素个数 </li>
+<li>first() 返回数据集的第一个元素(类似于take(1)) </li>
+<li>take(n)  返回一个数组，由数据集的前n个元素组成。注意此操作目前并非并行执行的，而是driver程序所在机器 </li>
+<li>takeSample(withReplacement,num,seed) 返回一个数组，在数据集中随机采样num个元素组成，可以选择是否用随机数替换不足的部分，seed用于指定的随机数生成器种子 </li>
+<li>saveAsTextFile(path) 将数据集的元素，以textfile的形式保存到本地文件系统hdfs或者任何其他hadoop支持的文件系统，spark将会调用每个元素的toString方法，并将它转换为文件中的一行文本 </li>
+<li>takeOrderd(n,[ordering]) 排序后的limit(n) </li>
+<li>saveAsSequenceFile(path) 将数据集的元素，以sequencefile的格式保存到指定的目录下，本地系统，hdfs或者任何其他hadoop支持的文件系统，RDD的元素必须由key-value对组成。并都实现了hadoop的writable接口或隐式可以转换为writable </li>
+<li>saveAsObjectFile(path) 使用java的序列化方法保存到本地文件，可以被sparkContext.objectFile()加载 </li>
+<li>countByKey()  对(K,V)类型的RDD有效，返回一个(K,Int)对的map，表示每一个可以对应的元素个数 </li>
+<li>foreache(func) 在数据集的每一个元素上，运行函数func,t通常用于更新一个累加器变量，或者和外部存储系统做交互</li>
 </ul>
 <h2 id="Spark常用存储格式parquet-详解"><a href="#Spark常用存储格式parquet-详解" class="headerlink" title="Spark常用存储格式parquet 详解"></a>Spark常用存储格式parquet 详解</h2><ul>
 <li><a href="https://juejin.im/entry/589932fab123db16a3ace2d1" target="_blank" rel="noopener">新型列式存储格式 Parquet 详解 - 后端 - 掘金</a></li>
@@ -179,8 +179,10 @@
 </ul>
 </li>
 </ul>
-<h2 id="Spark-Stremaing-相关"><a href="#Spark-Stremaing-相关" class="headerlink" title="Spark Stremaing 相关"></a>Spark Stremaing 相关</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
-<li><p>BlockRDD：生成由spark.stremaing.blockInterval决定，一个BatchDuration 有几个block就会产生几个 partition</p>
+<h2 id="Spark-Stremaing-相关"><a href="#Spark-Stremaing-相关" class="headerlink" title="Spark Stremaing 相关"></a>Spark Stremaing 相关</h2><h3 id="BlockRDD"><a href="#BlockRDD" class="headerlink" title="BlockRDD"></a>BlockRDD</h3><ul>
+<li>由spark.streaming.blockInterval和duration决定有多少个BlockRdd</li>
+<li>在Receiver模式下，一个BatchDuration有几个block就会产生几个partition，可参考<a href="http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-1-receiver-based-approach" target="_blank" rel="noopener">receiver bases approach</a></li>
+<li><p>在direct模式下，blockRDD不再对实际的分区数量起作用，而是会创建和kafka partitions 相同数量的RDD partitions，可参考<a href="http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-2-direct-approach-no-receivers" target="_blank" rel="noopener">direct approach</a></p>
 </li>
 <li><p>消息消费速率限定</p>
 <ul>
@@ -238,7 +240,64 @@
 </ul>
 </li>
 </ul>
-</div><iframe src="/donate/?AliPayQR=null&amp;WeChatQR=http://ol7zjjc80.bkt.clouddn.com/271524552778_.pic.jpg&amp;GitHub=null&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2018/10/15/Spark学习笔记/" data-id="cjnh14pdd00098v46xo91d6w1" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aQW7jMAwF0Nz/0ikwqwEK25+UUiDU0yowXFvPC5YU+XrF6/1v3V/5//rV/ffXr+7ZtjAwML6W8b5dvzedkO7vv7rn6r0RFQMD4wBG8prqRtc/U7I3DAwMjKvErreV5HNgYGBgrAfcpBBNwu6utBIDA+McRpK69QB5spgUtxtqcQwMjC9kVBsDf/n7g/0NDAyML2G8W2v9YG7vwsDAmM24T/t2TTvkh2v3wxkPO8TAwBjK6IW2Hjj5q15bFAMD4xxGEoKTO5MjuZWBs8J/DAwMjBGMahPxvhytJn/VMvjhyRgYGKMZu47JEl51LKPcKMXAwDiAsVLQVl+8ctzWnBzBwMAYxFgPyr1n5kUsBgbGOYw8dFbbkNVkMdn05RUMDIzRjKQGbMbvVnqXty0fQjkGBsYgRmGgIS5Z14/+89D/quoxMDDGMdYnHKqZWy/1xMDAmM3IByzWm47lMBp/CAwMjNmM6kHYrpGvXvl6+RsDA2M0I0ny1ofAemVq/l4MDIwTGL2iMSlEP30AF8V1DAyMAxh5OVotUKvla3lyBAMDYxAjH33ID93yRHAdg4GBMZvxLq4eO3nj0uAFBgbGaMauaL33xbsG0TAwMCYxeildNYyupJiFWhwDA2M0YyXwrRyWVZ/wkOdiYGBgBA/Nj9g+2MLEwMA4mBE1EeOtVOvshwCNgYFxAKM6qJqMWeTNhmhENQm4GBgYQxnrJWj+yl7TNG+sYmBgjGP8APoQaphUNWnqAAAAAElFTkSuQmCC" class="article-share-link">分享</a><div class="tags"><a href="/tags/学习/">学习</a><a href="/tags/大数据/">大数据</a><a href="/tags/Spark/">Spark</a></div><div class="post-nav"><a href="/2018/08/30/airflow实战总结/" class="next">airflow实战总结</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'https://jacobs-wanhb.disqus.com/embed.js';
+<h2 id="Spark-内存管理"><a href="#Spark-内存管理" class="headerlink" title="Spark 内存管理"></a>Spark 内存管理</h2><ul>
+<li><a href="https://www.ibm.com/developerworks/cn/analytics/library/ba-cn-apache-spark-memory-management/index.html" target="_blank" rel="noopener">参考文章：apache spark内存管理详解</a></li>
+</ul>
+<h3 id="堆内内存和堆外内存"><a href="#堆内内存和堆外内存" class="headerlink" title="堆内内存和堆外内存"></a>堆内内存和堆外内存</h3><ul>
+<li>堆内：Executor 的内存管理建立在 JVM 的内存管理之上，Spark 对 JVM 的堆内（On-heap）空间进行了更为详细的分配，以充分利用内存<ul>
+<li>缓存 RDD 数据和广播（Broadcast）数据时占用的内存被规划为存储（Storage）内存</li>
+<li>执行 Shuffle 时占用的内存被规划为执行（Execution）内存<br>- 剩余部分： Spark 内部的对象实例，或者用户定义的 Spark 应用程序中的对象实例</li>
+<li>注意：在被 Spark 标记为释放的对象实例，很有可能在实际上并没有被 JVM 回收，导致实际可用的内存小于 Spark 记录的可用内存。所以 Spark 并不能准确记录实际可用的堆内内存，从而也就无法完全避免内存溢出（OOM, Out of Memory）的异常</li>
+</ul>
+</li>
+<li>堆外：进一步优化内存的使用以及提高 Shuffle 时排序的效率， 可以直接在工作节点的系统内存中开辟空间，存储经过序列化的二进制数据<ul>
+<li>堆外内存可以被精确地申请和释放，而且序列化的数据占用的空间可以被精确计算，所以相比堆内内存来说降低了管理的难度，也降低了误差</li>
+</ul>
+</li>
+</ul>
+<h3 id="存储管理"><a href="#存储管理" class="headerlink" title="存储管理"></a>存储管理</h3><ul>
+<li><p>RDD 的持久化机制</p>
+<ul>
+<li>RDD 的持久化由 Spark 的 Storage 模块 [7] 负责，实现了 RDD 与物理存储的解耦合</li>
+<li>Storage 模块负责管理 Spark 在计算过程中产生的数据，将那些在内存或磁盘、在本地或远程存取数据的功能封装了起来</li>
+<li>在具体实现时 Driver 端和 Executor 端的 Storage 模块构成了主从式的架构，即 Driver 端的 BlockManager 为 Master，Executor 端的 BlockManager 为 Slave。</li>
+<li>Storage 模块在逻辑上以 Block 为基本存储单位，RDD 的每个 Partition 经过处理后唯一对应一个 Block（BlockId 的格式为 rdd_RDD-ID_PARTITION-ID ）。</li>
+<li>Master 负责整个 Spark 应用程序的 Block 的元数据信息的管理和维护，而 Slave 需要将 Block 的更新等状态上报到 Master，同时接收 Master 的命令，例如新增或删除一个 RDD</li>
+</ul>
+</li>
+<li><p>RDD 缓存的过程</p>
+<ul>
+<li>RDD 在缓存到存储内存之后，Partition 被转换成 Block, 其中Record在堆内占有一块连续的空间</li>
+<li>将Partition由不连续的存储空间转换为连续存储空间的过程，Spark称之为”展开”（Unroll）</li>
+<li>Block 有序列化和非序列化两种存储格式</li>
+<li>用一个 LinkedHashMap 来集中管理所有的 Block，Block 由需要缓存的 RDD 的 Partition 转化而成</li>
+</ul>
+</li>
+<li><p>淘汰规则</p>
+<ul>
+<li>被淘汰的旧 Block 要与新 Block 的 MemoryMode 相同，即同属于堆外或堆内内存</li>
+<li>新旧 Block 不能属于同一个 RDD，避免循环淘汰</li>
+<li>旧 Block 所属 RDD 不能处于被读状态，避免引发一致性问题</li>
+<li>遍历 LinkedHashMap 中 Block，按照最近最少使用（LRU）的顺序淘汰，直到满足新 Block 所需的空间。其中 LRU 是 LinkedHashMap 的特性。</li>
+</ul>
+</li>
+<li><p>Spark中执行内存管理</p>
+<ul>
+<li>shuffle write:<ul>
+<li>若在 map 端选择普通的排序方式，会采用 ExternalSorter 进行外排，在内存中存储数据时主要占用堆内执行空间。</li>
+<li>若在 map 端选择 Tungsten 的排序方式，则采用 ShuffleExternalSorter 直接对以序列化形式存储的数据排序，在内存中存储数据时可以占用堆外或堆内执行空间，取决于用户是否开启了堆外内存以及堆外执行内存是否足够。</li>
+</ul>
+</li>
+<li>shuffle read:<ul>
+<li>在对 reduce 端的数据进行聚合时，要将数据交给 Aggregator 处理，在内存中存储数据时占用堆内执行空间。</li>
+<li>如果需要进行最终结果排序，则要将再次将数据交给 ExternalSorter 处理，占用堆内执行空间。</li>
+</ul>
+</li>
+<li>Spark 用 AppendOnlyMap 来存储 Shuffle 过程中的数据，在 Tungsten 排序中甚至抽象成为页式内存管理，开辟了全新的 JVM 内存管理机制</li>
+</ul>
+</li>
+</ul>
+</div><iframe src="/donate/?AliPayQR=null&amp;WeChatQR=http://ol7zjjc80.bkt.clouddn.com/271524552778_.pic.jpg&amp;GitHub=null&amp;BTCQR=null&amp;BTCKEY=null&amp;PayPal=null" style="overflow-x:hidden;overflow-y:hidden; border:0xp none #fff; min-height:240px; width:100%;" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2018/10/15/Spark学习笔记/" data-id="cjoy15nhk002p19469xslbs8o" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aQW7jMAwF0Nz/0ikwqwEK25+UUiDU0yowXFvPC5YU+XrF6/1v3V/5//rV/ffXr+7ZtjAwML6W8b5dvzedkO7vv7rn6r0RFQMD4wBG8prqRtc/U7I3DAwMjKvErreV5HNgYGBgrAfcpBBNwu6utBIDA+McRpK69QB5spgUtxtqcQwMjC9kVBsDf/n7g/0NDAyML2G8W2v9YG7vwsDAmM24T/t2TTvkh2v3wxkPO8TAwBjK6IW2Hjj5q15bFAMD4xxGEoKTO5MjuZWBs8J/DAwMjBGMahPxvhytJn/VMvjhyRgYGKMZu47JEl51LKPcKMXAwDiAsVLQVl+8ctzWnBzBwMAYxFgPyr1n5kUsBgbGOYw8dFbbkNVkMdn05RUMDIzRjKQGbMbvVnqXty0fQjkGBsYgRmGgIS5Z14/+89D/quoxMDDGMdYnHKqZWy/1xMDAmM3IByzWm47lMBp/CAwMjNmM6kHYrpGvXvl6+RsDA2M0I0ny1ofAemVq/l4MDIwTGL2iMSlEP30AF8V1DAyMAxh5OVotUKvla3lyBAMDYxAjH33ID93yRHAdg4GBMZvxLq4eO3nj0uAFBgbGaMauaL33xbsG0TAwMCYxeildNYyupJiFWhwDA2M0YyXwrRyWVZ/wkOdiYGBgBA/Nj9g+2MLEwMA4mBE1EeOtVOvshwCNgYFxAKM6qJqMWeTNhmhENQm4GBgYQxnrJWj+yl7TNG+sYmBgjGP8APoQaphUNWnqAAAAAElFTkSuQmCC" class="article-share-link">分享</a><div class="tags"><a href="/tags/学习/">学习</a><a href="/tags/大数据/">大数据</a><a href="/tags/Spark/">Spark</a></div><div class="post-nav"><a href="/2018/08/30/airflow实战总结/" class="next">airflow实战总结</a></div><div id="disqus_thread"><div class="btn_click_load"><button class="disqus_click_btn">阅读评论 「请确保 disqus.com 可以正常加载」</button></div><script>var disqus_shortname = 'https://jacobs-wanhb.disqus.com/embed.js';
 var disqus_identifier = '2018/10/15/Spark学习笔记/';
 var disqus_title = 'Spark实战总结';
 var disqus_url = 'http://yoursite.com/2018/10/15/Spark学习笔记/';
@@ -270,7 +329,7 @@ $.ajax({
    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
    j.async = true;
    e.parentNode.insertBefore(j, e);
-})(document, 'script');</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/15/Spark学习笔记/">Spark实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/30/airflow实战总结/">airflow实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/12/impala集群搭建/">impala集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/okhttp-support-100-continue-for-palo/">okhttp support 100-continue for palo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/26/JVM知识总结/">JVM知识总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/31/kylin-query原理剖析/">kylin query原理剖析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/superset-customization/">superset customization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/lombok-builder-泛型擦除问题/">lombok builder 泛型擦除</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/07/Kylin二次开发——测试环境搭建/">Kylin二次开发——测试环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/kylin-master-slave同步原理及问题排查/">kylin master-slave同步原理及问题排查</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+})(document, 'script');</script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/10/15/Spark学习笔记/">Spark实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/30/airflow实战总结/">airflow实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/12/impala集群搭建/">impala集群搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/24/okhttp-support-100-continue-for-palo/">okhttp support 100-continue for palo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/26/JVM知识总结/">JVM知识总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/31/kylin-query原理剖析/">kylin query原理剖析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/superset-customization/">superset customization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/lombok-builder-泛型擦除问题/">lombok builder 泛型擦除</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/07/Kylin二次开发——测试环境搭建/">Kylin二次开发——测试环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/kylin-master-slave同步原理及问题排查/">kylin master-slave同步原理及问题排查</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//https://jacobs-wanhb.disqus.com/embed.js.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2018 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
   hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985## Your Baidu Analytics tracking id, e.g. 8006843039519956000";
