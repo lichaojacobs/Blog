@@ -107,38 +107,38 @@ Job调度就是在application内部的一组Job集合，在application分配到�
 ## spark transformation和action的算子
 
 ### transformation
-- [ ] map(func) 返回一个新的分布式数据集，由每个原元素经过func函数处理后的新元素组成 
-- [ ] filter(func) 返回一个新的数据集，由经过func函数处理后返回值为true的原元素组成 
-- [ ] flatMap(func) 类似于map，但是每一个输入元素，会被映射为0个或多个输出元素，(因此，func函数的返回值是一个seq，而不是单一元素) 
-- [ ] mapPartitions(func) 类似于map，对RDD的每个分区起作用，在类型为T的RDD上运行时，func的函数类型必须是Iterator[T]=>Iterator[U]
-- [ ] mapPartitionsWithIndex(func) 和mapPartitions类似，但func带有一个整数参数表上分区的索引值，在类型为T的RDD上运行时，func的函数参数类型必须是(int,Iterator[T])=>Iterator[U] 
-- [ ] sample(withReplacement,fraction,seed) 根据给定的随机种子seed，随机抽样出数量为fraction的数据 
-- [ ] pipe(command,[envVars]) 通过管道的方式对RDD的每个分区使用shell命令进行操作，返回对应的结果 
-- [ ] union(otherDataSet) 返回一个新的数据集，由原数据集合参数联合而成 
-- [ ] intersection(otherDataset) 求两个RDD的交集 
-- [ ] distinct([numtasks]) 返回一个包含源数据集中所有不重复元素的i新数据集 
-- [ ] groupByKey([numtasks]) 在一个由(K,v)对组成的数据集上调用，返回一个(K,Seq[V])对组成的数据集。默认情况下，输出结果的并行度依赖于父RDD的分区数目，如果想要对key进行聚合的话，使用reduceByKey或者combineByKey会有更好的性能 
-- [ ] reduceByKey(func,[numTasks]) 在一个(K,V)对的数据集上使用，返回一个(K,V)对的数据集，key相同的值，都被使用指定的reduce函数聚合到一起，reduce任务的个数是可以通过第二个可选参数来配置的 
-- [ ] sortByKey([ascending],[numTasks]) 在类型为(K,V)的数据集上调用，返回以K为键进行排序的(K,V)对数据集，升序或者降序有boolean型的ascending参数决定 
-- [ ] join(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个(K,(V,W))对，每个key中的所有元素都在一起的数据集 
-- [ ] cogroup(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个数据集，组成元素为(K,Iterable[V],Iterable[W]) tuples 
-- [ ] cartesian(otherDataset) 笛卡尔积，但在数据集T和U上调用时，返回一个(T,U)对的数据集，所有元素交互进行笛卡尔积 
-- [ ] coalesce(numPartitions) 对RDD中的分区减少指定的数目，通常在过滤完一个大的数据集之后进行此操作 
-- [ ] repartition(numpartitions) 将RDD中所有records平均划分到numparitions个partition中
+- map(func) 返回一个新的分布式数据集，由每个原元素经过func函数处理后的新元素组成 
+- filter(func) 返回一个新的数据集，由经过func函数处理后返回值为true的原元素组成 
+- flatMap(func) 类似于map，但是每一个输入元素，会被映射为0个或多个输出元素，(因此，func函数的返回值是一个seq，而不是单一元素) 
+- mapPartitions(func) 类似于map，对RDD的每个分区起作用，在类型为T的RDD上运行时，func的函数类型必须是Iterator[T]=>Iterator[U]
+- mapPartitionsWithIndex(func) 和mapPartitions类似，但func带有一个整数参数表上分区的索引值，在类型为T的RDD上运行时，func的函数参数类型必须是(int,Iterator[T])=>Iterator[U] 
+- sample(withReplacement,fraction,seed) 根据给定的随机种子seed，随机抽样出数量为fraction的数据 
+- pipe(command,[envVars]) 通过管道的方式对RDD的每个分区使用shell命令进行操作，返回对应的结果 
+- union(otherDataSet) 返回一个新的数据集，由原数据集合参数联合而成 
+- intersection(otherDataset) 求两个RDD的交集 
+- distinct([numtasks]) 返回一个包含源数据集中所有不重复元素的i新数据集 
+- groupByKey([numtasks]) 在一个由(K,v)对组成的数据集上调用，返回一个(K,Seq[V])对组成的数据集。默认情况下，输出结果的并行度依赖于父RDD的分区数目，如果想要对key进行聚合的话，使用reduceByKey或者combineByKey会有更好的性能 
+- reduceByKey(func,[numTasks]) 在一个(K,V)对的数据集上使用，返回一个(K,V)对的数据集，key相同的值，都被使用指定的reduce函数聚合到一起，reduce任务的个数是可以通过第二个可选参数来配置的 
+- sortByKey([ascending],[numTasks]) 在类型为(K,V)的数据集上调用，返回以K为键进行排序的(K,V)对数据集，升序或者降序有boolean型的ascending参数决定 
+- join(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个(K,(V,W))对，每个key中的所有元素都在一起的数据集 
+- cogroup(otherDataset,[numTasks]) 在类型为(K,V)和(K,W)类型的数据集上调用，返回一个数据集，组成元素为(K,Iterable[V],Iterable[W]) tuples 
+- cartesian(otherDataset) 笛卡尔积，但在数据集T和U上调用时，返回一个(T,U)对的数据集，所有元素交互进行笛卡尔积 
+- coalesce(numPartitions) 对RDD中的分区减少指定的数目，通常在过滤完一个大的数据集之后进行此操作 
+- repartition(numpartitions) 将RDD中所有records平均划分到numparitions个partition中
 
 ### action算子操作
-- [ ] reduce(func) 通过函数func聚集数据集中的所有元素，这个函数必须是关联性的，确保可以被正确的并发执行 
-- [ ] collect() 在driver的程序中，以数组的形式，返回数据集的所有元素，这通常会在使用filter或者其它操作后，返回一个足够小的数据子集再使用 
-- [ ] count() 返回数据集的元素个数 
-- [ ] first() 返回数据集的第一个元素(类似于take(1)) 
-- [ ] take(n)  返回一个数组，由数据集的前n个元素组成。注意此操作目前并非并行执行的，而是driver程序所在机器 
-- [ ] takeSample(withReplacement,num,seed) 返回一个数组，在数据集中随机采样num个元素组成，可以选择是否用随机数替换不足的部分，seed用于指定的随机数生成器种子 
-- [ ] saveAsTextFile(path) 将数据集的元素，以textfile的形式保存到本地文件系统hdfs或者任何其他hadoop支持的文件系统，spark将会调用每个元素的toString方法，并将它转换为文件中的一行文本 
-- [ ] takeOrderd(n,[ordering]) 排序后的limit(n) 
-- [ ] saveAsSequenceFile(path) 将数据集的元素，以sequencefile的格式保存到指定的目录下，本地系统，hdfs或者任何其他hadoop支持的文件系统，RDD的元素必须由key-value对组成。并都实现了hadoop的writable接口或隐式可以转换为writable 
-- [ ] saveAsObjectFile(path) 使用java的序列化方法保存到本地文件，可以被sparkContext.objectFile()加载 
-- [ ] countByKey()  对(K,V)类型的RDD有效，返回一个(K,Int)对的map，表示每一个可以对应的元素个数 
-- [ ] foreache(func) 在数据集的每一个元素上，运行函数func,t通常用于更新一个累加器变量，或者和外部存储系统做交互
+- reduce(func) 通过函数func聚集数据集中的所有元素，这个函数必须是关联性的，确保可以被正确的并发执行 
+- collect() 在driver的程序中，以数组的形式，返回数据集的所有元素，这通常会在使用filter或者其它操作后，返回一个足够小的数据子集再使用 
+- count() 返回数据集的元素个数 
+- first() 返回数据集的第一个元素(类似于take(1)) 
+- take(n)  返回一个数组，由数据集的前n个元素组成。注意此操作目前并非并行执行的，而是driver程序所在机器 
+- takeSample(withReplacement,num,seed) 返回一个数组，在数据集中随机采样num个元素组成，可以选择是否用随机数替换不足的部分，seed用于指定的随机数生成器种子 
+- saveAsTextFile(path) 将数据集的元素，以textfile的形式保存到本地文件系统hdfs或者任何其他hadoop支持的文件系统，spark将会调用每个元素的toString方法，并将它转换为文件中的一行文本 
+- takeOrderd(n,[ordering]) 排序后的limit(n) 
+- saveAsSequenceFile(path) 将数据集的元素，以sequencefile的格式保存到指定的目录下，本地系统，hdfs或者任何其他hadoop支持的文件系统，RDD的元素必须由key-value对组成。并都实现了hadoop的writable接口或隐式可以转换为writable 
+- saveAsObjectFile(path) 使用java的序列化方法保存到本地文件，可以被sparkContext.objectFile()加载 
+- countByKey()  对(K,V)类型的RDD有效，返回一个(K,Int)对的map，表示每一个可以对应的元素个数 
+- foreache(func) 在数据集的每一个元素上，运行函数func,t通常用于更新一个累加器变量，或者和外部存储系统做交互
 
 ## Spark常用存储格式parquet 详解
 
@@ -201,8 +201,10 @@ Job调度就是在application内部的一组Job集合，在application分配到�
 
 ## Spark Stremaing 相关
 
-### 概念
-- BlockRDD：生成由spark.stremaing.blockInterval决定，一个BatchDuration 有几个block就会产生几个 partition
+### BlockRDD
+- 由spark.streaming.blockInterval和duration决定有多少个BlockRdd
+- 在Receiver模式下，一个BatchDuration有几个block就会产生几个partition，可参考[receiver bases approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-1-receiver-based-approach)
+- 在direct模式下，blockRDD不再对实际的分区数量起作用，而是会创建和kafka partitions 相同数量的RDD partitions，可参考[direct approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-2-direct-approach-no-receivers)
 
 - 消息消费速率限定
 	- 开启背压模式：spark.streaming.backpressure.enabled=true
@@ -248,3 +250,47 @@ Job调度就是在application内部的一组Job集合，在application分配到�
 
 - 使用Kryo优化序列化性能(如果希望RDD序列化存储在内存中，面临GC问题的时候，优先使用序列化缓存技术)
   - spark没有默认使用Kryo作为序列化类库，是因为Kryo要求注册所有需要序列化的自定义类型，这对开发比较麻烦
+
+
+## Spark 内存管理 
+
+- [参考文章：apache spark内存管理详解](https://www.ibm.com/developerworks/cn/analytics/library/ba-cn-apache-spark-memory-management/index.html)
+
+### 堆内内存和堆外内存
+
+- 堆内：Executor 的内存管理建立在 JVM 的内存管理之上，Spark 对 JVM 的堆内（On-heap）空间进行了更为详细的分配，以充分利用内存
+	- 缓存 RDD 数据和广播（Broadcast）数据时占用的内存被规划为存储（Storage）内存
+	- 执行 Shuffle 时占用的内存被规划为执行（Execution）内存
+	- 剩余部分： Spark 内部的对象实例，或者用户定义的 Spark 应用程序中的对象实例
+	- 注意：在被 Spark 标记为释放的对象实例，很有可能在实际上并没有被 JVM 回收，导致实际可用的内存小于 Spark 记录的可用内存。所以 Spark 并不能准确记录实际可用的堆内内存，从而也就无法完全避免内存溢出（OOM, Out of Memory）的异常
+- 堆外：进一步优化内存的使用以及提高 Shuffle 时排序的效率， 可以直接在工作节点的系统内存中开辟空间，存储经过序列化的二进制数据
+	- 堆外内存可以被精确地申请和释放，而且序列化的数据占用的空间可以被精确计算，所以相比堆内内存来说降低了管理的难度，也降低了误差
+
+### 存储管理
+
+- RDD 的持久化机制
+	- RDD 的持久化由 Spark 的 Storage 模块 [7] 负责，实现了 RDD 与物理存储的解耦合
+	- Storage 模块负责管理 Spark 在计算过程中产生的数据，将那些在内存或磁盘、在本地或远程存取数据的功能封装了起来
+	- 在具体实现时 Driver 端和 Executor 端的 Storage 模块构成了主从式的架构，即 Driver 端的 BlockManager 为 Master，Executor 端的 BlockManager 为 Slave。
+	- Storage 模块在逻辑上以 Block 为基本存储单位，RDD 的每个 Partition 经过处理后唯一对应一个 Block（BlockId 的格式为 rdd_RDD-ID_PARTITION-ID ）。
+	- Master 负责整个 Spark 应用程序的 Block 的元数据信息的管理和维护，而 Slave 需要将 Block 的更新等状态上报到 Master，同时接收 Master 的命令，例如新增或删除一个 RDD
+
+- RDD 缓存的过程
+	- RDD 在缓存到存储内存之后，Partition 被转换成 Block, 其中Record在堆内占有一块连续的空间
+	- 将Partition由不连续的存储空间转换为连续存储空间的过程，Spark称之为"展开"（Unroll）
+	- Block 有序列化和非序列化两种存储格式
+	- 用一个 LinkedHashMap 来集中管理所有的 Block，Block 由需要缓存的 RDD 的 Partition 转化而成
+- 淘汰规则
+	- 被淘汰的旧 Block 要与新 Block 的 MemoryMode 相同，即同属于堆外或堆内内存
+	- 新旧 Block 不能属于同一个 RDD，避免循环淘汰
+	- 旧 Block 所属 RDD 不能处于被读状态，避免引发一致性问题
+	- 遍历 LinkedHashMap 中 Block，按照最近最少使用（LRU）的顺序淘汰，直到满足新 Block 所需的空间。其中 LRU 是 LinkedHashMap 的特性。
+
+- Spark中执行内存管理
+	- shuffle write:
+		- 若在 map 端选择普通的排序方式，会采用 ExternalSorter 进行外排，在内存中存储数据时主要占用堆内执行空间。
+		- 若在 map 端选择 Tungsten 的排序方式，则采用 ShuffleExternalSorter 直接对以序列化形式存储的数据排序，在内存中存储数据时可以占用堆外或堆内执行空间，取决于用户是否开启了堆外内存以及堆外执行内存是否足够。
+	- shuffle read:
+		- 在对 reduce 端的数据进行聚合时，要将数据交给 Aggregator 处理，在内存中存储数据时占用堆内执行空间。
+		- 如果需要进行最终结果排序，则要将再次将数据交给 ExternalSorter 处理，占用堆内执行空间。
+	- Spark 用 AppendOnlyMap 来存储 Shuffle 过程中的数据，在 Tungsten 排序中甚至抽象成为页式内存管理，开辟了全新的 JVM 内存管理机制

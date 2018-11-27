@@ -87,6 +87,21 @@ Java 应用内存 = 堆内存 + MetaSpace + 堆外内存
 堆外内存 = 线程栈 + 缓冲区（例如 NIO）等等
 - 所以按照目前的经验来看，堆内存至少应该小于 2/3 的容器内存（？）
 
+### happens-before规则
+
+- 定义
+	- 如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。
+	- 两个操作之间存在happens-before关系，并不意味着Java平台的具体实现必须要按照happens-before关系指定的顺序来执行。如果重排序之后的执行结果，与按happens-before关系来执行的结果一致，那么这种重排序并不非法（也就是说，JMM允许这种重排序）
+- 程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作。
+- 监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁。
+- volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读。
+- 传递性：如果A happens-before B，且B happens-before C，那么A happens-before C。
+- start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。
+- join()规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。
+- 程序中断规则：对线程interrupted()方法的调用先行于被中断线程的代码检测到中断时间的发生。
+- 对象finalize规则：一个对象的初始化完成（构造函数执行结束）先行于发生它的finalize()方法的开始。
+
+
 
 ### 对象转入老年代的情况：
 - 1、经过了正常的MinoGC过程数次之后（可以通过-XX:MaxTenuringThreshold配置）晋升到老年代
@@ -96,20 +111,26 @@ Java 应用内存 = 堆内存 + MetaSpace + 堆外内存
 
 ### 一些JVM工具
 - jps : 虚拟机进程状况工具
+	- [详细参考文章](http://www.importnew.com/?p=18132&preview=true)
 	- -q 只输出LVMID,省略主类名称
 	- -m 输出虚拟机进程启动时传递给主类main()函数的参数
 	- -l 输出主类的全名，如果进程执行的是Jar包，输出jar路径
 	- -v 输出虚拟机进程启动时JVM参数
 
 - jstat: 虚拟机统计信息监视工具，可以显示本地或者远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据
-	- -class 监视类装载、卸载数量、总空间以及类装载所耗费时间
-	- -gc 监视Java堆状况，包括Eden区，两个Survivor区、老年代、永久代容量、已用空间、GC时间合计等信息
+	- [详细参考文章](http://www.importnew.com/18202.html)
+	- -class pid 监视类装载、卸载数量、总空间以及类装载所耗费时间
+	- -gc pid 监视Java堆状况，包括Eden区，两个Survivor区、老年代、永久代容量、已用空间、GC时间合计等信息
+	- -gccapacity pid 可以显示，VM内存中三代（young,old,perm）对象的使用和占用大小
+	- -gcnew pid 年轻代对象的信息
+	- -gcold 年老代对象信息
 
 - jinfo: java配置信息工具
 	- 实时地查看和调整虚拟机各项参数，未被显示指定的参数的系统默认值
 	- jinfo -flag CMSInitiatingOccupancyFraction 14444
 
 - jmap java内存映象工具 用于生成堆转储快照（一般称为heapdump或dump文件）如果不使用jmap命令，还可以使用暴力的手段如：-XX:+HeapDumpOnOutOfMemoryError参数，可以让虚拟机在 OOM异常之后自动生成dump文件。通过-XX:+HeapDumpOnCtrlBreak参数则可以使用[Ctrl]+[Break]键让虚拟机生成dump文件。
+	- [详细参考文章](http://www.importnew.com/18196.html)
 	- jmap 的作用不仅仅是为了获取dump文件，还可以查询finalize执行队列、Java堆和永久代的详细信息，如空间使用率、当前用的是哪种收集器等。
 	- -dump 生成java堆转储快照 -dump:[live, ]format=b, file=,其中live子参数说明是否只dump出存活的对象
 	- -heap 显示java堆详细信息，如使用那种回收器、参数配置、分代状况等／
@@ -121,6 +142,7 @@ Java 应用内存 = 堆内存 + MetaSpace + 堆外内存
 	- sun JDK提供jhat 与jmap 搭配使用，来分析jmap 生成的堆转储快照。jhat内置了一个微型的Http/Html服务器，生成dump文件的分析结果后，可以在浏览器中查看之后可以用visualVM来分析dump文件
 
 - jstack: java堆栈跟踪工具，用于生成虚拟机当前时刻的线程快照。线程快照就是当前虚拟机内每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环
+	- [详细参考文章](http://www.importnew.com/18176.html)
 
 
 ### 垃圾收集器参数总结：
@@ -264,6 +286,19 @@ static int i=1;
 		- 扩展类加载器（Extension ClassLoader） 负责加载JAVA_HOME\lib\ext目录中，或者被java.ext.dirs系统变量所指定的路径中的所有类库，开发者可以直接使用扩展类加载器
 		- 应用程序加载器（Application ClassLoader） 这个类加载器是ClassLoader中的getSystemClassLoader()方法的返回值，所以也被称为系统类加载器。负责加载用户类路径（ClassPath）上所指定的类库，如果应用程序没有自定义锅自己的类加载器，一般情况下这个就是程序中默认的类加载器
 
+### [JVM逃逸分析](http://www.importnew.com/23150.html)
+- 逃逸分析的基本行为就是分析对象动态作用域：当一个对象在方法中被定义后，它可能被外部方法所引用，例如作为调用参数传递到其他地方中，称为方法逃逸
+- 如果能证明一个对象不会逃逸到方法或线程外，则可能为这个变量进行一些高效的优化
+
+#### 优化点
+-  栈上分配
+	- 我们都知道Java中的对象都是在堆上分配的，而垃圾回收机制会回收堆中不再使用的对象，但是筛选可回收对象，回收对象还有整理内存都需要消耗时间。如果能够通过逃逸分析确定某些对象不会逃出方法之外，那就可以让这个对象在栈上分配内存，这样该对象所占用的内存空间就可以随栈帧出栈而销毁，就减轻了垃圾回收的压力。
+	- 在一般应用中，如果不会逃逸的局部对象所占的比例很大，如果能使用栈上分配，那大量的对象就会随着方法的结束而自动销毁了。
+-  同步消除：参考[高并发Java 九锁的优化和注意事项](https://my.oschina.net/hosee/blog/615865)
+-  标量替换
+	- Java虚拟机中的原始数据类型（int，long等数值类型以及reference类型等）都不能再进一步分解，它们就可以称为标量。相对的，如果一个数据可以继续分解，那它称为聚合量，Java中最典型的聚合量是对象。如果逃逸分析证明一个对象不会被外部访问，并且这个对象是可分解的，那程序真正执行的时候将可能不创建这个对象，而改为直接创建它的若干个被这个方法使用到的成员变量来代替。拆散后的变量便可以被单独分析与优化，可以各自分别在栈帧或寄存器上分配空间，原本的对象就无需整体分配空间了
+
+
 ### JIT 与Java10
 - Introduction:
 	- 对于大部分应用开发者来说，Java编译器指的是JDK自带的javac指令。这一指令可将Java源程序编译成.class文件，其中包含的代码格式我们称之为Java bytecode（Java字节码）。这种代码格式无法直接运行，但可以被不同平台JVM中的interpreter解释执行。*由于interpreter效率低下，JVM中的JIT compiler（即时编译器）会在运行时有选择性地将运行次数较多的方法编译成二进制代码，直接运行在底层硬件上。*Oracle的HotSpot VM便附带两个用C++实现的JIT compiler：C1及C2。
@@ -278,5 +313,14 @@ static int i=1;
 				- level 2：C1编译，仅方法及循环back-edge执行次数的profiling
 				- level 3：C1编译，除level 2中的profiling外还包括branch（针对分支跳转字节码）及receiver type（针对成员方法调用或类检测，如checkcast，instnaceof，aastore字节码）的profiling
 				- level 4：C2编译。其中，1级和4级为接受状态 — 除非已编译的方法被invalidated（通常在deoptimization中触发），否则HotSpot不会再发出该方法的编译请求。
+
+### JVM优秀博客
+- [Java字节码结构剖析一：常量池](http://www.importnew.com/30461.html)
+- [Java字节码结构剖析二：字段表
+](http://www.importnew.com/30505.html)
+- [Java字节码结构剖析三：方法表
+](http://www.importnew.com/30521.html)
+- [从字节码和 JVM 的角度解析 Java 核心类 String 的不可变特性](http://www.importnew.com/26595.html)
+- [高并发java博客系列](https://my.oschina.net/hosee?tab=popular)
 
 
