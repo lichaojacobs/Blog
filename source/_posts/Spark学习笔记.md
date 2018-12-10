@@ -203,8 +203,15 @@ Job调度就是在application内部的一组Job集合，在application分配到�
 
 ### BlockRDD
 - 由spark.streaming.blockInterval和duration决定有多少个BlockRdd
-- 在Receiver模式下，一个BatchDuration有几个block就会产生几个partition，可参考[receiver bases approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-1-receiver-based-approach)
-- 在direct模式下，blockRDD不再对实际的分区数量起作用，而是会创建和kafka partitions 相同数量的RDD partitions，可参考[direct approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-2-direct-approach-no-receivers)
+- Receiver模式
+	- 一个BatchDuration有几个block就会产生几个partition，可参考[receiver bases approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-1-receiver-based-approach)
+	- 并行度由手动创建的receiver决定
+	![receiver模式](http://imgs.wanhb.cn/receiver%E6%A8%A1%E5%BC%8F.png)
+
+- direct模式
+	- blockRDD不再对实际的分区数量起作用，而是会创建和kafka partitions 相同数量的RDD partitions，可参考[direct approach](http://spark.apache.org/docs/latest/streaming-kafka-0-8-integration.html#approach-2-direct-approach-no-receivers)
+	- 在实际运行的时候通过下发到executor上的task，边拉取数据边处理，这样即使每个task执行失败，对应分区下面的offset也没有提交，也能通过重启task恢复
+		![direct模式](http://imgs.wanhb.cn/direct%E6%A8%A1%E5%BC%8F.png)
 
 - 消息消费速率限定
 	- 开启背压模式：spark.streaming.backpressure.enabled=true
