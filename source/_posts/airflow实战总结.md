@@ -423,8 +423,11 @@ tags:
     ```
 
     - 解决方案三：源码零侵入，使用python的types.FunctionType重新创建一个不带module的function，这样序列化与反序列化的时候不会有问题（待验证)
+    	- 注意，使用types.FunctionType的方式装饰函数时，由于所有的引用都会从golbals里面找，所以对于module的导入，建议在被装饰的函数里面变成local的方式引入
+    
     ```
-    new_func = types.FunctionType((lambda df: df.iloc[:, 0].size == xx).__code__, {})
+    //这里把globals()传入是为了把builtlins等一些模块传入，省事
+    new_func = types.FunctionType((lambda df: df.iloc[:, 0].size == xx).__code__, globals())
 
     ```
 
