@@ -132,7 +132,11 @@ Java 应用内存 = 堆内存 + MetaSpace + 堆外内存
 - jmap java内存映象工具 用于生成堆转储快照（一般称为heapdump或dump文件）如果不使用jmap命令，还可以使用暴力的手段如：-XX:+HeapDumpOnOutOfMemoryError参数，可以让虚拟机在 OOM异常之后自动生成dump文件。通过-XX:+HeapDumpOnCtrlBreak参数则可以使用[Ctrl]+[Break]键让虚拟机生成dump文件。
 	- [详细参考文章](http://www.importnew.com/18196.html)
 	- jmap 的作用不仅仅是为了获取dump文件，还可以查询finalize执行队列、Java堆和永久代的详细信息，如空间使用率、当前用的是哪种收集器等。
-	- -dump 生成java堆转储快照 -dump:[live, ]format=b, file=,其中live子参数说明是否只dump出存活的对象
+	- -dump 生成java堆转储快照 -dump:[live, ]format=b, file=,其中live子参数说明是否只dump出存活的对象。
+
+	```
+	jmap -dump:format=b,file=20190108.dump [pid]
+	```
 	- -heap 显示java堆详细信息，如使用那种回收器、参数配置、分代状况等／
 	- -histo 显示堆中对象的统计信息，包括类，实例数量，合计容量
 	- -F 当虚拟机进程对-dump选项没有响应时，可使用这个选项强制生成dump快照。
