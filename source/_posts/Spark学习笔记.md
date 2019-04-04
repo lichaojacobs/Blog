@@ -13,14 +13,14 @@ tags:
 
 - ClusterManager: 在standalone模式中即为，Master主节点，控制整个集群，监控worker。在yarn模式中为资源管理器
 - worker :从节点，负责控制计算节点，启动Executro和Driver。在yarn模式中NodeManager,负责计算节点的控制。
-- Driver：运行Application的main()函数并且创建SparkContext。
+- Driver：运行Application的main()函数并且创建SparkContext
 - Executor: 执行器，是为某Application运行在worker node上的一个进程，启动线程池运行任务上，每个Application拥有一组独立的executors
 - SparkContext: 整个应用程序的上下文，控制整个应用的生命周期
 - RDD：Spark的基本计算单元，一组RDD形成执行的有向无环图RDD Graph(DAG)
 - DAG Scheduler: 根据Job构建基于stage的DAG，并且提交stage给TaskScheduler
 - TaskScheduler: 可以将提交给它的stage 拆分为更多的task并分发给Executor执行
 - SparkEnv: 线程级别的上下文，存储运行时的重要组件的引用
-- DStream: 是一个RDD的序列，由若干RDD组成。在一个batchInterval中，会产生一个RDD，产生的数据统一塞入到这个RDD中，采用内存+磁盘的模式，尽可能放到内存中，当数据量太大时会spill到磁盘中。
+- DStream: 是一个RDD的序列，由若干RDD组成。在一个batchInterval中，会产生一个RDD，产生的数据统一塞入到这个RDD中，采用内存+磁盘的模式，尽可能放到内存中，当数据量太大时会spill到磁盘中
 
 ### Spark 概念释义
 

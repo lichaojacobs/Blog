@@ -209,7 +209,7 @@ print()
 	- Using Bulk-encoded Output Formats
 		- **支持parquet，orc等文件格式**，批量编码文件
 		- 通过BulkWriter.Factory定义不同的文件格式   [ParquetAvroWriters (flink 1.7-SNAPSHOT API)](https://ci.apache.org/projects/flink/flink-docs-release-1.7/api/java/org/apache/flink/formats/parquet/avro/ParquetAvroWriters.html)
-		- **源码：** [flink/StreamingFileSink.java at master · apache/flink · GitHub](https://github.com/apache/flink/blob/master/flink-streaming-java/src/main/java/org/apache/flink/streaming/api/functions/sink/filesystem/StreamingFileSink.java)
+/Users/lichao15/Documents/github/awesome-big-data/README.md		- **源码：** [flink/StreamingFileSink.java at master · apache/flink · GitHub](https://github.com/apache/flink/blob/master/flink-streaming-java/src/main/java/org/apache/flink/streaming/api/functions/sink/filesystem/StreamingFileSink.java)
 		- 使用这种方式只能配合 `OnCheckpointRollingPolicy`  使用来滚动生成分区文件，通过设置 `env.enableCheckpointing(interval)`来设置文件滚动间隔
 		- **Streaming to parquet in hdfs 出现问题，内存溢出导致job无限崩溃重启，大量part file**
 		- 如果失败，将从上一个检查点开始重新store，期间回滚in-progress中的文件，以确保不会重复保存上一个检查点之后的数据
