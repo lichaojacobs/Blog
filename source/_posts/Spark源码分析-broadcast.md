@@ -1,5 +1,5 @@
 ---
-title: Spark源码分析--broadcast
+title: Spark源码分析--Broadcast
 date: 2019-06-02 13:31:16
 tags:
     - 学习
@@ -7,12 +7,12 @@ tags:
     - Spark
 ---
 
-## broadcast 原理
+## Broadcast 原理
 
 ### 满足broadcast join的条件源码分析
 
 - 来看SparkStrategies.scala文件
-- 看broadcast 策略入口 broadcastSideBySizes
+- Broadcast 策略入口 broadcastSideBySizes
   ![](http://imgs.wanhb.cn/spark-broadcast1.png)
 
   - 可以发现broadcast 左表或者是右表是根据两个策略来控制的：canBuildLeft/canBuildRight， canBroadcast；
