@@ -1,5 +1,5 @@
 ---
-title: Spark源码分析--Dynamic Resource Allocation设计的思考
+title: 【Spark源码分析】Dynamic Resource Allocation设计的思考
 date: 2019-05-26 13:46:21
 tags:
     - 学习
