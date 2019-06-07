@@ -7,6 +7,10 @@ tags:
     - Spark
 ---
 
+## 前言
+
+Spark的broadcast机制本意在于两表做join时，如果其中某一个表足够的小，且又不是join的基表时（left或right join），可以将小表通过网络全量分发到各个executor节点上；通过在各个分区本地做join的方式来减少一次shuffle带来的开销
+
 ## Broadcast 原理
 
 ### 满足broadcast join的条件源码分析
