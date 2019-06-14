@@ -175,8 +175,54 @@ val availableSlots = shuffledOffers.map(o => o.cores / CPUS_PER_TASK).sum
 
 - 看CoarseGrainedSchedulerBackend中具体处理StatusUpdate的实现，这里其实嵌套的比较多。按正常的路径首先会经过**taskResultGetter.enqueueSuccessfulTask**方法，在这里会将result反序列化（有**DirectTaskResult**与**IndirectTaskResult**之分），接着调用**DagScheduler.handleSuccessfulTask**。这里按照task类型不同有不同的处理方式：
 
-- - task是ResultTask的话，可以使用ResultHandler对result进行driver端计算（比如count()会对所有ResultTask的result做sum）
-  - 如果是ShuffleMapTask的话会注册mapOutputTracker，方便后续reduce task查询，然后submit 下一个stage
-  - ![](http://imgs.wanhb.cn/spark-job35.png)
+  - task是ResultTask的话，可以使用ResultHandler对result进行driver端计算（比如count()会对所有ResultTask的result做sum）
 
-- 所以从这里可以看出如果，如果ShuffleMapTask不做显示cache的话，output只是在磁盘上，不会经过blockManager托管，下次若有相同的依赖从DagScheduler.getCacheLocs找不到对应的信息，还是得重新计算一遍
+  - 如果是ShuffleMapTask的话会注册mapOutputTracker，方便后续reduce task查询，然后submit 下一个stage
+
+    ![](http://imgs.wanhb.cn/spark-job35.png)
+
+## Rdd Cache的过程
+
+- 分析至此，我们似乎还没看到ShuffleMapTask cache的过程，只知道如果是ResultTask产生的数据会优先塞入内存（不够溢写磁盘）。那么我们在平时操作中调用的rdd.cache在哪个环节起作用了呢？其实我们分析ShuffleMapTask处理过程时，忽略了一块代码（ShuffleMapTask.runTask 中 rdd.iterator的调用）
+
+  ```
+  ShuffleMapTask.runTask
+  => writer.write(rdd.iterator(partition, context).asInstanceOf[Iterator[_ <: Product2[Any, Any]]])
+  ```
+
+- 进入iterator实现
+
+  ```
+  Rdd.iterator
+  => getOrCompute (if storageLevel != StorageLevel.NONE)
+  => computeOrReadCheckPoint (if storageLevel == StorageLevel.NONE)
+  ```
+
+- 发现这里获取rdd的时候取决于当前rdd的存储方式，默认应该是**StorageLevel.NONE**，显示调cache的话将会走**getOrCompute**读取缓存逻辑，先看rdd不缓存的情况
+
+  ```
+  RDD.computeOrReadCheckpoint
+  => 如果被checkpoint了，读checkpoint数据
+  => 如果没有则直接重新计算
+  ```
+
+  如果有checkpoint会获取，否则直接compute重新计算rdd。看**getOrCompute**实现
+
+  ![](http://imgs.wanhb.cn/spark-job38.png)
+
+  - 核心还是调用从blockManager中去拿缓存的rdd或者重新计算更新blockManager，在getLocalValues方法里面会根据当前的StorageLevel到memory或者diskStore里面去拿blockResult，发现diskStore.getBytes实现里面，**diskManager.getFile**方法正是SortShuffleWriter中获取output路径的底层实现
+
+  ```
+  DiskStore.getBytes
+  => val file = diskManager.getFile(blockId.name)
+  ```
+
+  ```
+  SortShuffleWriter.write
+  => val output = shuffleBlockResolver.getDataFile(dep.shuffleId, mapId)
+  IndexShuffleBlockResolver.getDataFile
+  	 =>blockManager.diskBlockManager.getFile(ShuffleDataBlockId(shuffleId, mapId, NOOP_REDUCE_ID))		 
+       =>DiskManager.getFile
+  ```
+
+- 至此，shuffleMapTask从提交到输出到磁盘，以及DagScheduler如何处理Task Completion事件分析完了。后续文章中将分析ResultTask如何从**mapOutputTracker**拉取数据，以及如何计算的逻辑
