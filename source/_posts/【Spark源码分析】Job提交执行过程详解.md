@@ -55,6 +55,20 @@ tags:
 
 如果当前rdd本身没有设置storage level的话，也就无需查找缓存了，直接返回，否则通过blockManagerMaster.getLocations查找具体block对应的位置；blockManagerMaster上存储了所有Executor汇报上来的所有block位置元数据信息**（后面有一小节来分析block的写入和上报过程）**
 
+接着，对于rdd如果没有显式缓存的情况，需要遍历rdd所有的依赖，对于是宽依赖的stage，调用**getOrCreateShuffleMapStage**获取或者创建mapStage，通过isAvailable判断所有output是否都已经准备好，isAvailable是通过查询**mapOutputTracker**已经注册的task output信息得到的，对于isAvailable为false的情况，说明output没有，或丢失。需要重新计算
+
+```
+/**
+   * Number of partitions that have shuffle outputs.
+   * When this reaches [[numPartitions]], this map stage is ready.
+   */
+  def numAvailableOutputs: Int = mapOutputTrackerMaster.getNumAvailableOutputs(shuffleDep.shuffleId)
+  /**
+   * Returns true if the map stage is ready, i.e. all partitions have shuffle outputs.
+   */
+def isAvailable: Boolean = numAvailableOutputs == numPartitions
+```
+
 ### **submitMissingTasks解析**
 
 - 接下来分析submitStage中submitMissingTasks实现，这个方法是根据需要计算的stage来提交stage中的taskset。taskIdToLocation获取task要处理的数据的所在节点
@@ -225,4 +239,5 @@ val availableSlots = shuffledOffers.map(o => o.cores / CPUS_PER_TASK).sum
        =>DiskManager.getFile
   ```
 
+- 经过一番分析，也能看出，cache主要适用于数据量不大的且反复使用的rdd；如果数据量过大，会发生频繁的数据溢写，还可能导致OOM的错误，收益大于成本，需要慎用
 - 至此，shuffleMapTask从提交到输出到磁盘，以及DagScheduler如何处理Task Completion事件分析完了。后续文章中将分析ResultTask如何从**mapOutputTracker**拉取数据，以及如何计算的逻辑
