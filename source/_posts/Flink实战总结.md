@@ -15,7 +15,7 @@ Flink 近几年来一直备受业界瞩目，相对于同时期一夜成名的Sp
 	- DataSet和DataStream在flink中都代表一种数据结构，是不可变且包含重复记录的集合。区别在于DataSet是有限的集合，而DataStream是无界的
 - flink 配置interlij ideal 在本地运行调试
 	- 只需要将flink依赖的包引入项目中即可启动项目
-![HBase 架构图](http://imgs.wanhb.cn/flink1.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink1.png)
 - **讲解Flink怎么序列化objects，怎么分配内存**[Apache Flink: Juggling with Bits and Bytes](https://flink.apache.org/news/2015/05/11/Juggling-with-Bits-and-Bytes.html)
 
 ###  DataStream
@@ -120,7 +120,7 @@ bin/flink run -s :savepointPath [:runArgs]
 - [Apache Flink 1.7 Documentation: YARN](https://ci.apache.org/projects/flink/flink-docs-release-1.7/ops/deployment/yarn_setup.html)
 - **参考文章**[Flink1.6 - flink on yarn分布式部署架构 - 深山含笑](https://zhouhai02.com/post/flink-internals/flink1.6-flip6-flink-on-yarn-arch/)
 - 架构图
-![HBase 架构图](http://imgs.wanhb.cn/flink2.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink2.png)
 	- JobManager 和 ApplicationMaster  运行在同一个JVM里
 
 - **on yarn 两种模式**
@@ -129,10 +129,10 @@ bin/flink run -s :savepointPath [:runArgs]
 - **摘录参考文章**相比旧的Flink-on-YARN架构（Flink 1.5之前），新的yarn架构带来了以下的优势：
 	 - client可以直接在yarn上面启动一个作业，不在像以前需要先启动一个固定大小的Flink集群然后把作业提交到这个Flink集群上
 	 - 按需申请容器（指被同一个作业的不同算子所使用的容器可以有不同的CPU/Memory配置），没有被使用的容器将会被释放
-![HBase 架构图](http://imgs.wanhb.cn/flink3.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink3.png)
 - slot资源申请/分配流程分析
 - 请求新TaskExecutor的slot分配
-![HBase 架构图](http://imgs.wanhb.cn/flink4.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink4.png)
 - ResourceManager挂掉 ：不会挂掉task,不断尝试重新注册ResourceManager**详细见参考文章**
 - TaskExecutor挂掉
 - JobMaster挂掉
@@ -178,7 +178,7 @@ print()
 	```
 - [摘录：深入理解Flink核心技术 ](https://zhuanlan.zhihu.com/p/20585530)
 	- 纵坐标为event_time，横坐标为processingTime，理想情况自然是两者一致，但实际情况肯定不可能
-![HBase 架构图](http://imgs.wanhb.cn/flink5.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink5.png)
 - [摘录：使用EventTime与WaterMark进行流数据处理](http://shiyanjun.cn/archives/1785.html)
 
 ```
@@ -220,7 +220,7 @@ print()
 		- **part文件过多问题** [Streaming to parquet files not happy with flink 1.6.1 - Stack Overflow](https://stackoverflow.com/questions/52638193/streaming-to-parquet-files-not-happy-with-flink-1-6-1)
 		- **rolling parquet file 重点邮件** [Apache Flink User Mailing List archive. - Streaming to Parquet Files in HDFS](http://apache-flink-user-mailing-list-archive.2336050.n4.nabble.com/Streaming-to-Parquet-Files-in-HDFS-td23492.html)
 		- 注意压缩的时候内存溢出的情况，flink陷入无限的重启循环中
-![HBase 架构图](http://imgs.wanhb.cn/flink6.png)
+![HBase 架构图](http://jacobs.wanhb.cn/images/flink6.png)
 
 ##  StreamingFileSink与Kafka 结合
 ### 如何做到exactly once？

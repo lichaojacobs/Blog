@@ -19,7 +19,7 @@ tags:
 
 - 架构
 
-![impala-architecture](http://imgs.wanhb.cn/impala-architecture.png)
+![impala-architecture](http://jacobs.wanhb.cn/images/impala-architecture.png)
 
 - 集群角色
 

@@ -22,7 +22,7 @@ tags:
 
 ## Raft 组成部分
 - Raft 由 Leader，Follower以及Candidate三种角色组成，三者之间组成有限状态机，可在一定事件下互相切换，具体如下图
-![](http://imgs.wanhb.cn/raft-roles-switch.png)
+![](https://pic4.zhimg.com/80/v2-393502082f95a7432687a6fbe19d7cdf_hd.jpg)
 - 根据上图，角色对应的分工如下
 	- Follower
 		- 响应candidates和leader的 rpc请求
@@ -35,11 +35,11 @@ tags:
 	- Leader:
 		- 维持心跳，防止触发leader选举
 		- 如果接收到客户端append log请求，leader 会并发地向followers 发起AppendEntries Rpc请求，等大多数follower 节点都返回成功之后再将log entry本地commit,  并将结果最终结果返回给客户端；如果失败则retry，正常的请求处理流程如下图
-![](http://imgs.wanhb.cn/client-request.png)
+![](https://pic3.zhimg.com/80/v2-618a3dfc4c9169a6b486416c2c510516_hd.jpg)
 		- 在收到客户端append log 请求后，检测是否最新的log index大于nexIndex 中的值，如果是，则需要给follower 发送AppendEntries RPC请求
 			- 请求成功：更新nextIndex和matchIndex
 			- 请求失败：一般是因为leader重选导致*数据不一致*，则减小nextIndex 重新发送AppendEntries RPC，如此往复，直到找到follower 与 leader 同步的最近一条log entry为止
-![](http://imgs.wanhb.cn/client-request-2.png)
+![](https://pic2.zhimg.com/80/v2-d81511e3cf92859cae0f37d2a05da2e5_hd.jpg)
 		- 如果存在N， N>CommitIndex，大多数matchIndex[follower]>=N，且log[N].term == currentTerm，则将commitIndex 置为N
 
 ## 实现Raft的数据结构
@@ -70,7 +70,7 @@ matchIndex[]: 保存着每一个follower已经被确认replicate成功的最高�
 ```
 
 - RequestVote RPC 工作模式
-![](http://imgs.wanhb.cn/request-vote-rpc.png)
+![](https://pic1.zhimg.com/80/v2-0b504b0909c97d306c936e4d8a422ee8_hd.jpg)
 
 - AppendEntries RPC工作模式
 	- 由leader 发起log replicate，以及维护leader to follower 心跳，防止新一轮election触发
@@ -92,13 +92,13 @@ succss: 如果follower mactch了prevLogIndex和prevLogTerm返回true
 如果 leaderCommit > commitIndex, 将commitIndex 设置为min(leaderCommit, index of last new entry)
 ```
 
-![](http://imgs.wanhb.cn/append-entry-rpc.png)
+![](https://pic2.zhimg.com/80/v2-01f3b77c9c02f8e2b949b57418f140e1_hd.jpg)
 
 ## Leader崩溃
 ###  如何保证follower跟新leader的数据一致性
 - 问题：旧leader挂掉之后，follower通过心跳感知，并转为candidate，触发新一轮选举。新leader产生之后，leader和follower之间很可能存在数据不一致的情况：某些log entry在leader上不存在
 - Raft的做法是：leader会强制follower 完全复制自己的数据，这样会导致follower上的log entries 可能会被覆写删除（**Kafka中partition leader与follower 之间的Sync参考了这一点**）
-![](http://imgs.wanhb.cn/log-consistency.png)
+![](https://pic4.zhimg.com/80/v2-45bb7e6e89a1d8d5d421d29e3f3a3f5b_hd.jpg)
 	- 如上图，通过不断的retry之后找到leader和follower之间一致的log entry；从那个entry之后开始同步（强行覆写）
 ###  如何防止brain split后log entries正确性
 - 问题：如果集群中某一个follower 由于网络问题，长时间没收到leader心跳，如果这时它选自己为leader，等到网络恢复后是不是会成为新的leader覆写之前被commit 的log entry？
@@ -107,7 +107,7 @@ succss: 如果follower mactch了prevLogIndex和prevLogTerm返回true
 	- 实现：Vote RPC中包含了candidate 的log 信息，这样voter就可以通过对比自己的日志中log entry 的 index和term来判断candidate 是不是比自己日志更latest
 ### 如何继续leader crash之前的commit操作
 - 这个问题存在的前提是新一轮leader election 被选为新leader的节点上保存了上一个leader 未commit成功的log entry；**在raft协议中只确保commit 当前leader中的log entries会按照副本数机制实现(num of replicas > num of node / 2  )**
-![](http://imgs.wanhb.cn/commit-before.png)
+![](https://pic3.zhimg.com/80/v2-51183acb3121e6f1ad07bfc4b49e4ef6_hd.jpg)
 	- 这种确保的是：如果一条log entry 被当前leader commit成功，那么可以认为之前所有的entries 都commit成功了（**参考特性5 — Log Matching Property** ），**也不需将之前的log entry的term 改成current term**
 
 ## Follower&&Candidate崩溃
@@ -116,14 +116,14 @@ succss: 如果follower mactch了prevLogIndex和prevLogTerm返回true
 
 ## 集群扩缩容
 - 目前我们讨论的都是在一组固定的节点上操作，但是在现实中存在因为节点的down掉以及扩容的需求，需要变更集群节点。 如果直接变更的话，可能会出现一段时间brain split的情况。最稳妥的方案就是将服务全部下线，扩容完成之后再重新上线，但是这过于低效
-![](http://imgs.wanhb.cn/configuration-change1.png)
+![](https://pic4.zhimg.com/80/v2-fd51d6fa5b917864b632463c272b301b_hd.jpg)
 	- 如图表示的是滚动升级的情况，逐个重启旧server，会存在新旧两个leader同时存在的情况（各自都赢得了所在集群大多数的vote）
 - 解决方案：*引入一种特殊类型的log entry*，专门用来做集群配置更替，把它叫做C (old,new)，当C(old,new)被commit之后集群进入 joint consensus（联合一致性），即*新旧集群共存*的状态。在这种状态下，需遵循的规则如下：
 	- Log entries将被replicate到新旧配置的所有server节点中
 	- 任何一个节点通过新旧任何一份配置都有权利在选举中成为leader
 	- 选举结果和log entry commitment的决定需要各自配置中的大多数节点认可
 - 讨论集群扩容的例子
-![](http://imgs.wanhb.cn/cluster-change.png)
+![](https://pic4.zhimg.com/80/v2-01972efd90a47cab1e3e3339a6c4d2e7_hd.jpg)
 	- 第一阶段：逐台变更时，部分server上处于C(old,new) 状态，此时leader选举只能从C(old, new) 或 C(old) 中产生，具体取决于candidate是否接收到了C(old,new)  log entry；当C(old, new) 被最终committed，则只拥有C(new)和C(old) 的server将再无法被选举为leader（**参考特性4 — Log Matching Property**）
 	- 第二阶段：接着再引入一种log entry C(new) ，将它同步到所有节点，等C(new) 最终committed之后则集群切到了C(new)
 - 需注意的点
@@ -134,7 +134,7 @@ succss: 如果follower mactch了prevLogIndex和prevLogTerm返回true
 ## 日志压缩
 - 日志如果不做压缩处理，理论上会无限期膨胀，期间可能很多重复多余的数据，浪费空间
 - 最简单的做法就是利用snapshot，将系统整个的状态数据作为一个snapshot保存到stable storage上，这样在上一个时间点的snapshot就可以被删除了（FLink的 checkpoint 和Doris的metadata里面也是这么做的）
-![](http://imgs.wanhb.cn/log-snapshot.png)
+![](https://pic3.zhimg.com/80/v2-8f6e62d58a0ac891021bc119c3f9f1de_hd.jpg)
 - 一些其他的方式如：LSM Tree, log cleaning 等都可以
 
 ## 客户端设计的原则

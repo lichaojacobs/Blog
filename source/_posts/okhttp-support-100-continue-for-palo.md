@@ -48,11 +48,11 @@ tags:
 
 - 我们通过debug深入源码看看在哪一步处理的307重定向
 
-![](http://imgs.wanhb.cn/realInterceptor.png)
+![](https://pic2.zhimg.com/80/v2-9dca7e4ac92cae2de9844b1cf5565825_hd.jpg)
 
 由图，我们可以看到对于request/response的处理，okhttp采取了插件的形式，类似于Spring AOP 源码中切面invoke方法的处理方式。这种插件的方式意味着我们可以定制化请求处理逻辑。借官方原图：
 
-![](https://raw.githubusercontent.com/wiki/square/okhttp/interceptors@2x.png)
+![](https://pic2.zhimg.com/80/v2-c66ef8de0a698b2b2a7eb99856790ea1_hd.jpg)
 
 - 由于interceptor里面是可以执行重试逻辑或直接返回response，所以，我们再深入看看在哪个Interceptor里直接返回了response。断点打到RetryAndFollowUpInterceptor里如下的代码块：
 
@@ -71,7 +71,7 @@ tags:
 
 	由于followUp返回了null，导致response直接返回。说明当前的redirect策略不支持307重定向，再深入具体的重定向策略followUpRequest
 
-	![](http://imgs.wanhb.cn/redirectInterceptor.png)
+	![](https://pic2.zhimg.com/80/v2-f1c8c432fbd725b19055ef3dcf8228a1_hd.jpg)
 
 	发现307，308如果request method不等于GET且不为HEAD时直接返回了null，由此对于307 的PUT重定向操作okhttp是不支持的
 	
@@ -126,7 +126,7 @@ tags:
 
 - 在apache httpcomponents中，可以设置redirectStrategy，来达到重定向的策略，且不受http code的约束
 
-	![](http://imgs.wanhb.cn/apacheHttpComponents.png)
+	![](https://pic1.zhimg.com/80/v2-4f64e67306feb76dcc66ffea25931da8_hd.jpg)
 	
 	可以看到本身的redirect机制还是比较强大的
 	

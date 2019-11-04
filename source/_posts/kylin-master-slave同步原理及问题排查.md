@@ -32,7 +32,7 @@ kylin.server.cluster-servers=user:password@host:port,user:password@host:port,use
 
 #### 流程解析
 
-![流程解析](http://imgs.wanhb.cn/master-slave-kylin.png)
+![流程解析](http://jacobs.wanhb.cn/images/master-slave-kylin.png)
 
 #### 源码解析
 

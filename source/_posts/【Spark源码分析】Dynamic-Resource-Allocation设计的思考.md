@@ -21,7 +21,7 @@ tags:
 
 - 我们知道启动一个spark application之后相应的也会启动一个sparkUI server，用于实时监控展示 jobs，stages， executors等一些统计信息，那这些统计数据来自哪里呢？spark内部通过LiveListenerBus实现了一种监听订阅的模式，application内部所有的变更状态通过发布变更事件，交由订阅这些变更事件的实现去处理（这里称之为spark listener）。处理完之后的最新状态将反应在sparkUI上。
 
-  ![](http://imgs.wanhb.cn/sparkui-1.jpeg)
+  ![](http://jacobs.wanhb.cn/images/sparkui-1.jpeg)
 
 - 从图中我们可以看出DAGSchedule是主要产生各类SparkListenerEvent的起源，SparkListenerEvent通过ListenerBus事件队列，期间定时器匹配将事件匹配到不同的SparkListener实现上去
 
@@ -29,29 +29,29 @@ tags:
 
 - 在SparkUI的初始化方法中可以看到绑定了我们在界面中见到的几个Tab，如Executors，stages，storage等
 
-  ![](http://imgs.wanhb.cn/sparkui-2.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-2.png)
 
   跟进ExecutorsTab中看具体的页面渲染逻辑
 
-  ![](http://imgs.wanhb.cn/sparkui-3.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-3.png)
 
   整个代码层次分明，页面渲染包括页面顶部通用的bar以及body里面具体的内容，这里将渲染页面顶部的逻辑模块化了；我们主要看的是executorspage.js这个文件，这里面是获取executor summary数据并渲染的主逻辑。在executorspage.js内部，发现为获取all-executors数据，发送了一个ajax请求
 
-  ![](http://imgs.wanhb.cn/sparkui-4.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-4.png)
 
   这个allexecutors接口有我们想要的executors数据来源信息。全局搜索这个endpoint，发现在AbstractApplicationResource 声明定义了该接口实现
 
-  ![](http://imgs.wanhb.cn/sparkui-5.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-5.png)
 
   意外的发现做了一个类似于请求存储的操作，跟进去发现是AppStatusStore
 
-  ![](http://imgs.wanhb.cn/sparkui-6.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-6.png)
 
   查看类说明，发现这是一个spark 自身kv store的的访问封装实现
 
-  ![](http://imgs.wanhb.cn/sparkui-7.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-7.png)
 
-  ![](http://imgs.wanhb.cn/sparkui-8.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-8.png)
 
   追踪到这里，算是对数据来源钻到了尽头，可以知道最终sparkUI上executors summary数据是存在自身实现的kvstore里的
 
@@ -59,27 +59,27 @@ tags:
 
 - 现在我们需要关注一下executorAdded或者removed事件对kvstore里面的数据处理逻辑，看SparkListener中对executor增减接口的定义，追溯到AppStatusListener实现，这也恰好是改变AppStatusStore的入口
 
-  ![](http://imgs.wanhb.cn/sparkui-9.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-9.png)
 
   可见当executor被remove的时候只是将状态置为false，并更新了kvstore里面的值，而不是将其删除，所以前端查询的时候如果发现executor状态不是active且没在blacklist里面的话，默认就把状态format称Dead了
 
-  ![](http://imgs.wanhb.cn/sparkui-10.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-10.png)
 
-  ![](http://imgs.wanhb.cn/sparkui-11.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-11.png)
 
 #### DynamicAllocation 实现机制
 
 - 这里再补充一下DynamicAllocation的底层实现分析。回到之前SparkListener里定义的两个事件处理接口：onExecutorAdded，onExecutorRemoved；其实不止AppStatusListener对这两个事件做了处理，还有ExecutorAllocationListener。这个监听器是触发ExecutorAllocationManager增删executors的入口
 
-  ![](http://imgs.wanhb.cn/sparkui-12.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-12.png)
 
 - 可以看出里面都是调用的allocationManger里面的具体实现。在onExecutorAdded的callback处理逻辑中，会对新加入的executor做idle记录（onExecutorIdle中实现），先判断当前executor有没有缓存的blocks，走不同的计算timeout分支。其中**cachedExecutorIdleTimeoutS**默认是**Integer.MAX_VALUE** ，然后将记录存入hash结构(<executorId,idelTime>)里，方便**ExecutorAllocationManager**在定时任务下一个周期做检查排除过期的executor
 
-  ![](http://imgs.wanhb.cn/sparkui-13.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-13.png)
 
   检查逻辑如下：
 
-  ![](http://imgs.wanhb.cn/sparkui-14.png)
+  ![](http://jacobs.wanhb.cn/images/sparkui-14.png)
 
   
 

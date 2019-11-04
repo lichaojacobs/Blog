@@ -11,10 +11,10 @@ tags:
 ### IOC
 #### **设计理念**
 先来看看接口设计预览图：
-![IOC接口设计规范](http://imgs.wanhb.cn/ioc1.jpg)
+![IOC接口设计规范](http://jacobs.wanhb.cn/images/ioc1.jpg)
 
  bean 实例化总体步骤
-![bean initialization](http://imgs.wanhb.cn/bean%20initialization.jpg)
+![bean initialization](http://jacobs.wanhb.cn/images/bean%20initialization.jpg)
 
 
 #### 资源定位与注册
@@ -35,7 +35,7 @@ tags:
 
 #### 依赖注入
 
-![注入过程](http://imgs.wanhb.cn/ioc3.jpg)
+![注入过程](http://jacobs.wanhb.cn/images/ioc3.jpg)
 
 - 初始化过程完成的主要工作是在IOC容器中建立BeanDefinition数据映射。此过程中并没有实现IOC容器对Bean依赖关系进行注入。
 - 对于依赖注入，其触发条件是用户第一次向IOC容器索要Bean时触发的。当然也可以通过控制lazy-init属性来让容器完成对bean的预实例化。
@@ -209,7 +209,7 @@ tags:
 #### **设计原理及流程**
 Advice、PointCut、Advisor(通知器，组织起Advice与PointCut)
 
-![接口设计](http://imgs.wanhb.cn/aopinterface.jpg)
+![接口设计](http://jacobs.wanhb.cn/images/aopinterface.jpg)
 AopProxy代理对象生成过程：ProxyFactoryBean和ProxyFactory都提供了AOP的功能封装，但是ProxyFactoryBean与IOC进行了结合，利用BeanFactoryAware获取ApplicationContext,从而可以利用context对IOC注入的bean进行获取
 
 ```

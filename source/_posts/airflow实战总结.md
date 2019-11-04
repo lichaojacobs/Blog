@@ -13,17 +13,17 @@ airflow是一款开源的，分布式任务调度框架，它将一个具有上�
     - task原子性：工作流上每个task都是原子可重试的，一个工作流某个环节的task失败可自动或手动进行重试，不必从头开始任务
 - 工作流示意图
 
-    ![airflow-dags](http://imgs.wanhb.cn/airflow-dags.png)
+    ![airflow-dags](https://pic4.zhimg.com/v2-fbd8d77be2eda3c9766c300359e8eba3_1200x500.jpg)
 
     - 一个dag表示一个定时的工作流，包含一个或者多个具有依赖关系的task
 
 - task依赖图
 
-    ![airflow-tasks](http://imgs.wanhb.cn/airflow-graph.png)
+    ![airflow-tasks](https://pic1.zhimg.com/80/v2-57deb1228a73c290c666539bc56ee8ac_hd.jpg)
 
 - 架构图及集群角色
 
-    ![airflow-infra](http://imgs.wanhb.cn/airflow-infra.png)
+    ![airflow-infra](https://pic1.zhimg.com/80/v2-35a160b63e7389fe12f451e299ab0c00_hd.jpg)
 
     - webserver : 提供web端服务，以及会定时生成子进程去扫描对应的目录下的dags，并更新数据库
     - scheduler : 任务调度服务，根据dags生成任务，并提交到消息中间件队列中 (redis或rabbitMq)

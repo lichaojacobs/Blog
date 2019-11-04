@@ -122,7 +122,7 @@ where orderId>10000 and orderId<102000;
   - 意向排他锁（**IX Lock**），事务想要获得一张表中某几行的排他锁。
 
 由于InnoDB支持的是**行级别的锁**，因此意向锁其实不会阻塞**除全表扫**以外的任何请求，故而意向锁与行级别锁的兼容性
-![兼容性](http://imgs.wanhb.cn/lock.png)
+![兼容性](http://jacobs.wanhb.cn/images/lock.png)
 
 意向锁是InnoDB自动加的，不需用户干预。对于UPDATE、DELETE和INSERT语句，InnoDB会自动给涉及数据集加**排他锁（X)**；对于普通SELECT语句，**InnoDB不会加任何锁**；事务可以通过以下语句显示给记录集加共享锁或排他锁。
 
