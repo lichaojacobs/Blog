@@ -7,6 +7,8 @@ tags:
 	- Yarn
 ---
 
+[知乎链接](https://zhuanlan.zhihu.com/p/79378807)
+
 ## Federation架构总览
 
 - Federation: 主要有四个模块，Router ，StateStore，AMRMProxy, Global Policy Generator；从架构上来看，有点类似于后端的微服务架构中**服务注册发现**模块
