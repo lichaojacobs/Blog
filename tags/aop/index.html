@@ -1,8 +1,1940 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>aop | CHAO LI's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">CHAO LI's Blog</h1><a id="logo" href="/.">CHAO LI's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/" class="current"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><h1 class="label-title">正在查看 aop 下的文章</h1><div class="post"><div class="post-archive"><!--Use lodash to classify posts. See https://lodash.com/docs#groupBy--><h2>2017</h2><ul class="listing"><li><span class="date">2017/02/12</span><a href="/2017/02/12/Spring源码解析-事务处理/" title="Spring源码解析--事务处理">Spring源码解析--事务处理</a></li><li><span class="date">2017/02/07</span><a href="/2017/02/07/Spring源码解读/" title="Spring源码解读(-)">Spring源码解读(-)</a></li></ul></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hadoop/" style="font-size: 15px;">Hadoop</a> <a href="/tags/Yarn/" style="font-size: 15px;">Yarn</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/分布式/" style="font-size: 15px;">分布式</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/paper/" style="font-size: 15px;">paper</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/01/07/MR任务在Hadoop子系统中状态流转/">MR任务在Hadoop子系统中状态流转</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/05/Yarn-Federation源码串读/">Yarn Federation源码串读</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/05/Hadoop-Rpc源码分析/">Hadoop Rpc源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/">【Spark源码分析】Job提交执行过程详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/02/【Spark源码分析】Broadcast/">【Spark源码分析】Broadcast</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/26/【Spark源码分析】Dynamic-Resource-Allocation设计的思考/">【Spark源码分析】Dynamic Resource Allocation设计的思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/01/Raft论文学习/">Raft论文学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/12/【spark-tips】spark2-4-0触发的executor内存溢出排查/">【spark-tips】spark2.4.0触发的executor内存溢出排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/Flink实战总结/">Flink实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/15/Spark学习笔记/">Spark实战总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.7.1" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>标签: aop - CHAO LI&#39;s Blog</title>
+
+
+    <meta property="og:type" content="website">
+<meta property="og:title" content="CHAO LI&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/tags/aop/index.html">
+<meta property="og:site_name" content="CHAO LI&#39;s Blog">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CHAO LI&#39;s Blog">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    <script>
+var _hmt = _hmt || [];
 (function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985## Your Baidu Analytics tracking id, e.g. 8006843039519956000";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-  })();
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/hadoop_logo.jpg" alt="CHAO LI&#39;s Blog" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">标签</a></li>
+            <li class="is-active"><a href="#" aria-current="page">aop</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-02-11T16:42:30.000Z">2017-02-12</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    37 分钟 读完 (大约 5537 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/02/12/Spring源码解析-事务处理/">Spring源码解析--事务处理</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="事务处理相关类的层次结构"><a href="#事务处理相关类的层次结构" class="headerlink" title="事务处理相关类的层次结构"></a>事务处理相关类的层次结构</h3><p><img src="http://jacobs.wanhb.cn/images/2017-02-11_7.54.25.png" alt="事务处理相关类的层次结构"></p>
+<p>在 Spring事务处理中，可以通过设计一个TransactionProxyFactoryBean来使用AOP功能，通过它可以生成Proxy代理对象。在代理对象中，通过TranscationInterceptor来完成对代理对象方法的拦截。实现声明式事务处理时，是AOP和IOC集成的部分，而对于具体的事物处理实现，是通过设计PlatformTransactionManager，AbstractPlatforTransactionmanager以及一系列具体事务处理器来实现的。PlatformTransactionManager又实现了TransactionInterceptor，这样就能将一系列处理给串联起来。</p>
+<h3 id="Spring声明式事务处理"><a href="#Spring声明式事务处理" class="headerlink" title="Spring声明式事务处理"></a>Spring声明式事务处理</h3><h4 id="设计原理与过程"><a href="#设计原理与过程" class="headerlink" title="设计原理与过程"></a>设计原理与过程</h4><p>在实现声明式的事务处理时，常用的方式是结合IOC容器和Spring已有的TransactionProxyFactoryBean对事务管理进行配置，实现可分为以下几个步骤：</p>
+<ul>
+<li>读取和处理在IOC容器中配置的事务处理属性，并转化为Spring事务处理需要的内部数据结构。</li>
+<li>Spring事务处理模块实现统一的事务处理过程。</li>
+<li>底层的事务处理实现。Spring委托给具体的事务处理器来完成。</li>
+</ul>
+<p><img src="http://jacobs.wanhb.cn/images/2017-02-11_8.23.09.png" alt="建立事务处理对象时序图"></p>
+<p>从TransactionProxyFactoryBean入手，通过代码来了解Spring是如何通过AOP功能来完成事务管理配置的，从图中可以看到Spring为声明式事务处理的实现所做的一些准备工作：包括为AOP配置基础设施，这些基础设施包括设置拦截器TransactionInterceptor、通过DefaultPointcutAdvisor或TransactionAttributeSourceAdvisor。同时，在TransactionProxyFactoryBean的实现中，还可以看到注入进来的PlatformTransactionManager和事务处理属性TransactionAttribute等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public class TransactionProxyFactoryBean extends AbstractSingletonProxyFactoryBean implements BeanFactoryAware &#123;</span><br><span class="line">  private final TransactionInterceptor transactionInterceptor = new TransactionInterceptor();／／这个拦截器通过AOP发挥作用，通过这个拦截器的实现，Spring封装了事务处理实现</span><br><span class="line">  private Pointcut pointcut;</span><br><span class="line"></span><br><span class="line">  public TransactionProxyFactoryBean() &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void setTransactionManager(PlatformTransactionManager transactionManager) &#123;</span><br><span class="line">    this.transactionInterceptor.setTransactionManager(transactionManager);</span><br><span class="line">  &#125;</span><br><span class="line">  //通过依赖注入的事务属性以Properties的形式出现，把BeanDefinition中读到的事务管理的属性信息注入到TransactionInterceptor中</span><br><span class="line">  public void setTransactionAttributes(Properties transactionAttributes) &#123;</span><br><span class="line">    this.transactionInterceptor.setTransactionAttributes(transactionAttributes);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void setTransactionAttributeSource(TransactionAttributeSource transactionAttributeSource) &#123;</span><br><span class="line">    this.transactionInterceptor.setTransactionAttributeSource(transactionAttributeSource);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void setPointcut(Pointcut pointcut) &#123;</span><br><span class="line">    this.pointcut = pointcut;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void setBeanFactory(BeanFactory beanFactory) &#123;</span><br><span class="line">    this.transactionInterceptor.setBeanFactory(beanFactory);</span><br><span class="line">  &#125;</span><br><span class="line">//这里创建Spring  AOP对事务处理的Advisor</span><br><span class="line">  protected Object createMainInterceptor() &#123;</span><br><span class="line">    this.transactionInterceptor.afterPropertiesSet();//事务处理完成AOP配置的地方</span><br><span class="line">    return this.pointcut != null?new DefaultPointcutAdvisor(this.pointcut, this.transactionInterceptor):new TransactionAttributeSourceAdvisor(this.transactionInterceptor);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  protected void postProcessProxyFactory(ProxyFactory proxyFactory) &#123;</span><br><span class="line">    proxyFactory.addInterface(TransactionalProxy.class);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完成了AOP配置，Spring的TransactionInterceptor配置是IOC容器完成Bean的依赖注入时，通过initializeBean方法被调用。</p>
+<p>   在建立TransactionProxyFactoryBean的事务处理拦截器的时候， afterPropertiesSet方法首先对 ProxyFactoryBean的目标Bean设置进行检查，如果这个目标Bean的设置是正确的，就会创建ProxyFactory对象，从而实现AOP的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void afterPropertiesSet() &#123;</span><br><span class="line">  if(this.getTransactionManager() == null &amp;&amp; this.beanFactory == null) &#123;</span><br><span class="line">    throw new IllegalStateException(&quot;Set the \&apos;transactionManager\&apos; property or make sure to run within a BeanFactory containing a PlatformTransactionManager bean!&quot;);</span><br><span class="line">  &#125; else if(this.getTransactionAttributeSource() == null) &#123;</span><br><span class="line">    throw new IllegalStateException(&quot;Either \&apos;transactionAttributeSource\&apos; or \&apos;transactionAttributes\&apos; is required: If there are no transactional methods, then don\&apos;t use a transaction aspect.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="事务处理配置的读入"><a href="#事务处理配置的读入" class="headerlink" title="事务处理配置的读入"></a>事务处理配置的读入</h4><p>在AOP配置完成的基础上，以TransactionAttributeSourceAdvisor的实现为入口，了解具体的事务属性配置是如何读入的，实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private TransactionInterceptor transactionInterceptor;／／同样需要AOP中用到的Interceptro和Pointcut，通过内部类，调用TransactionInterceptor来得到事务的配置属性，在对Proxy的方法进行匹配调用时，会使用到这些配置属性。</span><br><span class="line">private final TransactionAttributeSourcePointcut pointcut = new TransactionAttributeSourcePointcut() &#123;</span><br><span class="line">  protected TransactionAttributeSource getTransactionAttributeSource() &#123;</span><br><span class="line">    return TransactionAttributeSourceAdvisor.this.transactionInterceptor != null?TransactionAttributeSourceAdvisor.this.transactionInterceptor.getTransactionAttributeSource():null;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>在声明式事务处理中，通过对目标对象的方法调用进行拦截实现，这个拦截通过AOP发挥作用。在AOP中，对于拦截的启动，首先需要对方法调用是否需要拦截进行判断，依据时那些在TransactionProxyFactoryBean中为目标对象设置的事务属性。这个匹配判断在TransactionAttributeSourcePointcut中完成。实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public boolean matches(Method method, Class&lt;?&gt; targetClass) &#123;</span><br><span class="line">  if(TransactionalProxy.class.isAssignableFrom(targetClass)) &#123;</span><br><span class="line">    return false;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    TransactionAttributeSource tas = this.getTransactionAttributeSource();</span><br><span class="line">    return tas == null || tas.getTransactionAttribute(method, targetClass) != null;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在方法中，首先把事务方法的属性配置读取到TransactionAttributeSource对象中，有了这些事务处理的配置以后，根据当前方法调用的method对象和目标对象，对是否需要启动事务处理拦截器进行判断。</p>
+<p>在Pointcut的matches判断过程中，会用到transactionAttributeSource对象，这个transactionAttributeSource对象是在对TransactionInterceptor进行依赖注入时就配置好的，它的设置是在TransactionInterceptor的基类TransactionAspectSupport中完成的。配置的是一个NameMatchTransactionAttributeSouce对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void setTransactionAttributes(Properties transactionAttributes) &#123;</span><br><span class="line">  NameMatchTransactionAttributeSource tas = new NameMatchTransactionAttributeSource();</span><br><span class="line">  tas.setProperties(transactionAttributes);</span><br><span class="line">  this.transactionAttributeSource = tas;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可知，NameMatchTransactionAttributeSouce作为TransacionAttributeSource的具体实现，是实际完成事务处理属性读入和匹配的地方。对于NameMatchTransactionAttributeSouce是怎样实现事务处理属性的读入和匹配的，可看如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">public void setProperties(Properties transactionAttributes) &#123;//设置配置的事务方法</span><br><span class="line">  TransactionAttributeEditor tae = new TransactionAttributeEditor();</span><br><span class="line">  Enumeration propNames = transactionAttributes.propertyNames();</span><br><span class="line"></span><br><span class="line">  while(propNames.hasMoreElements()) &#123;</span><br><span class="line">    String methodName = (String)propNames.nextElement();</span><br><span class="line">    String value = transactionAttributes.getProperty(methodName);</span><br><span class="line">    tae.setAsText(value);</span><br><span class="line">    TransactionAttribute attr = (TransactionAttribute)tae.getValue();</span><br><span class="line">    this.addTransactionalMethod(methodName, attr);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">private Map&lt;String, TransactionAttribute&gt; nameMap = new HashMap();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public void addTransactionalMethod(String methodName, TransactionAttribute attr) &#123;</span><br><span class="line">  if(logger.isDebugEnabled()) &#123;</span><br><span class="line">    logger.debug(&quot;Adding transactional method [&quot; + methodName + &quot;] with attribute [&quot; + attr + &quot;]&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.nameMap.put(methodName, attr);</span><br><span class="line">&#125;</span><br><span class="line">／／对调用的方法进行判断，判断它是否是事务方法，如果是，那么取出相应的事务配置属性</span><br><span class="line">public TransactionAttribute getTransactionAttribute(Method method, Class&lt;?&gt; targetClass) &#123;</span><br><span class="line">  if(!ClassUtils.isUserLevelMethod(method)) &#123;</span><br><span class="line">    return null;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    String methodName = method.getName();／／判断当前目标调用的方法与配置的事务方法是否直接匹配</span><br><span class="line">    TransactionAttribute attr = (TransactionAttribute)this.nameMap.get(methodName);</span><br><span class="line">    if(attr == null) &#123;//如果不能直接匹配，就通过调用PatternMatchUtils的simpleMatch方法来进行匹配判断。</span><br><span class="line">      String bestNameMatch = null;</span><br><span class="line">      Iterator var6 = this.nameMap.keySet().iterator();</span><br><span class="line"></span><br><span class="line">      while(true) &#123;</span><br><span class="line">        String mappedName;</span><br><span class="line">        do &#123;</span><br><span class="line">          do &#123;</span><br><span class="line">            if(!var6.hasNext()) &#123;</span><br><span class="line">              return attr;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            mappedName = (String)var6.next();</span><br><span class="line">          &#125; while(!this.isMatch(methodName, mappedName));</span><br><span class="line">        &#125; while(bestNameMatch != null &amp;&amp; bestNameMatch.length() &gt; mappedName.length());</span><br><span class="line"></span><br><span class="line">        attr = (TransactionAttribute)this.nameMap.get(mappedName);</span><br><span class="line">        bestNameMatch = mappedName;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return attr;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">／／事务方法的匹配判断，详细的匹配过程在PatternMatchUtils中实现</span><br><span class="line">protected boolean isMatch(String methodName, String mappedName) &#123;</span><br><span class="line">  return PatternMatchUtils.simpleMatch(mappedName, methodName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="事务处理拦截器的设计与实现："><a href="#事务处理拦截器的设计与实现：" class="headerlink" title="事务处理拦截器的设计与实现："></a>事务处理拦截器的设计与实现：</h4><p>经过TransactionProxyFactoryBean的AOP包装，此时如果对目标对象进行方法调用，起作用的对象实际傻姑娘是一个Proxy代理对象。对目标对象方法的调用，不会直接作用在TransactionProxyFactoryBean设置的目标对象上。而是会被设置的事务处理器拦截。而在TransactionProxyFactoryBean的AOP实现中，获取Proxy对象的过程并不复杂，TransactionProxyFactoryBean作为一个FactoryBean，对Bean对象的引用通过getObejct方法来得到的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public Object getObject() &#123; ／／TransactionProxyFactoryBean 的父类 AbstractSingletonProxyFactoryBean中</span><br><span class="line">／／返回的是一个Proxy，是ProxyFactory生成的AOP代理，已经封装了对事务处理的拦截器设置</span><br><span class="line">  if(this.proxy == null) &#123;</span><br><span class="line">    throw new FactoryBeanNotInitializedException();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return this.proxy;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于AOP代理对象的作用方法入口，我们一般都知道invoke方法，这个invke方法在事务处理拦截器TransactionInterceptor中，实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">public Object invoke(final MethodInvocation invocation) throws Throwable &#123;</span><br><span class="line">  Class targetClass = invocation.getThis() != null?AopUtils.getTargetClass(invocation.getThis()):null;</span><br><span class="line">  return this.invokeWithinTransaction(invocation.getMethod(), targetClass, new InvocationCallback() &#123;</span><br><span class="line">    public Object proceedWithInvocation() throws Throwable &#123;</span><br><span class="line">      return invocation.proceed();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line">protected Object invokeWithinTransaction(Method method, Class&lt;?&gt; targetClass, final TransactionAspectSupport.InvocationCallback invocation) throws Throwable &#123;</span><br><span class="line">  final TransactionAttribute txAttr = this.getTransactionAttributeSource().getTransactionAttribute(method, targetClass);／／这里读取事务的属性配置，通过TransactionAttributeSource对象取得</span><br><span class="line">  final PlatformTransactionManager tm = this.determineTransactionManager(txAttr);／／根据TransactionProxyFactoryBean的配置信息获得具体的事务处理器</span><br><span class="line">  final String joinpointIdentification = this.methodIdentification(method, targetClass, txAttr);</span><br><span class="line">  if(txAttr != null &amp;&amp; tm instanceof CallbackPreferringPlatformTransactionManager) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">      Object ex1 = ((CallbackPreferringPlatformTransactionManager)tm).execute(txAttr, new TransactionCallback() &#123;</span><br><span class="line">        public Object doInTransaction(TransactionStatus status) &#123;</span><br><span class="line">          TransactionAspectSupport.TransactionInfo txInfo = TransactionAspectSupport.this.prepareTransactionInfo(tm, txAttr, joinpointIdentification, status);／／创建事务，同时把事务过程中得到的信息放到TransactionInfo中去，TransactionInfo是保存当前事务状态的对象。</span><br><span class="line"></span><br><span class="line">          TransactionAspectSupport.ThrowableHolder var4;</span><br><span class="line">          try &#123;</span><br><span class="line">            Object ex = invocation.proceedWithInvocation();</span><br><span class="line">            return ex;</span><br><span class="line">          &#125; catch (Throwable var8) &#123;</span><br><span class="line">            if(txAttr.rollbackOn(var8)) &#123;</span><br><span class="line">              if(var8 instanceof RuntimeException) &#123;</span><br><span class="line">                throw (RuntimeException)var8;</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">              throw new TransactionAspectSupport.ThrowableHolderException(var8);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            var4 = new TransactionAspectSupport.ThrowableHolder(var8);</span><br><span class="line">          &#125; finally &#123;</span><br><span class="line">            TransactionAspectSupport.this.cleanupTransactionInfo(txInfo);</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          return var4;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      if(ex1 instanceof TransactionAspectSupport.ThrowableHolder) &#123;</span><br><span class="line">        throw ((TransactionAspectSupport.ThrowableHolder)ex1).getThrowable();</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        return ex1;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; catch (TransactionAspectSupport.ThrowableHolderException var14) &#123;</span><br><span class="line">      throw var14.getCause();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    TransactionAspectSupport.TransactionInfo ex = this.createTransactionIfNecessary(tm, txAttr, joinpointIdentification);</span><br><span class="line">    Object retVal = null;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">      retVal = invocation.proceedWithInvocation();／／这里的调用使处理沿着拦截器链进行，使最后目标对象的方法得到调用</span><br><span class="line">    &#125; catch (Throwable var15) &#123;</span><br><span class="line">      this.completeTransactionAfterThrowing(ex, var15);／／如果事务处理方法中调用出现了异常，事务处理如何进行需要根据具体情况考虑是否会滚或者提交</span><br><span class="line">      throw var15;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      this.cleanupTransactionInfo(ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    this.commitTransactionAfterReturning(ex);//这里通过事务处理器来对事务进行提交</span><br><span class="line">    return retVal;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于Spring而言，事务管理实际上是通过一个TransactionInfo对象来完成的，在该对象中，封装了事务对象和事务处理的状态信息，这是事务处理的抽象。在这一步完成以后，会对拦截器链进行处理，因为有可能在该事务对象中还配置了除事务处理AOP之外的其他拦截器，在结束对拦截器链处理之后，会对 TransactionInfo中的信息进行更新，以反映最近的事务处理情况，在这个时候，也就完成了事务提交的准备，通过调用事务处理器PlatformTransactionManager的commitTransactionAfterReturning方法来完成事务的提交。这个提交的处理过程已经封装在事务处理器中了，而与具体数据源相关的处理过程，最终委托给相关的事务处理器完成，如：DataSourceTransactionManager、HibernateTransactionManager等。</p>
+<p><img src="http://jacobs.wanhb.cn/images/aop_10.51.15.png" alt="事务提交时序图"></p>
+<p>这个invoke方法的实现中，可以看到整个事务处理在AOP拦截器中实现的全过程。同时，它也是Spring采用AOP封装事务处理和实现声明式事务处理的核心部分。</p>
+<h3 id="Spring事务处理的设计与实现"><a href="#Spring事务处理的设计与实现" class="headerlink" title="Spring事务处理的设计与实现"></a>Spring事务处理的设计与实现</h3><h4 id="Spring事务传播属性"><a href="#Spring事务传播属性" class="headerlink" title="Spring事务传播属性"></a>Spring事务传播属性</h4><blockquote>
+<p>PROPAGATION_REQUIRED – 支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择。<br>PROPAGATION_SUPPORTS – 支持当前事务，如果当前没有事务，就以非事务方式执行。<br>PROPAGATION_MANDATORY – 支持当前事务，如果当前没有事务，就抛出异常。<br>PROPAGATION_REQUIRES_NEW – 新建事务，如果当前存在事务，把当前事务挂起。<br>PROPAGATION_NOT_SUPPORTED – 以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。<br>PROPAGATION_NEVER – 以非事务方式执行，如果当前存在事务，则抛出异常。  PROPAGATION_NESTED –<br>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则进行与PROPAGATION_REQUIRED类似的操作。<br>前六个策略类似于EJB CMT，第七个（PROPAGATION_NESTED）是Spring所提供的一个特殊变量。</p>
+</blockquote>
+<h4 id="事务的创建"><a href="#事务的创建" class="headerlink" title="事务的创建"></a>事务的创建</h4><p>声明式事务中，TransactionInterceptor拦截器的invoke方法作为事务处理实现的起点，invoke方法中createTransactionIfNeccessary方法作为事务创建的入口。以下是createTransactionIfNeccessary方法的时序图</p>
+<p><img src="http://jacobs.wanhb.cn/images/2017-02-11_11.09.41.png" alt="createTransactionIfNeccessary方法的时序图"></p>
+<p>在createTransactionIfNeccessary中首先会向AbstractTransactionManager执行getTransaction，这个获取Transaction事务对象的过程，在AbstractTransactionManager中需要对事务不同的情况作出处理，然后创建一个TransactionStatus，并把这个TransactionStatus设置到对应的TransactionInfo中去，同时将TransactionInfo和当前的线程绑定，从而完成事务的创建过程。TransactionStatus和TransactionInfo这俩个对象持有的数据是事务处理器对事务进行处理的主要依据。对这俩个对象的使用贯穿整个事务处理的全过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">protected TransactionAspectSupport.TransactionInfo createTransactionIfNecessary(PlatformTransactionManager tm, final TransactionAttribute txAttr, final String joinpointIdentification) &#123;</span><br><span class="line">  if(txAttr != null &amp;&amp; ((TransactionAttribute)txAttr).getName() == null) &#123;</span><br><span class="line">    txAttr = new DelegatingTransactionAttribute((TransactionAttribute)txAttr) &#123;</span><br><span class="line">      public String getName() &#123;</span><br><span class="line">        return joinpointIdentification;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  TransactionStatus status = null;</span><br><span class="line">  if(txAttr != null) &#123;</span><br><span class="line">    if(tm != null) &#123;</span><br><span class="line">      status = tm.getTransaction((TransactionDefinition)txAttr);／／这里使用了定义好的事务方法的配置信息。事务创建由事务处理器来完成，同时返回TransactionStatus来记录当前的事务状态，包括已经创建的事务。</span><br><span class="line">    &#125; else if(this.logger.isDebugEnabled()) &#123;</span><br><span class="line">      this.logger.debug(&quot;Skipping transactional joinpoint [&quot; + joinpointIdentification + &quot;] because no transaction manager has been configured&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return this.prepareTransactionInfo(tm, (TransactionAttribute)txAttr, joinpointIdentification, status);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected TransactionAspectSupport.TransactionInfo prepareTransactionInfo(PlatformTransactionManager tm, TransactionAttribute txAttr, String joinpointIdentification, TransactionStatus status) &#123;</span><br><span class="line">  TransactionAspectSupport.TransactionInfo txInfo = new TransactionAspectSupport.TransactionInfo(tm, txAttr, joinpointIdentification);</span><br><span class="line">  if(txAttr != null) &#123;</span><br><span class="line">    if(this.logger.isTraceEnabled()) &#123;</span><br><span class="line">      this.logger.trace(&quot;Getting transaction for [&quot; + txInfo.getJoinpointIdentification() + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    txInfo.newTransactionStatus(status);</span><br><span class="line">  &#125; else if(this.logger.isTraceEnabled()) &#123;</span><br><span class="line">    this.logger.trace(&quot;Don\&apos;t need to create transaction for [&quot; + joinpointIdentification + &quot;]: This method isn\&apos;t transactional.&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  txInfo.bindToThread();</span><br><span class="line">  return txInfo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getTansaction实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public final TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException &#123;</span><br><span class="line">       Object transaction = doGetTransaction();</span><br><span class="line"></span><br><span class="line">       // Cache debug flag to avoid repeated checks.</span><br><span class="line">       boolean debugEnabled = logger.isDebugEnabled();</span><br><span class="line"></span><br><span class="line">       if (definition == null) &#123;</span><br><span class="line">              // Use defaults if no transaction definition given.</span><br><span class="line">              definition = new DefaultTransactionDefinition();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       if (isExistingTransaction(transaction)) &#123;</span><br><span class="line">              // Existing transaction found -&gt; check propagation behavior to find out how to behave.</span><br><span class="line">              return handleExistingTransaction(definition, transaction, debugEnabled);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       // Check definition settings for new transaction.</span><br><span class="line">       if (definition.getTimeout() &lt; TransactionDefinition.TIMEOUT_DEFAULT) &#123;</span><br><span class="line">              throw new InvalidTimeoutException(&quot;Invalid transaction timeout&quot;, definition.getTimeout());</span><br><span class="line">       &#125;</span><br><span class="line">／／没有事务存在，需要根据事务传播属性设置来创建事务，这里会看到事务传播属性的设置：mandatory、required required_new nested等</span><br><span class="line">       // No existing transaction found -&gt; check propagation behavior to find out how to proceed.</span><br><span class="line">       if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_MANDATORY) &#123;</span><br><span class="line">              throw new IllegalTransactionStateException(</span><br><span class="line">                            &quot;No existing transaction found for transaction marked with propagation &apos;mandatory&apos;&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">       else if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||</span><br><span class="line">                     definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||</span><br><span class="line">                     definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) &#123;</span><br><span class="line">              SuspendedResourcesHolder suspendedResources = suspend(null);</span><br><span class="line">              if (debugEnabled) &#123;</span><br><span class="line">                     logger.debug(&quot;Creating new transaction with name [&quot; + definition.getName() + &quot;]: &quot; + definition);</span><br><span class="line">              &#125;</span><br><span class="line">              try &#123;</span><br><span class="line">                     boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);</span><br><span class="line">                     DefaultTransactionStatus status = newTransactionStatus(</span><br><span class="line">                                   definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);</span><br><span class="line">                     doBegin(transaction, definition);</span><br><span class="line">                     prepareSynchronization(status, definition);</span><br><span class="line">                     return status;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (RuntimeException ex) &#123;</span><br><span class="line">                     resume(null, suspendedResources);</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (Error err) &#123;</span><br><span class="line">                     resume(null, suspendedResources);</span><br><span class="line">                     throw err;</span><br><span class="line">              &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       else &#123;</span><br><span class="line">              // Create &quot;empty&quot; transaction: no actual transaction, but potentially synchronization.</span><br><span class="line">              if (definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT &amp;&amp; logger.isWarnEnabled()) &#123;</span><br><span class="line">                     logger.warn(&quot;Custom isolation level specified but no actual transaction initiated; &quot; +</span><br><span class="line">                                   &quot;isolation level will effectively be ignored: &quot; + definition);</span><br><span class="line">              &#125;</span><br><span class="line">              boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);</span><br><span class="line">              return prepareTransactionStatus(definition, null, true, newSynchronization, debugEnabled, null);</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>handleExsitingTransaction方法是理解Spring事务传播属性的关键：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* Create a TransactionStatus for an existing transaction.</span><br><span class="line">*/</span><br><span class="line">private TransactionStatus handleExistingTransaction(</span><br><span class="line">              TransactionDefinition definition, Object transaction, boolean debugEnabled)</span><br><span class="line">              throws TransactionException &#123;</span><br><span class="line"></span><br><span class="line">       if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) &#123;</span><br><span class="line">              throw new IllegalTransactionStateException(</span><br><span class="line">                            &quot;Existing transaction found for transaction marked with propagation &apos;never&apos;&quot;);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NOT_SUPPORTED) &#123;</span><br><span class="line">              if (debugEnabled) &#123;</span><br><span class="line">                     logger.debug(&quot;Suspending current transaction&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              Object suspendedResources = suspend(transaction);</span><br><span class="line">              boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);</span><br><span class="line">              return prepareTransactionStatus(</span><br><span class="line">                            definition, null, false, newSynchronization, debugEnabled, suspendedResources);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW) &#123;</span><br><span class="line">              if (debugEnabled) &#123;</span><br><span class="line">                     logger.debug(&quot;Suspending current transaction, creating new transaction with name [&quot; +</span><br><span class="line">                                   definition.getName() + &quot;]&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              SuspendedResourcesHolder suspendedResources = suspend(transaction);</span><br><span class="line">              try &#123;</span><br><span class="line">                     boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);</span><br><span class="line">                     DefaultTransactionStatus status = newTransactionStatus(</span><br><span class="line">                                   definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);</span><br><span class="line">                     doBegin(transaction, definition);</span><br><span class="line">                     prepareSynchronization(status, definition);</span><br><span class="line">                     return status;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (RuntimeException beginEx) &#123;</span><br><span class="line">                     resumeAfterBeginException(transaction, suspendedResources, beginEx);</span><br><span class="line">                     throw beginEx;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (Error beginErr) &#123;</span><br><span class="line">                     resumeAfterBeginException(transaction, suspendedResources, beginErr);</span><br><span class="line">                     throw beginErr;</span><br><span class="line">              &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) &#123;</span><br><span class="line">              if (!isNestedTransactionAllowed()) &#123;</span><br><span class="line">                     throw new NestedTransactionNotSupportedException(</span><br><span class="line">                                   &quot;Transaction manager does not allow nested transactions by default - &quot; +</span><br><span class="line">                                   &quot;specify &apos;nestedTransactionAllowed&apos; property with value &apos;true&apos;&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              if (debugEnabled) &#123;</span><br><span class="line">                     logger.debug(&quot;Creating nested transaction with name [&quot; + definition.getName() + &quot;]&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              if (useSavepointForNestedTransaction()) &#123;／／在Spring管理的事务中，创建事务保存点</span><br><span class="line">                     // Create savepoint within existing Spring-managed transaction,</span><br><span class="line">                     // through the SavepointManager API implemented by TransactionStatus.</span><br><span class="line">                     // Usually uses JDBC 3.0 savepoints. Never activates Spring synchronization.</span><br><span class="line">                     DefaultTransactionStatus status =</span><br><span class="line">                                   prepareTransactionStatus(definition, transaction, false, false, debugEnabled, null);</span><br><span class="line">                     status.createAndHoldSavepoint();</span><br><span class="line">                     return status;</span><br><span class="line">              &#125;</span><br><span class="line">              else &#123;</span><br><span class="line">                     // Nested transaction through nested begin and commit/rollback calls.</span><br><span class="line">                     // Usually only for JTA: Spring synchronization might get activated here</span><br><span class="line">                     // in case of a pre-existing JTA transaction.</span><br><span class="line">                     boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);</span><br><span class="line">                     DefaultTransactionStatus status = newTransactionStatus(</span><br><span class="line">                                   definition, transaction, true, newSynchronization, debugEnabled, null);</span><br><span class="line">                     doBegin(transaction, definition);</span><br><span class="line">                     prepareSynchronization(status, definition);</span><br><span class="line">                     return status;</span><br><span class="line">              &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       // Assumably PROPAGATION_SUPPORTS or PROPAGATION_REQUIRED.</span><br><span class="line">       if (debugEnabled) &#123;</span><br><span class="line">              logger.debug(&quot;Participating in existing transaction&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">       if (isValidateExistingTransaction()) &#123;</span><br><span class="line">              if (definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT) &#123;</span><br><span class="line">                     Integer currentIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();</span><br><span class="line">                     if (currentIsolationLevel == null || currentIsolationLevel != definition.getIsolationLevel()) &#123;</span><br><span class="line">                            Constants isoConstants = DefaultTransactionDefinition.constants;</span><br><span class="line">                            throw new IllegalTransactionStateException(&quot;Participating transaction with definition [&quot; +</span><br><span class="line">                                          definition + &quot;] specifies isolation level which is incompatible with existing transaction: &quot; +</span><br><span class="line">                                          (currentIsolationLevel != null ?</span><br><span class="line">                                                        isoConstants.toCode(currentIsolationLevel, DefaultTransactionDefinition.PREFIX_ISOLATION) :</span><br><span class="line">                                                        &quot;(unknown)&quot;));</span><br><span class="line">                     &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              if (!definition.isReadOnly()) &#123;</span><br><span class="line">                     if (TransactionSynchronizationManager.isCurrentTransactionReadOnly()) &#123;</span><br><span class="line">                            throw new IllegalTransactionStateException(&quot;Participating transaction with definition [&quot; +</span><br><span class="line">                                          definition + &quot;] is not marked as read-only but existing transaction is&quot;);</span><br><span class="line">                     &#125;</span><br><span class="line">              &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);</span><br><span class="line">       return prepareTransactionStatus(definition, transaction, false, newSynchronization, debugEnabled, null);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="事务挂起"><a href="#事务挂起" class="headerlink" title="事务挂起"></a>事务挂起</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">protected final SuspendedResourcesHolder suspend(Object transaction) throws TransactionException &#123;／／返回的SuspendedResourcesHolder会作为参数传给TransactionStatus</span><br><span class="line">       if (TransactionSynchronizationManager.isSynchronizationActive()) &#123;</span><br><span class="line">              List&lt;TransactionSynchronization&gt; suspendedSynchronizations = doSuspendSynchronization();</span><br><span class="line">              try &#123;</span><br><span class="line">                     Object suspendedResources = null;／／把挂起事务的处理交给具体事务处理器去完成，如果具体的事务处理器不支持事务挂起，则默认抛出TransactionSuspensionNotSupportedException</span><br><span class="line">                     if (transaction != null) &#123;</span><br><span class="line">                            suspendedResources = doSuspend(transaction);</span><br><span class="line">                     &#125;//这里在线程中保存与事务处理有关的信息，并重置线程中相关的ThreadLocal变量</span><br><span class="line">                     String name = TransactionSynchronizationManager.getCurrentTransactionName();</span><br><span class="line">                     TransactionSynchronizationManager.setCurrentTransactionName(null);</span><br><span class="line">                     boolean readOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();</span><br><span class="line">                     TransactionSynchronizationManager.setCurrentTransactionReadOnly(false);</span><br><span class="line">                     Integer isolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();</span><br><span class="line">                     TransactionSynchronizationManager.setCurrentTransactionIsolationLevel(null);</span><br><span class="line">                     boolean wasActive = TransactionSynchronizationManager.isActualTransactionActive();</span><br><span class="line">                     TransactionSynchronizationManager.setActualTransactionActive(false);</span><br><span class="line">                     return new SuspendedResourcesHolder(</span><br><span class="line">                                   suspendedResources, suspendedSynchronizations, name, readOnly, isolationLevel, wasActive);</span><br><span class="line">              &#125;</span><br><span class="line">              catch (RuntimeException ex) &#123;</span><br><span class="line">                     // doSuspend failed - original transaction is still active… 如果处理失败，则恢复原始的事务</span><br><span class="line">                     doResumeSynchronization(suspendedSynchronizations);</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (Error err) &#123;</span><br><span class="line">                     // doSuspend failed - original transaction is still active...</span><br><span class="line">                     doResumeSynchronization(suspendedSynchronizations);</span><br><span class="line">                     throw err;</span><br><span class="line">              &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       else if (transaction != null) &#123;</span><br><span class="line">              // Transaction active but no synchronization active.</span><br><span class="line">              Object suspendedResources = doSuspend(transaction);</span><br><span class="line">              return new SuspendedResourcesHolder(suspendedResources);</span><br><span class="line">       &#125;</span><br><span class="line">       else &#123;</span><br><span class="line">              // Neither transaction nor synchronization active.</span><br><span class="line">              return null;</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Reactivate transaction synchronization for the current thread</span><br><span class="line"> * and resume all given synchronizations.</span><br><span class="line"> * @param suspendedSynchronizations List of TransactionSynchronization objects</span><br><span class="line"> */doSuspend 失败则恢复事务</span><br><span class="line">private void doResumeSynchronization(List&lt;TransactionSynchronization&gt; suspendedSynchronizations) &#123;</span><br><span class="line">       TransactionSynchronizationManager.initSynchronization();／／维护着ThreadLocal变量</span><br><span class="line">       for (TransactionSynchronization synchronization : suspendedSynchronizations) &#123;</span><br><span class="line">              synchronization.resume();</span><br><span class="line">              TransactionSynchronizationManager.registerSynchronization(synchronization);</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="事务的提交"><a href="#事务的提交" class="headerlink" title="事务的提交"></a>事务的提交</h4><p>在声明式事务处理中，事务的提交在TransactionInteceptor的invoke方法中实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">commitTransactionAfterReturning(txInfo)</span><br></pre></td></tr></table></figure></p>
+<p>txInfo是TransactionInfo对象，是创建事务时生成的。同时，Spring的事务管理框架的生成的TransactionStatus对象就包含在TransactionInfo对象中。commitTransactionAfterReturning具体实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">protected void commitTransactionAfterReturning(TransactionAspectSupport.TransactionInfo txInfo) &#123;</span><br><span class="line">  if(txInfo != null &amp;&amp; txInfo.hasTransaction()) &#123;</span><br><span class="line">    if(this.logger.isTraceEnabled()) &#123;</span><br><span class="line">      this.logger.trace(&quot;Completing transaction for [&quot; + txInfo.getJoinpointIdentification() + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    txInfo.getTransactionManager().commit(txInfo.getTransactionStatus());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用具体的事务管理器实现。而在事务管理器中的实现在AbstractPlatformTransactionManager中存在一个模版：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* This implementation of commit handles participating in existing</span><br><span class="line">* transactions and programmatic rollback requests.</span><br><span class="line">* Delegates to &#123;@code isRollbackOnly&#125;, &#123;@code doCommit&#125;</span><br><span class="line">* and &#123;@code rollback&#125;.</span><br><span class="line">* @see org.springframework.transaction.TransactionStatus#isRollbackOnly()</span><br><span class="line">* @see #doCommit</span><br><span class="line">* @see #rollback</span><br><span class="line">*/</span><br><span class="line">@Override</span><br><span class="line">public final void commit(TransactionStatus status) throws TransactionException &#123;</span><br><span class="line">       if (status.isCompleted()) &#123;</span><br><span class="line">              throw new IllegalTransactionStateException(</span><br><span class="line">                            &quot;Transaction is already completed - do not call commit or rollback more than once per transaction&quot;);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       DefaultTransactionStatus defStatus = (DefaultTransactionStatus) status;</span><br><span class="line">       if (defStatus.isLocalRollbackOnly()) &#123;／／如果事务处理过程中发生了异常，调用回滚。</span><br><span class="line">              if (defStatus.isDebug()) &#123;</span><br><span class="line">                     logger.debug(&quot;Transactional code has requested rollback&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              processRollback(defStatus);</span><br><span class="line">              return;</span><br><span class="line">       &#125;</span><br><span class="line">       if (!shouldCommitOnGlobalRollbackOnly() &amp;&amp; defStatus.isGlobalRollbackOnly()) &#123;</span><br><span class="line">              if (defStatus.isDebug()) &#123;</span><br><span class="line">                     logger.debug(&quot;Global transaction is marked as rollback-only but transactional code requested commit&quot;);</span><br><span class="line">              &#125;／／处理回滚</span><br><span class="line">              processRollback(defStatus);</span><br><span class="line">              // Throw UnexpectedRollbackException only at outermost transaction boundary</span><br><span class="line">              // or if explicitly asked to.</span><br><span class="line">              if (status.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) &#123;</span><br><span class="line">                     throw new UnexpectedRollbackException(</span><br><span class="line">                                   &quot;Transaction rolled back because it has been marked as rollback-only&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">              return;</span><br><span class="line">       &#125;</span><br><span class="line">       ／／处理提交入口</span><br><span class="line">       processCommit(defStatus);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出rollback和commit都在这个方法中实现。看看 processCommit的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">private void processCommit(DefaultTransactionStatus status) throws TransactionException &#123;</span><br><span class="line">       try &#123;</span><br><span class="line">              boolean beforeCompletionInvoked = false;</span><br><span class="line">              try &#123;／／事务的提交准备工作由具体的事务处理器来完成</span><br><span class="line">                     prepareForCommit(status);</span><br><span class="line">                     triggerBeforeCommit(status);</span><br><span class="line">                     triggerBeforeCompletion(status);</span><br><span class="line">                     beforeCompletionInvoked = true;</span><br><span class="line">                     boolean globalRollbackOnly = false;</span><br><span class="line">                     if (status.isNewTransaction() || isFailEarlyOnGlobalRollbackOnly()) &#123;</span><br><span class="line">                            globalRollbackOnly = status.isGlobalRollbackOnly();</span><br><span class="line">                     &#125;／／嵌套事务的处理过程。</span><br><span class="line">                     if (status.hasSavepoint()) &#123;</span><br><span class="line">                            if (status.isDebug()) &#123;</span><br><span class="line">                                   logger.debug(&quot;Releasing transaction savepoint&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                            status.releaseHeldSavepoint();</span><br><span class="line">                     &#125;</span><br><span class="line">                     else if (status.isNewTransaction()) &#123;／／根据当前线程中保存的事务状态进行处理，如果当前的事务是一个新的事务，调用具体事务处理器的完成提交，如果当前所持有的事务不是一个新事务，则不提交，由已经存在的事务来完成提交</span><br><span class="line">                            if (status.isDebug()) &#123;</span><br><span class="line">                                   logger.debug(&quot;Initiating transaction commit&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                            doCommit(status);</span><br><span class="line">                     &#125;</span><br><span class="line">                     // Throw UnexpectedRollbackException if we have a global rollback-only</span><br><span class="line">                     // marker but still didn&apos;t get a corresponding exception from commit.</span><br><span class="line">                     if (globalRollbackOnly) &#123;</span><br><span class="line">                            throw new UnexpectedRollbackException(</span><br><span class="line">                                          &quot;Transaction silently rolled back because it has been marked as rollback-only&quot;);</span><br><span class="line">                     &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (UnexpectedRollbackException ex) &#123;</span><br><span class="line">                     // can only be caused by doCommit</span><br><span class="line">                     triggerAfterCompletion(status, TransactionSynchronization.STATUS_ROLLED_BACK);</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (TransactionException ex) &#123;</span><br><span class="line">                     // can only be caused by doCommit</span><br><span class="line">                     if (isRollbackOnCommitFailure()) &#123;</span><br><span class="line">                            doRollbackOnCommitException(status, ex);</span><br><span class="line">                     &#125;</span><br><span class="line">                     else &#123;</span><br><span class="line">                            triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);</span><br><span class="line">                     &#125;</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (RuntimeException ex) &#123;</span><br><span class="line">                     if (!beforeCompletionInvoked) &#123;</span><br><span class="line">                            triggerBeforeCompletion(status);</span><br><span class="line">                     &#125;</span><br><span class="line">                     doRollbackOnCommitException(status, ex);</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (Error err) &#123;</span><br><span class="line">                     if (!beforeCompletionInvoked) &#123;</span><br><span class="line">                            triggerBeforeCompletion(status);</span><br><span class="line">                     &#125;</span><br><span class="line">                     doRollbackOnCommitException(status, err);</span><br><span class="line">                     throw err;</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">              // Trigger afterCommit callbacks, with an exception thrown there</span><br><span class="line">              // propagated to callers but the transaction still considered as committed.</span><br><span class="line">              try &#123;</span><br><span class="line">                     triggerAfterCommit(status);</span><br><span class="line">              &#125;</span><br><span class="line">              finally &#123;</span><br><span class="line">                     triggerAfterCompletion(status, TransactionSynchronization.STATUS_COMMITTED);</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">       finally &#123;</span><br><span class="line">              cleanupAfterCompletion(status);</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，对事务的提交处理都是紧紧围绕TransactionStatus保存的事务处理相关状态进行判断。具体的提交处理过程都设计成抽象方法，交由具体的事务处理器来完成。</p>
+<h4 id="事务的回滚"><a href="#事务的回滚" class="headerlink" title="事务的回滚"></a>事务的回滚</h4><p>在事务的提交方法中看到了事务的回滚入口，即processRollback方法，其实现代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">private void processRollback(DefaultTransactionStatus status) &#123;</span><br><span class="line">       try &#123;</span><br><span class="line">              try &#123;</span><br><span class="line">                     triggerBeforeCompletion(status);</span><br><span class="line">                     if (status.hasSavepoint()) &#123;／／嵌套事务的回滚处理</span><br><span class="line">                            if (status.isDebug()) &#123;</span><br><span class="line">                                   logger.debug(&quot;Rolling back transaction to savepoint&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                            status.rollbackToHeldSavepoint();</span><br><span class="line">                     &#125;／／当前事务调用方法中新建事务的回滚处理</span><br><span class="line">                     else if (status.isNewTransaction()) &#123;</span><br><span class="line">                            if (status.isDebug()) &#123;</span><br><span class="line">                                   logger.debug(&quot;Initiating transaction rollback&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                            doRollback(status);</span><br><span class="line">                     &#125;／／如果在当前事务调用方法中没有新建事务的回滚处理</span><br><span class="line">                     else if (status.hasTransaction()) &#123;</span><br><span class="line">                            if (status.isLocalRollbackOnly() || isGlobalRollbackOnParticipationFailure()) &#123;</span><br><span class="line">                                   if (status.isDebug()) &#123;</span><br><span class="line">                                          logger.debug(&quot;Participating transaction failed - marking existing transaction as rollback-only&quot;);</span><br><span class="line">                                   &#125;</span><br><span class="line">                                   doSetRollbackOnly(status);</span><br><span class="line">                            &#125;／／由线程的前一个事务来处理回滚，这里不执行任何操作。</span><br><span class="line">                            else &#123;</span><br><span class="line">                                   if (status.isDebug()) &#123;</span><br><span class="line">                                          logger.debug(&quot;Participating transaction failed - letting transaction originator decide on rollback&quot;);</span><br><span class="line">                                   &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                     &#125;</span><br><span class="line">                     else &#123;</span><br><span class="line">                            logger.debug(&quot;Should roll back transaction but cannot - no transaction available&quot;);</span><br><span class="line">                     &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (RuntimeException ex) &#123;</span><br><span class="line">                     triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);</span><br><span class="line">                     throw ex;</span><br><span class="line">              &#125;</span><br><span class="line">              catch (Error err) &#123;</span><br><span class="line">                     triggerAfterCompletion(status, TransactionSynchronization.STATUS_UNKNOWN);</span><br><span class="line">                     throw err;</span><br><span class="line">              &#125;</span><br><span class="line">              triggerAfterCompletion(status, TransactionSynchronization.STATUS_ROLLED_BACK);</span><br><span class="line">       &#125;</span><br><span class="line">       finally &#123;</span><br><span class="line">              cleanupAfterCompletion(status);</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>显然，看了代码我们很快就能理解，Spring 事务传播属性中的 Required_New和NESTED（嵌套事务）的本质区别</p>
+<ol>
+<li>PROPAGATION_REQUIRES_NEW 启动一个新的, 不依赖于环境的 “内部” 事务. 这个事务将被完全 commited 或 rolled back 而不依赖于外部事务, 它拥有自己的隔离范围, 自己的锁, 等等. 当内部事务开始执行时, 外部事务将被挂起, 内务事务结束时, 外部事务将继续执行. </li>
+<li>另一方面, PROPAGATION_NESTED 开始一个 “嵌套的” 事务,  它是已经存在事务的一个真正的子事务. 潜套事务开始执行时,它将取得一个 savepoint. 如果这个嵌套事务失败,我们将回滚到此savepoint潜套事务是外部事务的一部分,只有外部事务结束后它才会被提交。</li>
+<li>由此可见, PROPAGATION_REQUIRES_NEW 和 PROPAGATION_NESTED 的最大区别在于, PROPAGATION_REQUIRES_NEW 完全是一个新的事务, 而 PROPAGATION_NESTED 则是外部事务的子事务, 如果外部事务 commit, 潜套事务也会被 commit, 这个规则同样适用于 roll back. </li>
+</ol>
+<p>也就是说：</p>
+<ol>
+<li>PROPAGATION_REQUIRES_NEW事务不受外部事务的影响，是隔离的。</li>
+<li>PROPAGATION_NESTED，如果内部事务失败且内部，它会回到savepoint之前的状态不会产生脏数据，而外部事务catch住异常后可以选择回滚或者提交；如果外部事务失败，由于嵌套事务是外部事务的一部分，则会导致外部事务与嵌套事务一起回滚。</li>
+</ol>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-02-07T05:08:40.000Z">2017-02-07</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    21 分钟 读完 (大约 3147 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/02/07/Spring源码解读/">Spring源码解读(-)</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h3><h4 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a><strong>设计理念</strong></h4><p>先来看看接口设计预览图：<br><img src="http://jacobs.wanhb.cn/images/ioc1.jpg" alt="IOC接口设计规范"></p>
+<p> bean 实例化总体步骤<br><img src="http://jacobs.wanhb.cn/images/bean_initialization.jpg" alt="bean initialization"></p>
+<h4 id="资源定位与注册"><a href="#资源定位与注册" class="headerlink" title="资源定位与注册"></a>资源定位与注册</h4><p>容器的初始化过程是IOC实现的入口，过程如下：</p>
+<ol>
+<li>Resource定位。BeanDefitioin的资源定位，由ResourceLoader通过统一的Resource接口完成<br>，这个Resource对各种形式的BeanDefinition使用都提供了统一接口。</li>
+<li>BeanDefition的载入。这个载入过程是用户定义好的Bean表示成IOC容器内部的数据结构，而这个容器的数据结构就是BeanDefition。BeanDefition实际上就是POJO对象在IOC容器中的抽象，通过这个BeanDefition定义的数据结构，使得IOC容器能够方便地对POJO对象也就是Bean进行管理。</li>
+<li>向IOC容器注册这些BeanDefition的过程。调用BeanDefitionRegistry接口的实现来完成。把解析得到的BeanDefition向容器中进行注册。在IOC内部将BeanDefition注入到一个HasMap中去(BeanDefitionHolder),IOC容器就是通过这个HashMap来持有这些BeanDefition数据的。</li>
+<li><strong>值得注意：</strong>容器初始化过程不包括依赖注入的实现，Bean定义的载入和依赖注入是俩个独立的过程。依赖注入一般发生在第一次getBean的时候或者通过设置lazyinit实现预先注入Bean。 </li>
+</ol>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
+<li><p>AbstractApplicationContext定义了基本的refresh方法，其他的由子类去实现扩展,即AbstractApplicationContext是容器初始化的入口</p>
+</li>
+<li><p>DefaultListableBeanFactory是IOC容器的基础，FileSystemXmlApplicationContext、WebXmlApplicationContext都是建立在DefaultListableBeanFactory之上，实现自定义BeanDefinition的载入方式</p>
+</li>
+</ul>
+<h4 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h4><p><img src="http://jacobs.wanhb.cn/images/ioc3.jpg" alt="注入过程"></p>
+<ul>
+<li>初始化过程完成的主要工作是在IOC容器中建立BeanDefinition数据映射。此过程中并没有实现IOC容器对Bean依赖关系进行注入。</li>
+<li>对于依赖注入，其触发条件是用户第一次向IOC容器索要Bean时触发的。当然也可以通过控制lazy-init属性来让容器完成对bean的预实例化。</li>
+<li><strong>依赖注入的起点：</strong> IOC容器接口BeanFactory中定义了一个getBean接口，这个接口的实现就是触发依赖注入的地方。可以在DefaultListableBeanFactory的类AbstractBeanFactory入手看看getBean的实现。</li>
+<li>SimpleInstsntiationStrategy类，这个Strategy是Spring用来生成Bean对象的默认类，提供了俩种实例化Java对象的方法，一种是通过BeanUtils，它使用了JVM的反射功能，一种是CGLIB来生成，代码如下:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">	public Object instantiate(RootBeanDefinition bd, String beanName, BeanFactory owner) &#123;</span><br><span class="line">		// Don&apos;t override the class with CGLIB if no overrides.</span><br><span class="line">		if (bd.getMethodOverrides().isEmpty()) &#123;</span><br><span class="line">			Constructor&lt;?&gt; constructorToUse;</span><br><span class="line">			synchronized (bd.constructorArgumentLock) &#123;</span><br><span class="line">				constructorToUse = (Constructor&lt;?&gt;) bd.resolvedConstructorOrFactoryMethod;</span><br><span class="line">				if (constructorToUse == null) &#123;</span><br><span class="line">					final Class&lt;?&gt; clazz = bd.getBeanClass();</span><br><span class="line">					if (clazz.isInterface()) &#123;</span><br><span class="line">						throw new BeanInstantiationException(clazz, &quot;Specified class is an interface&quot;);</span><br><span class="line">					&#125;</span><br><span class="line">					try &#123;</span><br><span class="line">						if (System.getSecurityManager() != null) &#123;</span><br><span class="line">							constructorToUse = AccessController.doPrivileged(new PrivilegedExceptionAction&lt;Constructor&lt;?&gt;&gt;() &#123;</span><br><span class="line">								@Override</span><br><span class="line">								public Constructor&lt;?&gt; run() throws Exception &#123;</span><br><span class="line">									return clazz.getDeclaredConstructor((Class[]) null);</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;);</span><br><span class="line">						&#125;</span><br><span class="line">						else &#123;</span><br><span class="line">							constructorToUse =	clazz.getDeclaredConstructor((Class[]) null);</span><br><span class="line">						&#125;</span><br><span class="line">						bd.resolvedConstructorOrFactoryMethod = constructorToUse;</span><br><span class="line">					&#125;</span><br><span class="line">					catch (Throwable ex) &#123;</span><br><span class="line">						throw new BeanInstantiationException(clazz, &quot;No default constructor found&quot;, ex);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			return BeanUtils.instantiateClass(constructorToUse);</span><br><span class="line">		&#125;</span><br><span class="line">		else &#123;</span><br><span class="line">			// Must generate CGLIB subclass.</span><br><span class="line">			return instantiateWithMethodInjection(bd, beanName, owner);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>依赖注入最终步骤</strong>：在实例化Bean对象生成的基础上，对于Bean对象生成以后，怎样对这些Bean对象的依赖关系处理好，完成整个依赖注入过程？即通过populateBean方法完成，这个方法在AbstractAutowireCapableBeanFactory中实现，AutoWire的依赖注入等，都做了集中处理。</p>
+</li>
+<li><p><strong>Bean的初始化(InitializeBean)：</strong>：在initializeBean方法中，需要使用Bean的名字，完成依赖注入以后的Bean对象，以及这个Bean对应的BeanDefinition。然后开始初始化工作：</p>
+<ol>
+<li>为类型是BeanNameAware的Bean设置Bean的名字</li>
+<li>为类型是BeanClassLoaderAware的Bean设置类装载器，</li>
+<li>类型是BeanFactoryAware的Bean设置自身所在的IOC容器以供回调使用，对PostProcessBeforeInitialization/postAfterInitialization的回调和初始化属性init-method的处理等。</li>
+<li>最后，就可以正常的使用由IOC容器托管的Bean了</li>
+</ol>
+</li>
+</ul>
+<h4 id="讲讲预先注入"><a href="#讲讲预先注入" class="headerlink" title="讲讲预先注入"></a>讲讲预先注入</h4><p>我们讲过依赖注入一般发生在用户第一次请求，但是也可以设置lazy-init属性实现预先依赖注入。这部分过程依然属于AbstractApplicationContext的 refresh方法中。在finishBeanFactoryInitialization的方法中，封装了lazy-init属性的处理，实际的处理是在DefaultListableBeanFactory这个基本容器的preInstantiateSingletons方法中完成的。该方法对单件Bean完成预先实例化。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">public void refresh() throws BeansException, IllegalStateException &#123;</span><br><span class="line">   Object var1 = this.startupShutdownMonitor;</span><br><span class="line">   synchronized(this.startupShutdownMonitor) &#123;</span><br><span class="line">     this.prepareRefresh();</span><br><span class="line">     ConfigurableListableBeanFactory beanFactory = this.obtainFreshBeanFactory();</span><br><span class="line">     this.prepareBeanFactory(beanFactory);</span><br><span class="line"></span><br><span class="line">     try &#123;</span><br><span class="line">       this.postProcessBeanFactory(beanFactory);</span><br><span class="line">       this.invokeBeanFactoryPostProcessors(beanFactory);</span><br><span class="line">       this.registerBeanPostProcessors(beanFactory);</span><br><span class="line">       this.initMessageSource();</span><br><span class="line">       this.initApplicationEventMulticaster();</span><br><span class="line">       this.onRefresh();</span><br><span class="line">       this.registerListeners();</span><br><span class="line">       //预先实例化入口</span><br><span class="line">       this.finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">       this.finishRefresh();</span><br><span class="line">     &#125; catch (BeansException var9) &#123;</span><br><span class="line">       if(this.logger.isWarnEnabled()) &#123;</span><br><span class="line">         this.logger.warn(&quot;Exception encountered during context initialization - cancelling refresh attempt: &quot; + var9);</span><br><span class="line">       &#125;</span><br><span class="line">       this.destroyBeans();</span><br><span class="line">       this.cancelRefresh(var9);</span><br><span class="line">       throw var9;</span><br><span class="line">     &#125; finally &#123;</span><br><span class="line">       this.resetCommonCaches();</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> //在finishBeanFactoryInitialization方法中进行具体的处理过程</span><br><span class="line"> protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) &#123;</span><br><span class="line">   ...</span><br><span class="line">   beanFactory.setTempClassLoader((ClassLoader)null);</span><br><span class="line">   beanFactory.freezeConfiguration();</span><br><span class="line">   beanFactory.preInstantiateSingletons();</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">public void preInstantiateSingletons() throws BeansException &#123;</span><br><span class="line">	List&lt;String&gt; beanNames = new ArrayList&lt;String&gt;(this.beanDefinitionNames);</span><br><span class="line"></span><br><span class="line">	// Trigger initialization of all non-lazy singleton beans...</span><br><span class="line">	for (String beanName : beanNames) &#123;</span><br><span class="line">		RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);</span><br><span class="line">		if (!bd.isAbstract() &amp;&amp; bd.isSingleton() &amp;&amp; !bd.isLazyInit()) &#123;</span><br><span class="line">			if (isFactoryBean(beanName)) &#123;</span><br><span class="line">				final FactoryBean&lt;?&gt; factory = (FactoryBean&lt;?&gt;) getBean(FACTORY_BEAN_PREFIX + beanName);</span><br><span class="line">				boolean isEagerInit;</span><br><span class="line">				if (System.getSecurityManager() != null &amp;&amp; factory instanceof SmartFactoryBean) &#123;</span><br><span class="line">					isEagerInit = AccessController.doPrivileged(new PrivilegedAction&lt;Boolean&gt;() &#123;</span><br><span class="line">						@Override</span><br><span class="line">						public Boolean run() &#123;</span><br><span class="line">							return ((SmartFactoryBean&lt;?&gt;) factory).isEagerInit();</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;, getAccessControlContext());</span><br><span class="line">				&#125;</span><br><span class="line">				else &#123;</span><br><span class="line">					isEagerInit = (factory instanceof SmartFactoryBean &amp;&amp;</span><br><span class="line">							((SmartFactoryBean&lt;?&gt;) factory).isEagerInit());</span><br><span class="line">				&#125;</span><br><span class="line">				if (isEagerInit) &#123;</span><br><span class="line">					getBean(beanName);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			else &#123;</span><br><span class="line">				getBean(beanName);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// Trigger post-initialization callback for all applicable beans...</span><br><span class="line">	for (String beanName : beanNames) &#123;</span><br><span class="line">		Object singletonInstance = getSingleton(beanName);</span><br><span class="line">		if (singletonInstance instanceof SmartInitializingSingleton) &#123;</span><br><span class="line">			final SmartInitializingSingleton smartSingleton = (SmartInitializingSingleton) singletonInstance;</span><br><span class="line">			if (System.getSecurityManager() != null) &#123;</span><br><span class="line">				AccessController.doPrivileged(new PrivilegedAction&lt;Object&gt;() &#123;</span><br><span class="line">					@Override</span><br><span class="line">					public Object run() &#123;</span><br><span class="line">						smartSingleton.afterSingletonsInstantiated();</span><br><span class="line">						return null;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;, getAccessControlContext());</span><br><span class="line">			&#125;</span><br><span class="line">			else &#123;</span><br><span class="line">				smartSingleton.afterSingletonsInstantiated();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>存疑：</strong> spring 2 中preInstantiateSingletons的实现是加了个Synchronized内置锁，而在当前版本中，这一步去掉了锁，why?</p>
+<h3 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h3><h4 id="AOP名词解释"><a href="#AOP名词解释" class="headerlink" title="AOP名词解释"></a>AOP名词解释</h4><ul>
+<li><strong>方面（Aspect）</strong>：<br>一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是J2EE应用中一个很好的横切关注点例子。方面用spring的 Advisor或拦截器实现。</li>
+<li><strong>连接点（Joinpoint）:</strong> 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。</li>
+<li><strong>通知（Advice）:</strong> 在特定的连接点，AOP框架执行的动作。各种类型的通知包括“around”、“before”和“throws”通知。通知类型将在下面讨论。许多AOP框架包括Spring都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring中定义了四个advice: BeforeAdvice, AfterAdvice, ThrowAdvice和DynamicIntroductionAdvice</li>
+<li><strong>切入点（Pointcut 一系列连接点的集合）:</strong> 指定一个通知将被引发的一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring定义了Pointcut接口，用来组合MethodMatcher和ClassFilter，可以通过名字很清楚的理解， MethodMatcher是用来检查目标类的方法是否可以被应用此通知，而ClassFilter是用来检查Pointcut是否应该应用到目标类上</li>
+<li><strong>引入（Introduction）:</strong> 添加方法或字段到被通知的类。 Spring允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现 IsModified接口，来简化缓存。Spring中要使用Introduction, 可有通过DelegatingIntroductionInterceptor来实现通知，通过DefaultIntroductionAdvisor来配置Advice和代理类要实现的接口</li>
+<li><strong>目标对象（Target Object）:</strong> 包含连接点的对象。也被称作被通知或被代理对象。POJO</li>
+<li><strong>AOP代理（AOP Proxy）:</strong> AOP框架创建的对象，包含通知。 在Spring中，AOP代理可以是JDK动态代理或者CGLIB代理。</li>
+<li><strong>织入（Weaving）:</strong> 组装方面来创建一个被通知对象。这可以在编译时完成（例如使用AspectJ编译器），也可以在运行时完成。Spring和其他纯Java AOP框架一样，在运行时完成织入</li>
+</ul>
+<h4 id="设计原理及流程"><a href="#设计原理及流程" class="headerlink" title="设计原理及流程"></a><strong>设计原理及流程</strong></h4><p>Advice、PointCut、Advisor(通知器，组织起Advice与PointCut)</p>
+<p><img src="http://jacobs.wanhb.cn/images/aopinterface.jpg" alt="接口设计"><br>AopProxy代理对象生成过程：ProxyFactoryBean和ProxyFactory都提供了AOP的功能封装，但是ProxyFactoryBean与IOC进行了结合，利用BeanFactoryAware获取ApplicationContext,从而可以利用context对IOC注入的bean进行获取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">初始化通知链—— &gt;获取单例，没有的话去创建——&gt;判断是否为接口，如果为接口使用JDK,如果不是使用CGlib最后返回AopProxy</span><br></pre></td></tr></table></figure>
+<h4 id="AOP调用"><a href="#AOP调用" class="headerlink" title="AOP调用"></a><strong>AOP调用</strong></h4><p>invoke方法，里面逐个去应用配置好的拦截器链,在逐个应用之前先进行一系列的判断：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">／／如果目标对象没有实现object的基本法方法：equals、如果目标对象没有实现object的基本方法： hashcode、根据代理对象的配置来调用服务</span><br><span class="line">if(!this.equalsDefined &amp;&amp; AopUtils.isEqualsMethod(method)) &#123;</span><br><span class="line">  Boolean retVal3 = Boolean.valueOf(this.equals(args[0]));</span><br><span class="line">  return retVal3;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(!this.hashCodeDefined &amp;&amp; AopUtils.isHashCodeMethod(method)) &#123;</span><br><span class="line">  Integer retVal2 = Integer.valueOf(this.hashCode());</span><br><span class="line">  return retVal2;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(method.getDeclaringClass() == DecoratingProxy.class) &#123;</span><br><span class="line">  Class retVal1 = AopProxyUtils.ultimateTargetClass(this.advised);</span><br><span class="line">  return retVal1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Object retVal;</span><br><span class="line">if(!this.advised.opaque &amp;&amp; method.getDeclaringClass().isInterface() &amp;&amp; method.getDeclaringClass().isAssignableFrom(Advised.class)) &#123;</span><br><span class="line">  retVal = AopUtils.invokeJoinpointUsingReflection(this.advised, method, args);</span><br><span class="line">  return retVal;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(this.advised.exposeProxy) &#123;</span><br><span class="line">  oldProxy = AopContext.setCurrentProxy(proxy);</span><br><span class="line">  setProxyContext = true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">target = targetSource.getTarget();</span><br><span class="line">if(target != null) &#123;</span><br><span class="line">  targetClass = target.getClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后获取配置好的拦截器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);</span><br></pre></td></tr></table></figure>
+<p>判断是否为空，为空的话直接调用invokeJoinpointUsingReflection方法。这个方法直接调用目标方法的实现，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public static Object invokeJoinpointUsingReflection(Object target, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    ReflectionUtils.makeAccessible(method);</span><br><span class="line">    return method.invoke(target, args);</span><br><span class="line">  &#125; catch (InvocationTargetException var4) &#123;</span><br><span class="line">    throw var4.getTargetException();</span><br><span class="line">  &#125; catch (IllegalArgumentException var5) &#123;</span><br><span class="line">    throw new AopInvocationException(&quot;AOP configuration seems to be invalid: tried calling method [&quot; + method + &quot;] on target [&quot; + target + &quot;]&quot;, var5);</span><br><span class="line">  &#125; catch (IllegalAccessException var6) &#123;</span><br><span class="line">    throw new AopInvocationException(&quot;Could not access method [&quot; + method + &quot;]&quot;, var6);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">如果不为空，则创建ReflectiveMethodInvocation传入chain（拦截器链）,然后调用proceed方法，这个方法去递归调用拦截器链中的invoke方法，代码如下（在拦截器的调用一节还会详细展开介绍）：</span><br><span class="line">ReflectiveMethodInvocation invocation = new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);</span><br><span class="line">retVal = invocation.proceed();</span><br><span class="line"></span><br><span class="line">public Object proceed() throws Throwable &#123;</span><br><span class="line">  if(this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) &#123;</span><br><span class="line">    return this.invokeJoinpoint();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    Object interceptorOrInterceptionAdvice = this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);</span><br><span class="line">    if(interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher) &#123;</span><br><span class="line">      InterceptorAndDynamicMethodMatcher dm = (InterceptorAndDynamicMethodMatcher)interceptorOrInterceptionAdvice;</span><br><span class="line">      return dm.methodMatcher.matches(this.method, this.targetClass, this.arguments)?dm.interceptor.invoke(this):this.proceed();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return ((MethodInterceptor)interceptorOrInterceptionAdvice).invoke(this);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于最后的目标对象的调用：JDK 直接通过AopUtils的反射机制而cglib则是通过 MethodProxy完成调用，这是cglib自己封住好的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">retval=methodProxy.invoke(target,args);</span><br></pre></td></tr></table></figure>
+<h4 id="AOP拦截器链的调用"><a href="#AOP拦截器链的调用" class="headerlink" title="AOP拦截器链的调用"></a><strong>AOP拦截器链的调用</strong></h4><p>了解了AOP的调用之后，再来看看AOP是怎么实现对目标对象增强的。<br>在运行拦截器链的拦截方法时，需要对代理方法完成一个匹配判断，通过这个匹配判断来决定是否满足切面增强的要求。确定是否执行拦截方法。<br>获取interceptors的操作是由advised的对象完成的。是一个AdvisedSupport对象。AdvisedSupport是ProxyFactoryBean的基类。在其中，我们可以看到getInterceptorsAndDynamicInterceptionAdvice 方法的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;Object&gt; getInterceptorsAndDynamicInterceptionAdvice(Method method, Class&lt;?&gt; targetClass) &#123;</span><br><span class="line">  AdvisedSupport.MethodCacheKey cacheKey = new AdvisedSupport.MethodCacheKey(method);</span><br><span class="line">  List cached = (List)this.methodCache.get(cacheKey);</span><br><span class="line">  if(cached == null) &#123;</span><br><span class="line">    cached = this.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(this, method, targetClass);</span><br><span class="line">    this.methodCache.put(cacheKey, cached);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return cached;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里AdvisedSupport被配置成一个DefaultAdvisedSupport对象，里面实现了具体的getInterceptorsAndDynamicInterceptionAdvice方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;Object&gt; getInterceptorsAndDynamicInterceptionAdvice(Advised config, Method method, Class&lt;?&gt; targetClass) &#123;</span><br><span class="line">  ArrayList interceptorList = new ArrayList(config.getAdvisors().length);</span><br><span class="line">  Class actualClass = targetClass != null?targetClass:method.getDeclaringClass();</span><br><span class="line">  boolean hasIntroductions = hasMatchingIntroductions(config, actualClass);</span><br><span class="line">  AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();</span><br><span class="line">  Advisor[] var8 = config.getAdvisors();</span><br><span class="line">  int var9 = var8.length;</span><br><span class="line"></span><br><span class="line">  for(int var10 = 0; var10 &lt; var9; ++var10) &#123;</span><br><span class="line">    Advisor advisor = var8[var10];</span><br><span class="line">    MethodInterceptor[] interceptors1;</span><br><span class="line">    if(advisor instanceof PointcutAdvisor) &#123;</span><br><span class="line">      PointcutAdvisor var20 = (PointcutAdvisor)advisor;</span><br><span class="line">      if(config.isPreFiltered() || var20.getPointcut().getClassFilter().matches(actualClass)) &#123;</span><br><span class="line">        interceptors1 = registry.getInterceptors(advisor);</span><br><span class="line">        MethodMatcher mm = var20.getPointcut().getMethodMatcher();</span><br><span class="line">        if(MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) &#123;</span><br><span class="line">          if(mm.isRuntime()) &#123;</span><br><span class="line">            MethodInterceptor[] var15 = interceptors1;</span><br><span class="line">            int var16 = interceptors1.length;</span><br><span class="line"></span><br><span class="line">            for(int var17 = 0; var17 &lt; var16; ++var17) &#123;</span><br><span class="line">              MethodInterceptor interceptor = var15[var17];</span><br><span class="line">              interceptorList.add(new InterceptorAndDynamicMethodMatcher(interceptor, mm));</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">            interceptorList.addAll(Arrays.asList(interceptors1));</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else if(advisor instanceof IntroductionAdvisor) &#123;</span><br><span class="line">      IntroductionAdvisor var19 = (IntroductionAdvisor)advisor;</span><br><span class="line">      if(config.isPreFiltered() || var19.getClassFilter().matches(actualClass)) &#123;</span><br><span class="line">        interceptors1 = registry.getInterceptors(advisor);</span><br><span class="line">        interceptorList.addAll(Arrays.asList(interceptors1));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      MethodInterceptor[] interceptors = registry.getInterceptors(advisor);</span><br><span class="line">      interceptorList.addAll(Arrays.asList(interceptors));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return interceptorList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DefaultAdvisorChainFactory 会通过一个AdvisorDapterRegister实现拦截器的注册，注册完成之后,List中的拦截器会被JDK生成的AopProxy中的代理对象的invoke调用，这里通过配置的Intercepters获得拦截器列表然后逐一应用在目标方法上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public MethodInterceptor[] getInterceptors(Advisor advisor) throws UnknownAdviceTypeException &#123;</span><br><span class="line">    ArrayList interceptors = new ArrayList(3);</span><br><span class="line">    Advice advice = advisor.getAdvice();</span><br><span class="line">    if(advice instanceof MethodInterceptor) &#123;</span><br><span class="line">      interceptors.add((MethodInterceptor)advice);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Iterator var4 = this.adapters.iterator();</span><br><span class="line"></span><br><span class="line">    while(var4.hasNext()) &#123;</span><br><span class="line">      AdvisorAdapter adapter = (AdvisorAdapter)var4.next();</span><br><span class="line">      if(adapter.supportsAdvice(advice)) &#123;</span><br><span class="line">        interceptors.add(adapter.getInterceptor(advisor));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(interceptors.isEmpty()) &#123;</span><br><span class="line">      throw new UnknownAdviceTypeException(advisor.getAdvice());</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return (MethodInterceptor[])interceptors.toArray(new MethodInterceptor[interceptors.size()]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/images/profile.jpg" alt="CHAO LI">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        CHAO LI
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Big Data
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Beijing</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            30
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            39
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/ppoffice/hexo-theme-icarus">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/lichaojacobs" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">Github</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://www.zhihu.com/people/chao-li-11" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">知乎</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">www.zhihu.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://weibo.com/3101672623/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">微博</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">weibo.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BigData/" style="font-size: 10px;">BigData</a> <a href="/tags/Crawler/" style="font-size: 10px;">Crawler</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 15px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 12.5px;">Hbase</a> <a href="/tags/InnoDB/" style="font-size: 10px;">InnoDB</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Kylin/" style="font-size: 10px;">Kylin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/Spark/" style="font-size: 17.5px;">Spark</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Yarn/" style="font-size: 15px;">Yarn</a> <a href="/tags/aop/" style="font-size: 12.5px;">aop</a> <a href="/tags/data/" style="font-size: 10px;">data</a> <a href="/tags/infrastructure/" style="font-size: 12.5px;">infrastructure</a> <a href="/tags/ioc/" style="font-size: 12.5px;">ioc</a> <a href="/tags/java8/" style="font-size: 10px;">java8</a> <a href="/tags/kylin/" style="font-size: 12.5px;">kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 12.5px;">kylin - Java - 源码</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/sqlGenerator/" style="font-size: 10px;">sqlGenerator</a> <a href="/tags/superset/" style="font-size: 10px;">superset</a> <a href="/tags/事务处理/" style="font-size: 10px;">事务处理</a> <a href="/tags/二次开发/" style="font-size: 10px;">二次开发</a> <a href="/tags/函数式编程/" style="font-size: 10px;">函数式编程</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/学习/" style="font-size: 17.5px;">学习</a> <a href="/tags/成长/" style="font-size: 17.5px;">成长</a> <a href="/tags/架构/" style="font-size: 17.5px;">架构</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-06T17:42:13.000Z">2020-01-07</time></div>
+                    <a href="/2020/01/07/MR任务在Hadoop子系统中状态流转/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MR任务在Hadoop子系统中状态流转</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:47:46.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Yarn-Federation源码串读/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Yarn Federation源码串读</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:38:28.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Hadoop-Rpc源码分析/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hadoop Rpc源码分析</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-10T05:08:55.000Z">2019-06-10</time></div>
+                    <a href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Job提交执行过程详解</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-02T05:31:16.000Z">2019-06-02</time></div>
+                    <a href="/2019/06/02/【Spark源码分析】Broadcast/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Broadcast</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/BigData/">
+                        <span class="tag">BigData</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Crawler/">
+                        <span class="tag">Crawler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/HBase/">
+                        <span class="tag">HBase</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hadoop/">
+                        <span class="tag">Hadoop</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hbase/">
+                        <span class="tag">Hbase</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/InnoDB/">
+                        <span class="tag">InnoDB</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JVM/">
+                        <span class="tag">JVM</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Java/">
+                        <span class="tag">Java</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Kylin/">
+                        <span class="tag">Kylin</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Python/">
+                        <span class="tag">Python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ReentrantLock/">
+                        <span class="tag">ReentrantLock</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spark/">
+                        <span class="tag">Spark</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Yarn/">
+                        <span class="tag">Yarn</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/aop/">
+                        <span class="tag">aop</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/data/">
+                        <span class="tag">data</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/infrastructure/">
+                        <span class="tag">infrastructure</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ioc/">
+                        <span class="tag">ioc</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/java8/">
+                        <span class="tag">java8</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin/">
+                        <span class="tag">kylin</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin-Java-源码/">
+                        <span class="tag">kylin - Java - 源码</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/paper/">
+                        <span class="tag">paper</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spark/">
+                        <span class="tag">spark</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spring/">
+                        <span class="tag">spring</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/sqlGenerator/">
+                        <span class="tag">sqlGenerator</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/superset/">
+                        <span class="tag">superset</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/事务处理/">
+                        <span class="tag">事务处理</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/二次开发/">
+                        <span class="tag">二次开发</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/函数式编程/">
+                        <span class="tag">函数式编程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/分布式/">
+                        <span class="tag">分布式</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/多线程/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/大数据/">
+                        <span class="tag">大数据</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/学习/">
+                        <span class="tag">学习</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/成长/">
+                        <span class="tag">成长</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/架构/">
+                        <span class="tag">架构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/源码/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/读书/">
+                        <span class="tag">读书</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-06T17:42:13.000Z">2020-01-07</time></div>
+                    <a href="/2020/01/07/MR任务在Hadoop子系统中状态流转/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MR任务在Hadoop子系统中状态流转</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:47:46.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Yarn-Federation源码串读/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Yarn Federation源码串读</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:38:28.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Hadoop-Rpc源码分析/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hadoop Rpc源码分析</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-10T05:08:55.000Z">2019-06-10</time></div>
+                    <a href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Job提交执行过程详解</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-02T05:31:16.000Z">2019-06-02</time></div>
+                    <a href="/2019/06/02/【Spark源码分析】Broadcast/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Broadcast</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/BigData/">
+                        <span class="tag">BigData</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Crawler/">
+                        <span class="tag">Crawler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/HBase/">
+                        <span class="tag">HBase</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hadoop/">
+                        <span class="tag">Hadoop</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hbase/">
+                        <span class="tag">Hbase</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/InnoDB/">
+                        <span class="tag">InnoDB</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JVM/">
+                        <span class="tag">JVM</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Java/">
+                        <span class="tag">Java</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Kylin/">
+                        <span class="tag">Kylin</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Python/">
+                        <span class="tag">Python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ReentrantLock/">
+                        <span class="tag">ReentrantLock</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spark/">
+                        <span class="tag">Spark</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Yarn/">
+                        <span class="tag">Yarn</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/aop/">
+                        <span class="tag">aop</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/data/">
+                        <span class="tag">data</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/infrastructure/">
+                        <span class="tag">infrastructure</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ioc/">
+                        <span class="tag">ioc</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/java8/">
+                        <span class="tag">java8</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin/">
+                        <span class="tag">kylin</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin-Java-源码/">
+                        <span class="tag">kylin - Java - 源码</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/paper/">
+                        <span class="tag">paper</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spark/">
+                        <span class="tag">spark</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spring/">
+                        <span class="tag">spring</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/sqlGenerator/">
+                        <span class="tag">sqlGenerator</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/superset/">
+                        <span class="tag">superset</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/事务处理/">
+                        <span class="tag">事务处理</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/二次开发/">
+                        <span class="tag">二次开发</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/函数式编程/">
+                        <span class="tag">函数式编程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/分布式/">
+                        <span class="tag">分布式</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/多线程/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/大数据/">
+                        <span class="tag">大数据</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/学习/">
+                        <span class="tag">学习</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/成长/">
+                        <span class="tag">成长</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/架构/">
+                        <span class="tag">架构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/源码/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/读书/">
+                        <span class="tag">读书</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/hadoop_logo.jpg" alt="CHAO LI&#39;s Blog" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

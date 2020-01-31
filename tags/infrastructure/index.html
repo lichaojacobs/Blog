@@ -1,8 +1,1906 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>infrastructure | CHAO LI's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/7.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">CHAO LI's Blog</h1><a id="logo" href="/.">CHAO LI's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/" class="current"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><h1 class="label-title">正在查看 infrastructure 下的文章</h1><div class="post"><div class="post-archive"><!--Use lodash to classify posts. See https://lodash.com/docs#groupBy--><h2>2017</h2><ul class="listing"><li><span class="date">2017/07/06</span><a href="/2017/07/06/kylin-master-slave同步原理及问题排查/" title="kylin master-slave同步原理及问题排查">kylin master-slave同步原理及问题排查</a></li><li><span class="date">2017/05/02</span><a href="/2017/05/02/Kylin学习笔记/" title="Kylin学习笔记">Kylin学习笔记</a></li></ul></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/HBase/" style="font-size: 15px;">HBase</a> <a href="/tags/架构/" style="font-size: 15px;">架构</a> <a href="/tags/Hadoop/" style="font-size: 15px;">Hadoop</a> <a href="/tags/Yarn/" style="font-size: 15px;">Yarn</a> <a href="/tags/Hbase/" style="font-size: 15px;">Hbase</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/分布式/" style="font-size: 15px;">分布式</a> <a href="/tags/大数据/" style="font-size: 15px;">大数据</a> <a href="/tags/paper/" style="font-size: 15px;">paper</a> <a href="/tags/InnoDB/" style="font-size: 15px;">InnoDB</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/成长/" style="font-size: 15px;">成长</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a> <a href="/tags/kylin/" style="font-size: 15px;">kylin</a> <a href="/tags/infrastructure/" style="font-size: 15px;">infrastructure</a> <a href="/tags/data/" style="font-size: 15px;">data</a> <a href="/tags/学习/" style="font-size: 15px;">学习</a> <a href="/tags/BigData/" style="font-size: 15px;">BigData</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/ioc/" style="font-size: 15px;">ioc</a> <a href="/tags/aop/" style="font-size: 15px;">aop</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/ReentrantLock/" style="font-size: 15px;">ReentrantLock</a> <a href="/tags/事务处理/" style="font-size: 15px;">事务处理</a> <a href="/tags/Kylin/" style="font-size: 15px;">Kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 15px;">kylin - Java - 源码</a> <a href="/tags/superset/" style="font-size: 15px;">superset</a> <a href="/tags/二次开发/" style="font-size: 15px;">二次开发</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/spark/" style="font-size: 15px;">spark</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Crawler/" style="font-size: 15px;">Crawler</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/java8/" style="font-size: 15px;">java8</a> <a href="/tags/sqlGenerator/" style="font-size: 15px;">sqlGenerator</a> <a href="/tags/函数式编程/" style="font-size: 15px;">函数式编程</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/01/07/MR任务在Hadoop子系统中状态流转/">MR任务在Hadoop子系统中状态流转</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/05/Yarn-Federation源码串读/">Yarn Federation源码串读</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/05/Hadoop-Rpc源码分析/">Hadoop Rpc源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/">【Spark源码分析】Job提交执行过程详解</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/02/【Spark源码分析】Broadcast/">【Spark源码分析】Broadcast</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/26/【Spark源码分析】Dynamic-Resource-Allocation设计的思考/">【Spark源码分析】Dynamic Resource Allocation设计的思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/01/Raft论文学习/">Raft论文学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/12/【spark-tips】spark2-4-0触发的executor内存溢出排查/">【spark-tips】spark2.4.0触发的executor内存溢出排查</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/Flink实战总结/">Flink实战总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/15/Spark学习笔记/">Spark实战总结</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.zhihu.com/people/chao-li-11/activities" title="知乎" target="_blank">知乎</a><ul></ul><a href="http://weibo.com/3101672623/profile?topnav=1&amp;wvr=6" title="微博" target="_blank">微博</a><ul></ul><a href="https://github.com/lichaojacobs" title="GitHub" target="_blank">GitHub</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">CHAO LI's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.1.20/jquery.fancybox.min.css"><script>var _hmt = _hmt || [];
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
+
+<meta name="generator" content="Hexo 3.7.1" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<title>标签: infrastructure - CHAO LI&#39;s Blog</title>
+
+
+    <meta property="og:type" content="website">
+<meta property="og:title" content="CHAO LI&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/tags/infrastructure/index.html">
+<meta property="og:site_name" content="CHAO LI&#39;s Blog">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/og_image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CHAO LI&#39;s Blog">
+<meta name="twitter:image" content="http://yoursite.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    <script>
+var _hmt = _hmt || [];
 (function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985## Your Baidu Analytics tracking id, e.g. 8006843039519956000";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-  })();
-</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?4ca08f1c48fe3bf3d0e2bfb54473d985";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/hadoop_logo.jpg" alt="CHAO LI&#39;s Blog" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">标签</a></li>
+            <li class="is-active"><a href="#" aria-current="page">infrastructure</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-07-06T07:11:38.000Z">2017-07-06</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    13 分钟 读完 (大约 1962 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/07/06/kylin-master-slave同步原理及问题排查/">kylin master-slave同步原理及问题排查</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最近俩个月，团队整个数据基础架构慢慢转移到kylin上面来。而kylin也不负众望，对于一些复杂的聚合查询响应速度远超于hive。随着数据量的上来，kylin的单体部署逐渐无法支撑大量的并行读写任务。于是，自然而然的考虑到kylin的读写分离。一写多读，正好也符合kylin官方文档上的cluster架构。然而在实际的使用中也出现了一些问题:</p>
+<ul>
+<li>主节点更新了schema而从节点未sync</li>
+<li>从节点中部分sync成功，而不是全部</li>
+</ul>
+<p>而很明显的是kylin中所有的数据，包括所有元数据都是落地在HBase中的，那唯一导致节点间数据不一致的可能就只有各个节点都有本地缓存的情况了。为了理解原理方便debug，我对kylin master-slave的同步原理做了一些源代码层面的剖析。</p>
+<h3 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h3><h4 id="主从配置方式"><a href="#主从配置方式" class="headerlink" title="主从配置方式"></a>主从配置方式</h4><p>关于配置的格式，不得不吐槽官方文档的滑水。并没有给出详细的节点配置格式，查阅相关源码才发现正确的配置格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//kylin.properties下面的配置，根据源码，配置的格式为：user:pwd@host:port</span><br><span class="line">kylin.server.cluster-servers=user:password@host:port,user:password@host:port,user:password@host:port</span><br></pre></td></tr></table></figure>
+<h4 id="流程解析"><a href="#流程解析" class="headerlink" title="流程解析"></a>流程解析</h4><p><img src="http://jacobs.wanhb.cn/images/master-slave-kylin.png" alt="流程解析"></p>
+<h4 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h4><ul>
+<li><p>先来看看整个同步机制的核心BroadCaster类的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">//Broadcaster的构造函数</span><br><span class="line">private Broadcaster(final KylinConfig config) &#123;</span><br><span class="line">      this.config = config;</span><br><span class="line">      //获取kylin.properties中&quot;kylin.server.cluster-servers&quot;配置的值</span><br><span class="line">      //也就是集群中所有节点的配置了</span><br><span class="line">      final String[] nodes = config.getRestServers();</span><br><span class="line">      if (nodes == null || nodes.length &lt; 1) &#123;</span><br><span class="line">          logger.warn(&quot;There is no available rest server; check the &apos;kylin.server.cluster-servers&apos; config&quot;);</span><br><span class="line">          broadcastEvents = null; // disable the broadcaster</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">      logger.debug(nodes.length + &quot; nodes in the cluster: &quot; + Arrays.toString(nodes));</span><br><span class="line"></span><br><span class="line">      //开一个单线程，不间断的循环从broadcastEvents队列里面获取注册的事件。</span><br><span class="line">      Executors.newSingleThreadExecutor(new DaemonThreadFactory()).execute(new Runnable() &#123;</span><br><span class="line">          @Override</span><br><span class="line">          public void run() &#123;</span><br><span class="line">              final List&lt;RestClient&gt; restClients = Lists.newArrayList();</span><br><span class="line">              for (String node : config.getRestServers()) &#123;</span><br><span class="line">                  //根据配置的节点信息注册RestClient</span><br><span class="line">                  restClients.add(new RestClient(node));</span><br><span class="line">              &#125;</span><br><span class="line">              final ExecutorService wipingCachePool = Executors.newFixedThreadPool(restClients.size(), new DaemonThreadFactory());</span><br><span class="line">              while (true) &#123;</span><br><span class="line">                  try &#123;</span><br><span class="line">                      final BroadcastEvent broadcastEvent = broadcastEvents.takeFirst();</span><br><span class="line">                      logger.info(&quot;Announcing new broadcast event: &quot; + broadcastEvent);</span><br><span class="line">                      for (final RestClient restClient : restClients) &#123;</span><br><span class="line">                          wipingCachePool.execute(new Runnable() &#123;</span><br><span class="line">                              @Override</span><br><span class="line">                              public void run() &#123;</span><br><span class="line">                                  try &#123;</span><br><span class="line">                                      restClient.wipeCache(broadcastEvent.getEntity(), broadcastEvent.getEvent(), broadcastEvent.getCacheKey());</span><br><span class="line">                                  &#125; catch (IOException e) &#123;</span><br><span class="line">                                      logger.warn(&quot;Thread failed during wipe cache at &quot; + broadcastEvent, e);</span><br><span class="line">                                  &#125;</span><br><span class="line">                              &#125;</span><br><span class="line">                          &#125;);</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125; catch (Exception e) &#123;</span><br><span class="line">                      logger.error(&quot;error running wiping&quot;, e);</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>通过Broadcaster的构造函数其实就能清楚整个同步过程的大概逻辑了。无非就是启动一个线程去轮询阻塞队列里面的元素，有的话就消费下来广播到其他从节点从而达到清理缓存的目的。</p>
+</li>
+<li><p>再来看看广播的实际逻辑实现,基本封装在RestClient中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//此处是根据配置的节点信息正则匹配：&quot;user:pwd@host:port&quot;</span><br><span class="line">public RestClient(String uri) &#123;</span><br><span class="line">   Matcher m = fullRestPattern.matcher(uri);</span><br><span class="line">   if (!m.matches())</span><br><span class="line">       throw new IllegalArgumentException(&quot;URI: &quot; + uri + &quot; -- does not match pattern &quot; + fullRestPattern);</span><br><span class="line"></span><br><span class="line">   String user = m.group(1);</span><br><span class="line">   String pwd = m.group(2);</span><br><span class="line">   String host = m.group(3);</span><br><span class="line">   String portStr = m.group(4);</span><br><span class="line">   int port = Integer.parseInt(portStr == null ? &quot;7070&quot; : portStr);</span><br><span class="line"></span><br><span class="line">   init(host, port, user, pwd);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>根据配置的节点信息实例化RestClient，然后在init方法中，拼接wipe cache的url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private void init(String host, int port, String userName, String password) &#123;</span><br><span class="line">  this.host = host;</span><br><span class="line">  this.port = port;</span><br><span class="line">  this.userName = userName;</span><br><span class="line">  this.password = password;</span><br><span class="line">  //拼接rest接口</span><br><span class="line">  this.baseUrl = &quot;http://&quot; + host + &quot;:&quot; + port + &quot;/kylin/api&quot;;</span><br><span class="line"></span><br><span class="line">  client = new DefaultHttpClient();</span><br><span class="line"></span><br><span class="line">  if (userName != null &amp;&amp; password != null) &#123;</span><br><span class="line">      CredentialsProvider provider = new BasicCredentialsProvider();</span><br><span class="line">      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);</span><br><span class="line">      provider.setCredentials(AuthScope.ANY, credentials);</span><br><span class="line">      client.setCredentialsProvider(provider);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发现kylin所有的交互接口基本上底层都是调用的自己的rest接口，它自己所谓的jdbc的查询方式其实也只是在rest接口上封装了一层，底层还是http请求。可谓是挂羊头卖狗肉了。看看RestClient中怎么去通知其他节点wipe cache的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public void wipeCache(String entity, String event, String cacheKey) throws IOException &#123;</span><br><span class="line">   String url = baseUrl + &quot;/cache/&quot; + entity + &quot;/&quot; + cacheKey + &quot;/&quot; + event;</span><br><span class="line">   HttpPut request = new HttpPut(url);</span><br><span class="line"></span><br><span class="line">   try &#123;</span><br><span class="line">       HttpResponse response = client.execute(request);</span><br><span class="line">       String msg = EntityUtils.toString(response.getEntity());</span><br><span class="line"></span><br><span class="line">       if (response.getStatusLine().getStatusCode() != 200)</span><br><span class="line">           throw new IOException(&quot;Invalid response &quot; + response.getStatusLine().getStatusCode() + &quot; with cache wipe url &quot; + url + &quot;\n&quot; + msg);</span><br><span class="line">   &#125; catch (Exception ex) &#123;</span><br><span class="line">       throw new IOException(ex);</span><br><span class="line">   &#125; finally &#123;</span><br><span class="line">       request.releaseConnection();</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>已经很明了了，就是调的rest接口：/kylin/api/cache/{entity}/{cacaheKey}/{event}</p>
+</li>
+<li><p>当slave节点接收到wipeCache的指令时的处理逻辑如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public void notifyMetadataChange(String entity, Event event, String cacheKey) throws IOException &#123;</span><br><span class="line">     Broadcaster broadcaster = Broadcaster.getInstance(getConfig());</span><br><span class="line"></span><br><span class="line">     //这里会判断当前节点是否注册为listener了，如果注册了，此逻辑会被ignored</span><br><span class="line">     broadcaster.registerListener(cacheSyncListener, &quot;cube&quot;);</span><br><span class="line"></span><br><span class="line">     broadcaster.notifyListener(entity, event, cacheKey);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> //注册listener的逻辑</span><br><span class="line"> public void registerListener(Listener listener, String... entities) &#123;</span><br><span class="line">  synchronized (CACHE) &#123;</span><br><span class="line">      // ignore re-registration</span><br><span class="line">      List&lt;Listener&gt; all = listenerMap.get(SYNC_ALL);</span><br><span class="line">      if (all != null &amp;&amp; all.contains(listener)) &#123;</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      for (String entity : entities) &#123;</span><br><span class="line">          if (!StringUtils.isBlank(entity))</span><br><span class="line">              addListener(entity, listener);</span><br><span class="line">      &#125;</span><br><span class="line">      //注册几种事件类型</span><br><span class="line">      addListener(SYNC_ALL, listener);</span><br><span class="line">      addListener(SYNC_PRJ_SCHEMA, listener);</span><br><span class="line">      addListener(SYNC_PRJ_DATA, listener);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>notifyListener主要就是对所有事件处理逻辑的划分，根据事件类型选择处理逻辑，一般sheme的更新走的是默认逻辑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public void notifyListener(String entity, Event event, String cacheKey) throws IOException &#123;</span><br><span class="line">     synchronized (CACHE) &#123;</span><br><span class="line">         List&lt;Listener&gt; list = listenerMap.get(entity);</span><br><span class="line">         if (list == null)</span><br><span class="line">             return;</span><br><span class="line"></span><br><span class="line">         logger.debug(&quot;Broadcasting metadata change: entity=&quot; + entity + &quot;, event=&quot; + event + &quot;, cacheKey=&quot; + cacheKey + &quot;, listeners=&quot; + list);</span><br><span class="line"></span><br><span class="line">         // prevents concurrent modification exception</span><br><span class="line">         list = Lists.newArrayList(list);</span><br><span class="line">         switch (entity) &#123;</span><br><span class="line">         case SYNC_ALL:</span><br><span class="line">             for (Listener l : list) &#123;</span><br><span class="line">                 l.onClearAll(this);</span><br><span class="line">             &#125;</span><br><span class="line">             clearCache(); // clear broadcaster too in the end</span><br><span class="line">             break;</span><br><span class="line">         case SYNC_PRJ_SCHEMA:</span><br><span class="line">             ProjectManager.getInstance(config).clearL2Cache();</span><br><span class="line">             for (Listener l : list) &#123;</span><br><span class="line">                 l.onProjectSchemaChange(this, cacheKey);</span><br><span class="line">             &#125;</span><br><span class="line">             break;</span><br><span class="line">         case SYNC_PRJ_DATA:</span><br><span class="line">             ProjectManager.getInstance(config).clearL2Cache(); // cube&apos;s first becoming ready leads to schema change too</span><br><span class="line">             for (Listener l : list) &#123;</span><br><span class="line">                 l.onProjectDataChange(this, cacheKey);</span><br><span class="line">             &#125;</span><br><span class="line">             break;</span><br><span class="line">         //大部分的走向</span><br><span class="line">         default:</span><br><span class="line">             for (Listener l : list) &#123;</span><br><span class="line">                 l.onEntityChange(this, entity, event, cacheKey);</span><br><span class="line">             &#125;</span><br><span class="line">             break;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         logger.debug(&quot;Done broadcasting metadata change: entity=&quot; + entity + &quot;, event=&quot; + event + &quot;, cacheKey=&quot; + cacheKey);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>看到default分支会执行onEntityChange这个方法，看一下这个方法干的是什么</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">private Broadcaster.Listener cacheSyncListener = new Broadcaster.Listener() &#123;</span><br><span class="line">   @Override</span><br><span class="line">   public void onClearAll(Broadcaster broadcaster) throws IOException &#123;</span><br><span class="line">       removeAllOLAPDataSources();</span><br><span class="line">       cleanAllDataCache();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">   public void onProjectSchemaChange(Broadcaster broadcaster, String project) throws IOException &#123;</span><br><span class="line">       removeOLAPDataSource(project);</span><br><span class="line">       cleanDataCache(project);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">   public void onProjectDataChange(Broadcaster broadcaster, String project) throws IOException &#123;</span><br><span class="line">       removeOLAPDataSource(project); // data availability (cube enabled/disabled) affects exposed schema to SQL</span><br><span class="line">       cleanDataCache(project);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">   public void onEntityChange(Broadcaster broadcaster, String entity, Event event, String cacheKey) throws IOException &#123;</span><br><span class="line">       if (&quot;cube&quot;.equals(entity) &amp;&amp; event == Event.UPDATE) &#123;</span><br><span class="line">           final String cubeName = cacheKey;</span><br><span class="line">           new Thread() &#123; // do not block the event broadcast thread</span><br><span class="line">               public void run() &#123;</span><br><span class="line">                   try &#123;</span><br><span class="line">                       Thread.sleep(1000);</span><br><span class="line">                       cubeService.updateOnNewSegmentReady(cubeName);</span><br><span class="line">                   &#125; catch (Throwable ex) &#123;</span><br><span class="line">                       logger.error(&quot;Error in updateOnNewSegmentReady()&quot;, ex);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;.start();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<p>看到对于cache的同步是单独实现了一个listener的，Event为update的时候，会单独启动一个线程去执行刷新缓存操作</p>
+</li>
+</ul>
+<h3 id="加入简单的重试逻辑"><a href="#加入简单的重试逻辑" class="headerlink" title="加入简单的重试逻辑"></a>加入简单的重试逻辑</h3><p>由于目前对于同步失败的猜想是目标服务短暂不可用（响应超时或者处于失败重启阶段），于是我只是单纯的将失败的任务重新塞入broadcastEvents队列尾部供再一次调用。当然这种操作过于草率和暴力，却也是验证猜想最简单快速的方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">for (final RestClient restClient : restClients) &#123;</span><br><span class="line">           wipingCachePool.execute(new Runnable() &#123;</span><br><span class="line">             @Override</span><br><span class="line">             public void run() &#123;</span><br><span class="line">               try &#123;</span><br><span class="line">                 restClient.wipeCache(broadcastEvent.getEntity(), broadcastEvent.getEvent(),</span><br><span class="line">                     broadcastEvent.getCacheKey());</span><br><span class="line">               &#125; catch (IOException e) &#123;</span><br><span class="line">                 logger</span><br><span class="line">                     .warn(&quot;Thread failed during wipe cache at &#123;&#125;, error msg: &#123;&#125;&quot;, broadcastEvent,</span><br><span class="line">                         e.getMessage());</span><br><span class="line">                 try &#123;</span><br><span class="line">                   //这里重新塞入队列尾部，等待重新执行</span><br><span class="line">                   broadcastEvents.putLast(broadcastEvent);</span><br><span class="line">                   logger.info(&quot;put failed broadcastEvent to queue. broacastEvent: &#123;&#125;&quot;,</span><br><span class="line">                       broadcastEvent);</span><br><span class="line">                 &#125; catch (InterruptedException ex) &#123;</span><br><span class="line">                   logger.warn(&quot;error reentry failed broadcastEvent to queue, broacastEvent:&#123;&#125;, error: &#123;&#125; &quot;,</span><br><span class="line">                       broadcastEvent, ex);</span><br><span class="line">                 &#125;</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;);</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>编译部署之后，日志中出现了如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread failed during wipe cache at java.lang.IllegalStateException: Invalid use of BasicClientConnManager: connection still allocated.</span><br></pre></td></tr></table></figure>
+<p>比较意外，不过也终于发现了问题的所在。Kylin在启动的时候会按照配置的nodes实例化一次RestClient，之后就直接从缓存中拿了，而kylin用的DefaultHttpClient每次只允许一次请求，请求完必须释放链接，否则无法复用HttpClient。所以需要修改wipeCache方法的逻辑如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public void wipeCache(String entity, String event, String cacheKey) throws IOException &#123;</span><br><span class="line">    String url = baseUrl + &quot;/cache/&quot; + entity + &quot;/&quot; + cacheKey + &quot;/&quot; + event;</span><br><span class="line">    HttpPut request = new HttpPut(url);</span><br><span class="line"></span><br><span class="line">    HttpResponse response =null;</span><br><span class="line">    try &#123;</span><br><span class="line">        response = client.execute(request);</span><br><span class="line">        String msg = EntityUtils.toString(response.getEntity());</span><br><span class="line"></span><br><span class="line">        if (response.getStatusLine().getStatusCode() != 200)</span><br><span class="line">            throw new IOException(&quot;Invalid response &quot; + response.getStatusLine().getStatusCode() + &quot; with cache wipe url &quot; + url + &quot;\n&quot; + msg);</span><br><span class="line">    &#125; catch (Exception ex) &#123;</span><br><span class="line">        throw new IOException(ex);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        //确保释放连接</span><br><span class="line">        if(response!=null) &#123;</span><br><span class="line">          EntityUtils.consume(response.getEntity());</span><br><span class="line">        &#125;</span><br><span class="line">        request.releaseConnection();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-05-02T02:40:01.000Z">2017-05-02</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    15 分钟 读完 (大约 2193 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/05/02/Kylin学习笔记/">Kylin学习笔记</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="OLAP-on-Line-AnalysisProcessing-的实现方式"><a href="#OLAP-on-Line-AnalysisProcessing-的实现方式" class="headerlink" title="OLAP(on-Line AnalysisProcessing)的实现方式"></a>OLAP(on-Line AnalysisProcessing)的实现方式</h3><ul>
+<li>ROLAP:<br>基于关系数据库的OLAP实现（Relational OLAP）。ROLAP将多维数据库的多维结构划分为两类表:一类是事实表,用来存储数据和维关键字;另一类是维表,即对每个维至少使用一个表来存放维的层次、成员类别等维的描述信息。维表和事实表通过主关键字和外关键字联系在一起,形成了”星型模式”。对于层次复杂的维,为避免冗余数据占用过大的存储空间,可以使用多个表来描述,这种星型模式的扩展称为”雪花模式”。特点是将细节数据保留在关系型数据库的事实表中，聚合后的数据也保存在关系型的数据库中。这种方式查询效率最低，不推荐使用。</li>
+<li><p>MOLAP:<br>多维数据组织的OLAP实现（Multidimensional OLAP。以多维数据组织方式为核心,也就是说,MOLAP使用多维数组存储数据。多维数据在存储中将形成”立方块（Cube）”的结构,在MOLAP中对”立方块”的”旋转”、”切块”、”切片”是产生多维数据报表的主要技术。特点是将细节数据和聚合后的数据均保存在cube中，所以以空间换效率，查询时效率高，但生成cube时需要大量的时间和空间。</p>
+</li>
+<li><p>HOLAP: 基于混合数据组织的OLAP实现（Hybrid OLAP）。如低层是关系型的，高层是多维矩阵型的。这种方式具有更好的灵活性。特点是将细节数据保留在关系型数据库的事实表中，但是聚合后的数据保存在cube中,聚合时需要比ROLAP更多的时间,查询效率比ROLAP高，但低于MOLAP。</p>
+</li>
+<li><p>kylin的cube数据是作为key-value结构存储在hbase中的，key是每一个维度成员的组合值，不同的cuboid下面的key的结构是不一样的，例如cuboid={brand，product，year}下面的一个key可能是brand=’Nike’，product=’shoe’，year=2015，那么这个key就可以写成Nike:shoe:2015，但是如果使用这种方式的话会出现很多重复，所以一般情况下我们会把一个维度下的所有成员取出来，然后保存在一个数组里面，使用数组的下标组合成为一个key，这样可以大大节省key的存储空间，kylin也使用了相同的方法，只不过使用了字典树（Trie树），每一个维度的字典树作为cube的元数据以二进制的方式存储在hbase中，内存中也会一直保持一份。</p>
+</li>
+</ul>
+<h3 id="cube-构建"><a href="#cube-构建" class="headerlink" title="cube 构建"></a>cube 构建</h3><ul>
+<li>Dimension：Mandatory、hierarchy、derived</li>
+<li>增量cube: kylin的核心在于预计算缓存数据，因此无法达到真正的实时查询效果。一个cube中包含了多个segment，每一个segment对应着一个物理cube，在实际存储上对应着一个hbase的一个表。每次查询的时候会查询所有的segment聚合之后的值进行返回，但是当segment数量较多时，查询效率会降低，这时会对segment进行合并。被合并的几个segment所对应的hbase表并没有被删除。</li>
+<li>cube词典树：cube数据是作为key-value结构存储在HBase中的。key是每一个维度成员的组合值</li>
+</ul>
+<h3 id="Streaming-cubing"><a href="#Streaming-cubing" class="headerlink" title="Streaming cubing"></a>Streaming cubing</h3><ul>
+<li>支持实时数据的cub。与传统的cub一样，共享storage engine(HBase)以及query engine。kylin Streaming cubing相比其他实时分析系统来说，不需要特别大的内存，也不需要实现真正的实时分析。因为在OLAP中，存在几分钟的数据延迟是完全可以接受的。于是实现手法上采用了micro batch approach。</li>
+<li>micro batch approach:将监听到的数据按照时间窗口的方式划分，并且为每个窗口封装了一个微量批处理，批处理后的结果直接存到HBase。</li>
+<li>Streaming cubing data 最终会慢慢转换成普通的cubes,因为所有的数据是直接保存到HBase中的，并且保存为一个新的segment，当segment数量到达一定程度时，job engine会将segment 合并起来形成一个大的cube。</li>
+</ul>
+<h3 id="实战问题总结"><a href="#实战问题总结" class="headerlink" title="实战问题总结"></a>实战问题总结</h3><p>由于集群环境是CDH集群，所以选择了kylin CDH 1.6的版本，支持从Kafka读取消息建立Streaming cubes直接写入HDFS中</p>
+<ul>
+<li>选择一个集群namenode节点，将解压包放入/opt/cloudrea/parcels/目录中。如果是部署单节点，暂时不用更改配置文件。所有的配置加载都在bin/kylin.sh中。</li>
+<li>直接kylin.sh start/stop 运行脚本，服务就会在7070端口起一个web界面。这个界面是可以进行可视化操作的。</li>
+</ul>
+<h3 id="Hive-数据源"><a href="#Hive-数据源" class="headerlink" title="Hive 数据源"></a>Hive 数据源</h3><ul>
+<li>直接测试hive数据源是没有问题的，这一功能比较完善，也是主打功能。</li>
+</ul>
+<h3 id="kafka数据源"><a href="#kafka数据源" class="headerlink" title="kafka数据源"></a>kafka数据源</h3><p>从kylin 1.6 版本开始正式支持Kafka做数据源，将Streaming Cubes实时写入 HBase中。这一块在测试的时候也出现了问题：</p>
+<ul>
+<li><p>Kafka版本问题</p>
+<ul>
+<li>由于实验环境的CDH集群Kafka版本是0.9的，而kylin 仅支持0.10以上的版本，所以需要对CDH kafka集群进行升级。</li>
+</ul>
+</li>
+<li><p>mapreduce运行环境无jar包</p>
+<ul>
+<li>kylin中提交cube build之后，map reduce任务直接抛错。错误提示是，找不到Kafka的Consumer类。根本原因是kylin默认集群上的map reduce classpath是会加载kafka-clients.jar包的，所以在提交任务的时候没有将kafka-clients.jar包打进去。这时可以有三种做法：</li>
+<li>直接修改kylin的源码，将kafka-clients.jar包给包括进去（待尝试）。</li>
+<li>可以通过修改集群的HADOOP_ClASSPATH的路径，将jar包给包括进去。</li>
+<li>hadoop classpath 查看classpath目录信息 将对应jar包直接拷入map reduce classpath中，这方法简单，但是缺点就是需要逐个得对node进行操作。</li>
+</ul>
+</li>
+<li><p>Property is not embedded format</p>
+<ul>
+<li><p>现在意识到，使用开源框架不会看其源码是不行的…就在我折腾俩天终于将mapreduce任务跑起来之后，新的错误出现了:”ava.lang.RuntimeException: java.io.IOException: Property ‘xxx’ is not embedded format”。莫名奇妙的错误。迫使我直接去github上看kylin kafka模块的源码。在TimedJsonStreamParser.java中发现代码逻辑中默认json数据中，如果key存在下划线就会将该key按照下划线split… 然后看key对应的value是不是map类型，如果不是直接抛出标题的错误。</p>
+</li>
+<li><p>明确了问题之后，如何复写默认下划线split的配置成为问题。由于官网的文档十分鸡肋，很多坑都没有涉及到，所以继续看源码。发现StreamingParser.java这个类中会去写一些默认的配置。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public static final String PROPERTY_TS_COLUMN_NAME = &quot;tsColName&quot;;</span><br><span class="line">public static final String PROPERTY_TS_PARSER = &quot;tsParser&quot;;</span><br><span class="line">public static final String PROPERTY_TS_PATTERN = &quot;tsPattern&quot;;</span><br><span class="line">public static final String EMBEDDED_PROPERTY_SEPARATOR = &quot;separator&quot;;</span><br><span class="line"></span><br><span class="line">static &#123;</span><br><span class="line">        derivedTimeColumns.put(&quot;minute_start&quot;, 1);</span><br><span class="line">        derivedTimeColumns.put(&quot;hour_start&quot;, 2);</span><br><span class="line">        derivedTimeColumns.put(&quot;day_start&quot;, 3);</span><br><span class="line">        derivedTimeColumns.put(&quot;week_start&quot;, 4);</span><br><span class="line">        derivedTimeColumns.put(&quot;month_start&quot;, 5);</span><br><span class="line">        derivedTimeColumns.put(&quot;quarter_start&quot;, 6);</span><br><span class="line">        derivedTimeColumns.put(&quot;year_start&quot;, 7);</span><br><span class="line">        defaultProperties.put(PROPERTY_TS_COLUMN_NAME, &quot;timestamp&quot;);</span><br><span class="line">        defaultProperties.put(PROPERTY_TS_PARSER, &quot;org.apache.kylin.source.kafka.DefaultTimeParser&quot;);</span><br><span class="line">        defaultProperties.put(PROPERTY_TS_PATTERN, DateFormat.DEFAULT_DATETIME_PATTERN_WITHOUT_MILLISECONDS);</span><br><span class="line">        defaultProperties.put(EMBEDDED_PROPERTY_SEPARATOR, &quot;_&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>自然而然会联想到，这个默认的配置肯定是可以在用户设置的时候通过key（separator）去覆盖的…于是发现在构建Streaming table的时候，可以通过Parse Properties去覆盖配置。<br>于是直接写成如下的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">tsColName=timestamp;separator=no</span><br><span class="line"></span><br><span class="line">//源码中拿到这个配置之后会做覆盖处理，然后执行 getValueByKey：</span><br><span class="line"></span><br><span class="line">protected String getValueByKey(String key, Map&lt;String, Object&gt; rootMap) throws IOException &#123;</span><br><span class="line">        if (rootMap.containsKey(key)) &#123;</span><br><span class="line">            return objToString(rootMap.get(key));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String[] names = nameMap.get(key);</span><br><span class="line">        if (names == null &amp;&amp; key.contains(separator)) &#123;</span><br><span class="line">            names = key.toLowerCase().split(separator);</span><br><span class="line">            nameMap.put(key, names);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (names != null &amp;&amp; names.length &gt; 0) &#123;</span><br><span class="line">            tempMap.clear();</span><br><span class="line">            tempMap.putAll(rootMap);</span><br><span class="line">            //这块如果复写了separator属性的话split后的names数组长度为1会跳过这一步循环，防止解析出错</span><br><span class="line">            for (int i = 0; i &lt; names.length - 1; i++) &#123;</span><br><span class="line">                Object o = tempMap.get(names[i]);</span><br><span class="line">                if (o instanceof Map) &#123;</span><br><span class="line">                    tempMap.clear();</span><br><span class="line">                    tempMap.putAll((Map&lt;String, Object&gt;) o);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    throw new IOException(&quot;Property &apos;&quot; + names[i] + &quot;&apos; is not embedded format&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            Object finalObject = tempMap.get(names[names.length - 1]);</span><br><span class="line">            return objToString(finalObject);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return StringUtils.EMPTY;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="/images/profile.jpg" alt="CHAO LI">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        CHAO LI
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Big Data
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Beijing</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <a href="/archives">
+                        <p class="title has-text-weight-normal">
+                            30
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <a href="/categories">
+                        <p class="title has-text-weight-normal">
+                            0
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <a href="/tags">
+                        <p class="title has-text-weight-normal">
+                            39
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Github" href="https://github.com/ppoffice/hexo-theme-icarus">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" rel="noopener"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/lichaojacobs" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">Github</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://www.zhihu.com/people/chao-li-11" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">知乎</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">www.zhihu.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://weibo.com/3101672623/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" rel="noopener">
+                    <span class="level-left">
+                        <span class="level-item">微博</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">weibo.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BigData/" style="font-size: 10px;">BigData</a> <a href="/tags/Crawler/" style="font-size: 10px;">Crawler</a> <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 15px;">Hadoop</a> <a href="/tags/Hbase/" style="font-size: 12.5px;">Hbase</a> <a href="/tags/InnoDB/" style="font-size: 10px;">InnoDB</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Kylin/" style="font-size: 10px;">Kylin</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/ReentrantLock/" style="font-size: 10px;">ReentrantLock</a> <a href="/tags/Spark/" style="font-size: 17.5px;">Spark</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/Yarn/" style="font-size: 15px;">Yarn</a> <a href="/tags/aop/" style="font-size: 12.5px;">aop</a> <a href="/tags/data/" style="font-size: 10px;">data</a> <a href="/tags/infrastructure/" style="font-size: 12.5px;">infrastructure</a> <a href="/tags/ioc/" style="font-size: 12.5px;">ioc</a> <a href="/tags/java8/" style="font-size: 10px;">java8</a> <a href="/tags/kylin/" style="font-size: 12.5px;">kylin</a> <a href="/tags/kylin-Java-源码/" style="font-size: 12.5px;">kylin - Java - 源码</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/sqlGenerator/" style="font-size: 10px;">sqlGenerator</a> <a href="/tags/superset/" style="font-size: 10px;">superset</a> <a href="/tags/事务处理/" style="font-size: 10px;">事务处理</a> <a href="/tags/二次开发/" style="font-size: 10px;">二次开发</a> <a href="/tags/函数式编程/" style="font-size: 10px;">函数式编程</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/大数据/" style="font-size: 20px;">大数据</a> <a href="/tags/学习/" style="font-size: 17.5px;">学习</a> <a href="/tags/成长/" style="font-size: 17.5px;">成长</a> <a href="/tags/架构/" style="font-size: 17.5px;">架构</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-06T17:42:13.000Z">2020-01-07</time></div>
+                    <a href="/2020/01/07/MR任务在Hadoop子系统中状态流转/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MR任务在Hadoop子系统中状态流转</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:47:46.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Yarn-Federation源码串读/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Yarn Federation源码串读</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:38:28.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Hadoop-Rpc源码分析/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hadoop Rpc源码分析</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-10T05:08:55.000Z">2019-06-10</time></div>
+                    <a href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Job提交执行过程详解</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-02T05:31:16.000Z">2019-06-02</time></div>
+                    <a href="/2019/06/02/【Spark源码分析】Broadcast/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Broadcast</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/BigData/">
+                        <span class="tag">BigData</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Crawler/">
+                        <span class="tag">Crawler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/HBase/">
+                        <span class="tag">HBase</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hadoop/">
+                        <span class="tag">Hadoop</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hbase/">
+                        <span class="tag">Hbase</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/InnoDB/">
+                        <span class="tag">InnoDB</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JVM/">
+                        <span class="tag">JVM</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Java/">
+                        <span class="tag">Java</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Kylin/">
+                        <span class="tag">Kylin</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Python/">
+                        <span class="tag">Python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ReentrantLock/">
+                        <span class="tag">ReentrantLock</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spark/">
+                        <span class="tag">Spark</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Yarn/">
+                        <span class="tag">Yarn</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/aop/">
+                        <span class="tag">aop</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/data/">
+                        <span class="tag">data</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/infrastructure/">
+                        <span class="tag">infrastructure</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ioc/">
+                        <span class="tag">ioc</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/java8/">
+                        <span class="tag">java8</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin/">
+                        <span class="tag">kylin</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin-Java-源码/">
+                        <span class="tag">kylin - Java - 源码</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/paper/">
+                        <span class="tag">paper</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spark/">
+                        <span class="tag">spark</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spring/">
+                        <span class="tag">spring</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/sqlGenerator/">
+                        <span class="tag">sqlGenerator</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/superset/">
+                        <span class="tag">superset</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/事务处理/">
+                        <span class="tag">事务处理</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/二次开发/">
+                        <span class="tag">二次开发</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/函数式编程/">
+                        <span class="tag">函数式编程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/分布式/">
+                        <span class="tag">分布式</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/多线程/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/大数据/">
+                        <span class="tag">大数据</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/学习/">
+                        <span class="tag">学习</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/成长/">
+                        <span class="tag">成长</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/架构/">
+                        <span class="tag">架构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/源码/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/读书/">
+                        <span class="tag">读书</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-06T17:42:13.000Z">2020-01-07</time></div>
+                    <a href="/2020/01/07/MR任务在Hadoop子系统中状态流转/" class="title has-link-black-ter is-size-6 has-text-weight-normal">MR任务在Hadoop子系统中状态流转</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:47:46.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Yarn-Federation源码串读/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Yarn Federation源码串读</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T17:38:28.000Z">2019-11-05</time></div>
+                    <a href="/2019/11/05/Hadoop-Rpc源码分析/" class="title has-link-black-ter is-size-6 has-text-weight-normal">Hadoop Rpc源码分析</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-10T05:08:55.000Z">2019-06-10</time></div>
+                    <a href="/2019/06/10/【Spark源码分析】Job提交执行过程详解/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Job提交执行过程详解</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-06-02T05:31:16.000Z">2019-06-02</time></div>
+                    <a href="/2019/06/02/【Spark源码分析】Broadcast/" class="title has-link-black-ter is-size-6 has-text-weight-normal">【Spark源码分析】Broadcast</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/BigData/">
+                        <span class="tag">BigData</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Crawler/">
+                        <span class="tag">Crawler</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/HBase/">
+                        <span class="tag">HBase</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hadoop/">
+                        <span class="tag">Hadoop</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hbase/">
+                        <span class="tag">Hbase</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/InnoDB/">
+                        <span class="tag">InnoDB</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/JVM/">
+                        <span class="tag">JVM</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Java/">
+                        <span class="tag">Java</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Kylin/">
+                        <span class="tag">Kylin</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Python/">
+                        <span class="tag">Python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ReentrantLock/">
+                        <span class="tag">ReentrantLock</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spark/">
+                        <span class="tag">Spark</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Spring/">
+                        <span class="tag">Spring</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Yarn/">
+                        <span class="tag">Yarn</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/aop/">
+                        <span class="tag">aop</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/data/">
+                        <span class="tag">data</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/infrastructure/">
+                        <span class="tag">infrastructure</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/ioc/">
+                        <span class="tag">ioc</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/java8/">
+                        <span class="tag">java8</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin/">
+                        <span class="tag">kylin</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/kylin-Java-源码/">
+                        <span class="tag">kylin - Java - 源码</span>
+                        <span class="tag is-grey">2</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/mysql/">
+                        <span class="tag">mysql</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/paper/">
+                        <span class="tag">paper</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spark/">
+                        <span class="tag">spark</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/spring/">
+                        <span class="tag">spring</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/sqlGenerator/">
+                        <span class="tag">sqlGenerator</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/superset/">
+                        <span class="tag">superset</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/事务处理/">
+                        <span class="tag">事务处理</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/二次开发/">
+                        <span class="tag">二次开发</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/函数式编程/">
+                        <span class="tag">函数式编程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/分布式/">
+                        <span class="tag">分布式</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/多线程/">
+                        <span class="tag">多线程</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/大数据/">
+                        <span class="tag">大数据</span>
+                        <span class="tag is-grey">5</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/学习/">
+                        <span class="tag">学习</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/成长/">
+                        <span class="tag">成长</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/架构/">
+                        <span class="tag">架构</span>
+                        <span class="tag is-grey">4</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/源码/">
+                        <span class="tag">源码</span>
+                        <span class="tag is-grey">3</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/读书/">
+                        <span class="tag">读书</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/hadoop_logo.jpg" alt="CHAO LI&#39;s Blog" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                共<span id="busuanzi_value_site_uv">0</span>个访客
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+<script>
+var IcarusThemeSettings = {
+    site: {
+        url: 'http://yoursite.com',
+        external_link: {"enable":true,"exclude":[]}
+    },
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
+    }
+};
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+
+
+<script src="/js/animation.js"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
