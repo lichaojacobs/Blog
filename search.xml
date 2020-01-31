@@ -68,9 +68,9 @@
       
         <tags>
             
-            <tag> 学习 </tag>
-            
             <tag> 大数据 </tag>
+            
+            <tag> 学习 </tag>
             
             <tag> Spark </tag>
             
@@ -87,9 +87,9 @@
       
         <tags>
             
-            <tag> 学习 </tag>
-            
             <tag> 大数据 </tag>
+            
+            <tag> 学习 </tag>
             
             <tag> Spark </tag>
             
@@ -106,9 +106,9 @@
       
         <tags>
             
-            <tag> 学习 </tag>
-            
             <tag> 大数据 </tag>
+            
+            <tag> 学习 </tag>
             
             <tag> Spark </tag>
             
@@ -125,9 +125,9 @@
       
         <tags>
             
-            <tag> 大数据 </tag>
-            
             <tag> 分布式 </tag>
+            
+            <tag> 大数据 </tag>
             
             <tag> paper </tag>
             
@@ -139,7 +139,7 @@
       <title>【spark-tips】spark2.4.0触发的executor内存溢出排查</title>
       <link href="/2019/01/12/%E3%80%90spark-tips%E3%80%91spark2-4-0%E8%A7%A6%E5%8F%91%E7%9A%84executor%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E6%8E%92%E6%9F%A5/"/>
       <url>/2019/01/12/%E3%80%90spark-tips%E3%80%91spark2-4-0%E8%A7%A6%E5%8F%91%E7%9A%84executor%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E6%8E%92%E6%9F%A5/</url>
-      <content type="html"><![CDATA[<h3 id="版本升级背景"><a href="#版本升级背景" class="headerlink" title="版本升级背景"></a>版本升级背景</h3><p>spark 2.4.0 最近刚发版，新增了很多令人振奋的特性。由于本司目前使用的是spark 2.3.0版本，本没打算这么快升级到2.4.0。无奈最近排查出的两个大bug迫使我们只能对spark进行升级。排查的两个bug如下：<br></p><ul><li><p>spark2.3.0 bug导致driver跑一段时间内存溢出，经过dump下来的堆转储文件发现占绝大内存的对象是spark自身的ElementTrackingStore。这是统计任务运行时资源占用情况的类，在每一个批次处理完之后都没有释放，导致driver内存溢出<br>  <img src="http://jacobs.wanhb.cn/images/memory.png" alt=""></p><ul><li>详情参考文章：<a href="https://www.cnblogs.com/bethunebtj/p/9103547.html" target="_blank" rel="noopener">导致driver OOM的一个SparkPlanGraphWrapper源码的bug</a></li></ul></li><li>spark streaming 2.3.0 + kafka 0.8.2.1 + zk管理offset 每次重启，会导致offsetrange的左区间莫名向右移动若干offset size，导致每个批次通过offsetrange从kafka消费的数据普遍会丢失部分数据，具体问题还在通过源码定位中</li></ul><p>第一个bug在spark 2.4.0中得到解决（<a href="https://issues.apache.org/jira/browse/SPARK-23670" target="_blank" rel="noopener">参考issue</a>），于是对spark进行了升级。所幸spark升级对spark on yarn这种运行方式来说非常解耦，只需要定义spark.jars依赖就行，yarn nodemanager会对依赖包进行下载。</p><h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>spark 版本升级之后，当天对在线任务观察，运行平稳，上一节提到的bug也修复了；但是第二天离线任务的运行却出现了问题：部分离线任务在做聚合运算的时候出现executor 集体内存溢出，任务执行失败</p><h4 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h4><ul><li><p>查看日志发现是内存溢出导致executor触发钩子异常退出</p><p>  <img src="http://jacobs.wanhb.cn/images/spark_1.png" alt=""></p></li><li><p>进一步发现在某个计算步骤，需要读入上一个步骤写入hdfs的数据，每个task处理的数据量比较大，且都放到了内存中（<em>导火线</em>）<br>  <img src="http://jacobs.wanhb.cn/images/spark_2.png" alt=""></p></li><li><p>接着因为要做各种聚合运算（reduceby, groupgy, join…）execution 的内存也不断增大，濒临内存的限制边缘 8G * 0.6(spark.memory.fraction) =4.8G，很容易就会来不及spill到磁盘，导致内存溢出<br>  <img src="http://jacobs.wanhb.cn/images/spark_2.png" alt=""></p></li><li><p>于是基本可以得到问题原因：从读入hdfs的源头去排查，为什么导致一个task处理的数据量过大；发现hdfs中上一步save到hdfs中的每一个part都是将近500M大小的parquet+snappy 压缩文件，而这种格式无法切分，导致一个map task只能对这400多M的文件照单全收，而由于我应用申请的配置是 <em>8 cores 8 mem / executor</em> 导致8个task同时读入大文件到executor jvm中，最终jvm报内存溢出异常<br>  <img src="http://jacobs.wanhb.cn/images/spark_4.png" alt=""></p></li></ul><h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><ul><li>限制executor 并行度，将cores 调小，内存适当调大</li><li>由于上一步写hdfs的操作并行度太小（只有40），重新调整并行度，让输出的每个part文件减小</li></ul>]]></content>
+      <content type="html"><![CDATA[<h3 id="版本升级背景"><a href="#版本升级背景" class="headerlink" title="版本升级背景"></a>版本升级背景</h3><p>spark 2.4.0 最近刚发版，新增了很多令人振奋的特性。由于本司目前使用的是spark 2.3.0版本，本没打算这么快升级到2.4.0。无奈最近排查出的两个大bug迫使我们只能对spark进行升级。排查的两个bug如下：<br></p><ul><li><p>spark2.3.0 bug导致driver跑一段时间内存溢出，经过dump下来的堆转储文件发现占绝大内存的对象是spark自身的ElementTrackingStore。这是统计任务运行时资源占用情况的类，在每一个批次处理完之后都没有释放，导致driver内存溢出<br>  <img src="images/memory.png" alt=""></p><ul><li>详情参考文章：<a href="https://www.cnblogs.com/bethunebtj/p/9103547.html" target="_blank" rel="noopener">导致driver OOM的一个SparkPlanGraphWrapper源码的bug</a></li></ul></li><li>spark streaming 2.3.0 + kafka 0.8.2.1 + zk管理offset 每次重启，会导致offsetrange的左区间莫名向右移动若干offset size，导致每个批次通过offsetrange从kafka消费的数据普遍会丢失部分数据，具体问题还在通过源码定位中</li></ul><p>第一个bug在spark 2.4.0中得到解决（<a href="https://issues.apache.org/jira/browse/SPARK-23670" target="_blank" rel="noopener">参考issue</a>），于是对spark进行了升级。所幸spark升级对spark on yarn这种运行方式来说非常解耦，只需要定义spark.jars依赖就行，yarn nodemanager会对依赖包进行下载。</p><h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>spark 版本升级之后，当天对在线任务观察，运行平稳，上一节提到的bug也修复了；但是第二天离线任务的运行却出现了问题：部分离线任务在做聚合运算的时候出现executor 集体内存溢出，任务执行失败</p><h4 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h4><ul><li><p>查看日志发现是内存溢出导致executor触发钩子异常退出</p><p>  <img src="images/spark_1.png" alt=""></p></li><li><p>进一步发现在某个计算步骤，需要读入上一个步骤写入hdfs的数据，每个task处理的数据量比较大，且都放到了内存中（<em>导火线</em>）<br>  <img src="images/spark_2.png" alt=""></p></li><li><p>接着因为要做各种聚合运算（reduceby, groupgy, join…）execution 的内存也不断增大，濒临内存的限制边缘 8G * 0.6(spark.memory.fraction) =4.8G，很容易就会来不及spill到磁盘，导致内存溢出<br>  <img src="images/spark_3.png" alt=""></p></li><li><p>于是基本可以得到问题原因：从读入hdfs的源头去排查，为什么导致一个task处理的数据量过大；发现hdfs中上一步save到hdfs中的每一个part都是将近500M大小的parquet+snappy 压缩文件，而这种格式无法切分，导致一个map task只能对这400多M的文件照单全收，而由于我应用申请的配置是 <em>8 cores 8 mem / executor</em> 导致8个task同时读入大文件到executor jvm中，最终jvm报内存溢出异常<br>  <img src="images/spark_4.png" alt=""></p></li></ul><h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><ul><li>限制executor 并行度，将cores 调小，内存适当调大</li><li>由于上一步写hdfs的操作并行度太小（只有40），重新调整并行度，让输出的每个part文件减小</li></ul>]]></content>
       
       
         <tags>
@@ -168,9 +168,9 @@
       
         <tags>
             
-            <tag> 学习 </tag>
-            
             <tag> 大数据 </tag>
+            
+            <tag> 学习 </tag>
             
             <tag> Spark </tag>
             
@@ -307,9 +307,9 @@
             
             <tag> infrastructure </tag>
             
-            <tag> 成长 </tag>
-            
             <tag> 源码 </tag>
+            
+            <tag> 成长 </tag>
             
             <tag> Kylin </tag>
             
@@ -482,9 +482,9 @@
       
         <tags>
             
-            <tag> 成长 </tag>
-            
             <tag> spring </tag>
+            
+            <tag> 成长 </tag>
             
         </tags>
       
