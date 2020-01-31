@@ -46,7 +46,7 @@ tags:
 
 当Yarn RM通过ContainerManagerProtocol协议将AM Container启动之后，AM便开始了Map/Reduce（一般map执行完之后）任务调度过程
 
-![img](https://pic3.zhimg.com/80/v2-c9babe0d2fb818f1037c5c00a369da74_hd.png)
+![事务处理相关类的层次结构](http://jacobs.wanhb.cn/images/mr_job_trans.jpg)
 
 运行期间涉及到的状态机有Job, Task, 以及TaskAttempt，当然还有AM register/unregister过程Yarn RM系统对应的状态机转换；大致描述一下流程：
 

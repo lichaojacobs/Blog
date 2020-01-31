@@ -28,6 +28,7 @@ linkedin_username:
 excerpt_link: Read More
 fancybox: true
 
+# theme: icarus
 theme: maupassant
 
 # display widgets at the bottom of index pages (pagination == 2)

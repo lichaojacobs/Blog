@@ -40,7 +40,7 @@ RpcEngine作为Rpc实现的接口，用来获取client端proxy和server端的ser
 
 - Ipc.Client构成
 - callIdCounter：callId 发号器
-- connections: HashTable结构，用来维护Id → Connection的映射
+- rpc_client.png: HashTable结构，用来维护Id → Connection的映射
 - sendParamsExecutor：请求发送线程池	
 
 ![img](https://pic2.zhimg.com/v2-9b923f98235d7881f79f9525f2a025f5_b.jpg)
@@ -51,9 +51,7 @@ RpcEngine作为Rpc实现的接口，用来获取client端proxy和server端的ser
 - receiveRpcResponse:  run中不断轮询server看结果是否就绪
 - client 处理过程
 
-![img](https://pic1.zhimg.com/v2-6a94a1d6f6792b1ae190c54992ba3158_b.jpg)
-
-图片摘自《Hadoop技术内幕：深入解析MapReduce架构设计与实现原理 》
+![img](http://jacobs.wanhb.cn/images/rpc_client.png)
 
 - 通过反射获取到方法描述，走client Invoker调用远程实现
 

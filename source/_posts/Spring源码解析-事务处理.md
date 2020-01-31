@@ -12,7 +12,7 @@ tags:
 
 ### 事务处理相关类的层次结构
 
-![事务处理相关类的层次结构](http://jacobs.wanhb.cn/images/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-11%20%E4%B8%8B%E5%8D%887.54.25.png)
+![事务处理相关类的层次结构](http://jacobs.wanhb.cn/images/2017-02-11_7.54.25.png)
 
 在 Spring事务处理中，可以通过设计一个TransactionProxyFactoryBean来使用AOP功能，通过它可以生成Proxy代理对象。在代理对象中，通过TranscationInterceptor来完成对代理对象方法的拦截。实现声明式事务处理时，是AOP和IOC集成的部分，而对于具体的事物处理实现，是通过设计PlatformTransactionManager，AbstractPlatforTransactionmanager以及一系列具体事务处理器来实现的。PlatformTransactionManager又实现了TransactionInterceptor，这样就能将一系列处理给串联起来。
 
@@ -25,7 +25,7 @@ tags:
 - Spring事务处理模块实现统一的事务处理过程。
 - 底层的事务处理实现。Spring委托给具体的事务处理器来完成。
 
-![建立事务处理对象时序图](http://jacobs.wanhb.cn/images/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-11%20%E4%B8%8B%E5%8D%888.23.09.png)
+![建立事务处理对象时序图](http://jacobs.wanhb.cn/images/2017-02-11_8.23.09.png)
 
 从TransactionProxyFactoryBean入手，通过代码来了解Spring是如何通过AOP功能来完成事务管理配置的，从图中可以看到Spring为声明式事务处理的实现所做的一些准备工作：包括为AOP配置基础设施，这些基础设施包括设置拦截器TransactionInterceptor、通过DefaultPointcutAdvisor或TransactionAttributeSourceAdvisor。同时，在TransactionProxyFactoryBean的实现中，还可以看到注入进来的PlatformTransactionManager和事务处理属性TransactionAttribute等。
 
@@ -265,7 +265,7 @@ protected Object invokeWithinTransaction(Method method, Class<?> targetClass, fi
 
 对于Spring而言，事务管理实际上是通过一个TransactionInfo对象来完成的，在该对象中，封装了事务对象和事务处理的状态信息，这是事务处理的抽象。在这一步完成以后，会对拦截器链进行处理，因为有可能在该事务对象中还配置了除事务处理AOP之外的其他拦截器，在结束对拦截器链处理之后，会对 TransactionInfo中的信息进行更新，以反映最近的事务处理情况，在这个时候，也就完成了事务提交的准备，通过调用事务处理器PlatformTransactionManager的commitTransactionAfterReturning方法来完成事务的提交。这个提交的处理过程已经封装在事务处理器中了，而与具体数据源相关的处理过程，最终委托给相关的事务处理器完成，如：DataSourceTransactionManager、HibernateTransactionManager等。
 
-![事务提交时序图](http://jacobs.wanhb.cn/images/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-11%20%E4%B8%8B%E5%8D%8810.51.15.png)
+![事务提交时序图](http://jacobs.wanhb.cn/images/aop_10.51.15.png)
 
 这个invoke方法的实现中，可以看到整个事务处理在AOP拦截器中实现的全过程。同时，它也是Spring采用AOP封装事务处理和实现声明式事务处理的核心部分。
 
@@ -286,7 +286,7 @@ protected Object invokeWithinTransaction(Method method, Class<?> targetClass, fi
 
 声明式事务中，TransactionInterceptor拦截器的invoke方法作为事务处理实现的起点，invoke方法中createTransactionIfNeccessary方法作为事务创建的入口。以下是createTransactionIfNeccessary方法的时序图
 
-![createTransactionIfNeccessary方法的时序图](http://jacobs.wanhb.cn/images/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-11%20%E4%B8%8B%E5%8D%8811.09.41.png)
+![createTransactionIfNeccessary方法的时序图](http://jacobs.wanhb.cn/images/2017-02-11_11.09.41.png)
 
 在createTransactionIfNeccessary中首先会向AbstractTransactionManager执行getTransaction，这个获取Transaction事务对象的过程，在AbstractTransactionManager中需要对事务不同的情况作出处理，然后创建一个TransactionStatus，并把这个TransactionStatus设置到对应的TransactionInfo中去，同时将TransactionInfo和当前的线程绑定，从而完成事务的创建过程。TransactionStatus和TransactionInfo这俩个对象持有的数据是事务处理器对事务进行处理的主要依据。对这俩个对象的使用贯穿整个事务处理的全过程。
 

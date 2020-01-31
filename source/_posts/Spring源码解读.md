@@ -14,7 +14,7 @@ tags:
 ![IOC接口设计规范](http://jacobs.wanhb.cn/images/ioc1.jpg)
 
  bean 实例化总体步骤
-![bean initialization](http://jacobs.wanhb.cn/images/bean%20initialization.jpg)
+![bean initialization](http://jacobs.wanhb.cn/images/bean_initialization.jpg)
 
 
 #### 资源定位与注册
