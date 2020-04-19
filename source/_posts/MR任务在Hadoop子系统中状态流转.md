@@ -4,7 +4,7 @@ date: 2020-01-07 01:42:13
 tags:
 	- 架构
 	- Hadoop
-	- Yarn
+    - Yarn
 ---
 
 
