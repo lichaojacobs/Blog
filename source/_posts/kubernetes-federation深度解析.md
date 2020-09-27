@@ -7,7 +7,7 @@ tags:
     - 源码
 ---
 
-[知乎链接](https://zhuanlan.zhihu.com/p/121642861)
+[知乎专栏链接](https://zhuanlan.zhihu.com/p/121642861)
 
 ## Federation v1
 

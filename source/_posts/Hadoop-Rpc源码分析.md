@@ -8,7 +8,7 @@ tags:
 ---
 
 Hadoop生态系统中Rpc底层基本都是走的一套实现，所以有必要对Rpc底层实现做一次系统性的梳理总结。
-[知乎链接](https://zhuanlan.zhihu.com/p/88768710)
+[知乎专栏链接](https://zhuanlan.zhihu.com/p/88768710)
 
 **Client&Server实现入口**
 

@@ -7,7 +7,7 @@ tags:
 	- Yarn
 ---
 
-[知乎链接](https://zhuanlan.zhihu.com/p/79378807)
+[知乎专栏链接](https://zhuanlan.zhihu.com/p/79378807)
 
 ## Federation架构总览
 
