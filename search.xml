@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>Netty源码解析系列：参数篇</title>
+      <link href="/2021/01/16/Netty%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%9A%E5%8F%82%E6%95%B0%E7%AF%87/"/>
+      <url>/2021/01/16/Netty%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E7%B3%BB%E5%88%97%EF%BC%9A%E5%8F%82%E6%95%B0%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Netty是什么？"><a href="#Netty是什么？" class="headerlink" title="Netty是什么？"></a>Netty是什么？</h3><p>netty是一款高性能的网络编程框架。有了它，我们可以不需要使用原生的java io api，轻松地实现一款高性能网络应用。目前主流的java开源框架基本都使用了netty实现网络层。</p><h3 id="Netty有哪些参数，如何设置？"><a href="#Netty有哪些参数，如何设置？" class="headerlink" title="Netty有哪些参数，如何设置？"></a>Netty有哪些参数，如何设置？</h3><p>netty的参数很多，如果不根据自身应用的实际场景加以限制调整可能会使系统性能达不到理想的状态。</p><p>netty几乎所有关键的参数都在PlatformDependent这个类中。顾名思义，这个类主要是根据平台特性(操作系统，jdk版本等) 来动态控制netty的模式，做到平台兼容。</p><p><img src="https://pic4.zhimg.com/v2-30a62ec907089ca80da15c0fc7269417_b.png" alt="img"></p><p>下面列举一些在实际开发中会用到的参数：</p><h3 id="堆内-on-heap-还是堆外-off-heap-？"><a href="#堆内-on-heap-还是堆外-off-heap-？" class="headerlink" title="堆内(on heap)还是堆外(off heap)？"></a>堆内(on heap)还是堆外(off heap)？</h3><p>首先我们关心的是，netty默认是堆内还是堆外，能加以控制吗？</p><p>通过代码我们可以看到netty用堆内或堆外取决于两个条件</p><p><img src="https://pic2.zhimg.com/v2-4d212661f1a2a0815c1df76b1b5fb18d_b.png" alt="img"></p><ul><li>一方面，我们可通过参数 io.netty.noPreferDirect 控制，默认为false。也即是意味着netty默认用的是堆外</li><li>另一方面，可通过 io.netty.noUnsafe 来控制，默认为false，也即是netty自己通过unsafe接口来分配内存，这里前提是平台需要支持能访问unsafe api，如果不能将统一走java nio模式</li></ul><p><img src="https://pic3.zhimg.com/v2-bd859b8e48f0b317af5cf87725962cbe_b.png" alt="img"></p><h3 id="如何控制最大内存使用？"><a href="#如何控制最大内存使用？" class="headerlink" title="如何控制最大内存使用？"></a>如何控制最大内存使用？</h3><p>堆外内存好处就是不受jvm的机制管制，能够缓解gc压力。但是坏处也显而易见：容易泄漏，且不好排查。如果不设置netty最大使用内存，默认能使用jvm堆大小的内存。如果我们java应用放在容器里面，则很容易因为忽略堆外内存的使用导致容器被OOM killer杀死。可以通过两个参数来控制内存使用：</p><ul><li>io.netty.maxDirectMemory: 独立的控制内存参数，默认为-1</li><li>-XX:MaxDirectMemorySize: 复用jvm的堆外内存参数，如果不设置第一个参数则会使用这个参数来控制。如果MaxDirectMemorySize仍没有设置，则默认使用java堆大小</li></ul><h3 id="内存怎么回收？"><a href="#内存怎么回收？" class="headerlink" title="内存怎么回收？"></a>内存怎么回收？</h3><ul><li>netty默认通过Unsafe api来申请内存（NoCleaner），相应的，自然默认也通过Unsafe api来释放内存。也就是自给自足的方式来管理内存的申请释放。这种模式netty的性能是最高的</li><li>当然netty还兼容通过java nio api的方式来申请释放资源（Cleaner），这样netty的内存管理则交给了原生的java nio实现：申请通过Unsafe，释放则走gc的reference钩子。</li><li>具体需区分cleaner和nocleaner的模式，在newDirectBuffer入口处做了判断，来实例化具体的buffer，以Unpooled来举例子</li></ul><p><img src="https://pic4.zhimg.com/v2-3e44791a03962f330a2371e2db234077_b.png" alt="img"></p><h3 id="回收的内存怎么管理？"><a href="#回收的内存怎么管理？" class="headerlink" title="回收的内存怎么管理？"></a>回收的内存怎么管理？</h3><p>netty为了高性能，默认使用了cache来管理回收的内存，这样下次再分配时直接从cache中分配，而不用频繁地调用Unsafe接口。通过io.netty.allocator.type参数来控制</p><ul><li>Pooled模式：即是cache模式，类比jemalloc的java版实现。后续系列再详细介绍。数据结构自顶向下依次有：</li><li>PoolThreadCache（避免NIO线程内存操作竞争）</li><li>PoolArena（分配器）</li><li>PoolChunk（内存通过chunk来进行管理）</li><li>PoolSubPage（内存的最细粒度表示）</li><li>Unpooled模式：直接分配和释放内存，由netty直接调用Unsafe接口，相比Pooled模式来讲则简单直接了很多。</li></ul><h3 id="Netty工作线程怎么控制？"><a href="#Netty工作线程怎么控制？" class="headerlink" title="Netty工作线程怎么控制？"></a>Netty工作线程怎么控制？</h3><p>netty最为著名的特性自然是多路复用技术，通过此技术netty可以服务成千上万的请求。netty中实现此技术的角色称为EventLoop（Boss&amp;Worker）线程。如果不加以限制，默认是cpu 核心的两倍(GRPC实现中调整成了一倍)。</p><p>可通过io.netty.eventLoopThreads来控制工作线程数量。我们曾经没有在Grpc Client端控制该参数，导致当多个client在同一台物理机，并每个Client同时向多个RpcServer发请求时，CpuLoad打的很高，甚至机器出现宕机情况。</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>kubernetes shared Informer 源码解析</title>
       <link href="/2020/09/27/kubernetes-shared-Informer-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
       <url>/2020/09/27/kubernetes-shared-Informer-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</url>
